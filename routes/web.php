@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Dashboard\GetDashboardController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\Dashboard\GetDashboardController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,4 +23,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
