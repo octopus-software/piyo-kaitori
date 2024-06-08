@@ -47,9 +47,9 @@ class User extends Authenticatable
     }
 
     // リレーション設定
-    public function todo(): HasMany
+    public function purchase_offers(): HasMany
     {
-        return $this->hasMany(PurchaseTarget::class);
+        return $this->hasMany(PurchaseOffer::class);
     }
 
 }
