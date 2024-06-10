@@ -19,7 +19,9 @@ class PurchaseOffer extends Model
     // リレーション設定
     public function purchase_target(): BelongsTo
     {
-        return $this->belongsTo(PurchaseTarget::class);
+        return $this->belongsTo(PurchaseOffer::class);
     }
+
+    protected $guarded = ['id'];
 
 }
