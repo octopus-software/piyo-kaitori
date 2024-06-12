@@ -3,6 +3,7 @@
 use App\Http\Controllers\GetTestController;
 use App\Http\Controllers\GetUsersController;
 use App\Http\Controllers\PostTestController;
+use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Web\Dashboard\GetDashboardController;
 use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/users',GetUsersController::class);
+Route::post('/test',UserPostController::class);
 
 Route::get('/dashboard', GetDashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 

@@ -12,6 +12,7 @@ class GetUsersController extends Controller
         ->with(['purchase_offers', 'purchase_offers.purchase_target'])
         ->get();
 
+        // return csrf_token();
         return $users;
     }
 }
