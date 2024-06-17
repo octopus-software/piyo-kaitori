@@ -28,7 +28,7 @@ class PurchaseOffer extends Model
     // リレーション設定
     public function purchase_targets(): BelongsToMany
     {
-        return $this->belongsToMany(PurchaseTarget::class,'offer_target')->withPivot('user_id');
+        return $this->belongsToMany(PurchaseTarget::class,'offer_target')->withPivot(['price','amount','evidence_url']);
     }
 
     protected $guarded = ['id'];
