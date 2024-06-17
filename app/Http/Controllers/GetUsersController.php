@@ -13,6 +13,6 @@ class GetUsersController extends Controller
         ->get();
 
         // return csrf_token();
-        return $users;
+        // return $users;
     }
 }

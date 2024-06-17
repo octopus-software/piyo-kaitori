@@ -22,9 +22,10 @@ class TestFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>'string|alpha:ascii',
+            // 'name'=>'string|alpha:ascii',
+            'name'=>'string',
             'email'=>'email',
-            'email_verified_at'=>'date',
+            // 'email_verified_at'=>'date',
         ];
     }
 }

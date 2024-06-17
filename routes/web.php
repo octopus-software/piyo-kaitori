@@ -18,7 +18,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
+Route::get('/token',function(){
+    return csrf_token();
+});
 Route::get('/users',GetUsersController::class);
 Route::post('/test',UserPostController::class);
 

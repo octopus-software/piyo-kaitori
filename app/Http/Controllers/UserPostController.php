@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class UserPostController extends Controller
 {
-    public function __invoke(Request $request){
+    public function __invoke(TestFormRequest $request){
         // $input = $request->input();
         // dd($input);
         // return $input;
@@ -17,5 +17,7 @@ class UserPostController extends Controller
             "email" => $request -> email,
             "password" => $request -> password
         ]);
+
+        return $request->input();
     }
 };
