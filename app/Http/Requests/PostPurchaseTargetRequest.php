@@ -22,11 +22,10 @@ class PostPurchaseTargetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string',
-            'jan_code' => 'string|size:13',
-            'image_url' => 'url', //実装の際は'active_url'に変更
-            'amount' => 'integer|min:0',
-            'is_active' => 'integer|between:0,1' 
+            'name' => 'required|string',
+            'jan_code' => 'required|string|max:13',
+            'image_url' => 'required|url', //実装の際は'active_url'に変更
+            'amount' => 'required|integer|min:0'
         ];
     }
 }

@@ -14,8 +14,7 @@ class PostPurchaseTargetController extends Controller
             'name'=> $request -> name,
             'jan_code' => $request -> jan_code ,
             'image_url' => $request -> image_url,
-            'amount' => $request -> amount,
-            'is_active' => $request -> is_active
+            'amount' => $request -> amount
         ]);
 
         return $request->input();
