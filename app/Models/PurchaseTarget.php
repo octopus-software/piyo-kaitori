@@ -12,8 +12,8 @@ class PurchaseTarget extends Model
     use HasFactory;
 
     const IS_ACTIVE = [
-        'active' => 0,
-        'passive' => 1
+        'active' => 1,
+        'inactive' => 0
     ];
 
     /**

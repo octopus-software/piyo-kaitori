@@ -25,7 +25,7 @@ class PostPurchaseTargetRequest extends FormRequest
             'name' => 'required|string',
             'jan_code' => 'required|string|max:13',
             'image_url' => 'required|url', //実装の際は'active_url'に変更
-            'amount' => 'required|integer|min:0'
+            'amount' => 'required|integer|min:1'
         ];
     }
 }
