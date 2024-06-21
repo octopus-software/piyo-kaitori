@@ -11,6 +11,19 @@ class PurchaseTarget extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'jan_code',
+        'image_url',
+        'amount',
+        'is_active'
+    ];
+
     // リレーション設定
     public function purchase_offers(): BelongsToMany
     {

@@ -4,6 +4,7 @@ use App\Http\Controllers\GetPurchaseOffersController;
 use App\Http\Controllers\GetPurchaseTargetsController;
 use App\Http\Controllers\GetTestController;
 use App\Http\Controllers\GetUsersController;
+use App\Http\Controllers\PostPurchaseTargetController;
 use App\Http\Controllers\PostTestController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Web\Dashboard\GetDashboardController;
@@ -26,6 +27,8 @@ Route::get('/token',function(){
 Route::get('/purchase_offers',GetPurchaseOffersController::class);
 Route::get('/users',GetUsersController::class);
 Route::get('/purchase_targets',GetPurchaseTargetsController::class);
+
+Route::post('/purchase_target',PostPurchaseTargetController::class);
 Route::post('/test',UserPostController::class);
 
 Route::get('/dashboard', GetDashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
