@@ -8,6 +8,9 @@ use App\Http\Controllers\PostTestController;
 use App\Http\Controllers\UserPostController;
 use App\Http\Controllers\Web\Dashboard\GetDashboardController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\User\UserGetEditController;
+use App\Http\Controllers\Web\User\UserGetListController;
+use App\Http\Controllers\Web\User\UserUpdateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,6 +34,9 @@ Route::post('/test',UserPostController::class);
 Route::get('/dashboard', GetDashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/user', UserGetListController::class)->name('user.list');
+    Route::get('/user/{id}/edit', UserGetEditController::class)->name('user.edit');
+    Route::put('/user/{id}', UserUpdateController::class)->name('user.update');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

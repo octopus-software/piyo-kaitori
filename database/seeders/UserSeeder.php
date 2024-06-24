@@ -15,8 +15,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory()->count(5)->create();
-        $purchase_targets = PurchaseTarget::factory()->count(10)->create();
+        $users = User::factory()->count(30)->create();
+        $purchase_targets = PurchaseTarget::factory()->count(20)->create();
 
         foreach( $users as $user){
             $offers = PurchaseOffer::factory()->count(3)->state(function(array $attributes) use($user){

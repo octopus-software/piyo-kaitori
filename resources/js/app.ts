@@ -1,6 +1,8 @@
 import './bootstrap';
 import '../css/app.css';
 import 'flowbite';
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
 
 import { createApp, h, DefineComponent } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -16,6 +18,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
+            .use(ToastPlugin)
             .mount(el);
     },
     progress: {
