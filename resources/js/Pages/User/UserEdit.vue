@@ -29,14 +29,9 @@
                                    placeholder="name@flowbite.com" required/>
                         </div>
                     </div>
-                    <button @click="updateUser"
-                            class=" m-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        編集する
-                    </button>
-                    <button @click="goBack"
-                        class=" m-2 text-white bg-gray-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        戻る
-                    </button>
+                    <BlueButton text="編集する" :onclick="updateUser" />
+                    <DeleteButton text="削除する" :onclick="deleteUser" />
+                    <GrayButton text="戻る" :onclick="goBack" />
                 </div>
             </div>
         </div>
@@ -48,6 +43,10 @@ import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {ref} from "vue";
+import BlueButton from "../../Components/Button/BlueButton.vue";
+import GrayButton from "../../Components/Button/GrayButton.vue";
+import DeleteButton from "../../Components/Button/DeleteButton.vue";
+import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps({
     user: {
@@ -73,6 +72,19 @@ const updateUser = async () => {
         });
         console.log(res.data)
         toast.success('データが更新されました')
+    } catch (error) {
+        const toast = useToast();
+        toast.error(error.response.data.message);
+    }
+};
+
+const deleteUser = async () => {
+    try {
+        const toast = useToast();
+        const res = await axios.delete(`/user/${props.user.id}/delete`);
+        console.log(res.data)
+        sessionStorage.setItem('toastMessage', 'データが削除されました');
+        Inertia.visit('/user');
     } catch (error) {
         const toast = useToast();
         toast.error(error.response.data.message);

@@ -104,6 +104,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {onMounted, ref} from "vue";
 import BlueButton from "../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../Components/Button/OrangeButton.vue";
+import {useToast} from "vue-toast-notification";
 
 const props = defineProps({
     users: {
@@ -131,7 +132,12 @@ const name = ref(props.params.name)
 const email = ref(props.params.email)
 
 onMounted(() => {
-
+    const toast = useToast();
+    const toastMessage = sessionStorage.getItem('toastMessage');
+    if (toastMessage) {
+        toast.success(toastMessage);
+        sessionStorage.removeItem('toastMessage');
+    }
 })
 
 const clear = () => {
