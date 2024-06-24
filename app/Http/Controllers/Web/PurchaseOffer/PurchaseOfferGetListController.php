@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseOffer;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
-use Illuminate\Http\Request;
 
-class GetPurchaseOffersController extends Controller
+class PurchaseOfferGetListController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -26,7 +26,7 @@ class GetPurchaseOffersController extends Controller
                         'evidence_url' => $target['pivot']['evidence_url']
                     ];
                 })
-            ]; 
+            ];
         });
 
         // $responce = [];

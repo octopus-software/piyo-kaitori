@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseOffer;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
-use Illuminate\Http\Request;
 
 class PurchaseOfferGetEditController extends Controller
 {
@@ -27,7 +27,7 @@ class PurchaseOfferGetEditController extends Controller
                         'evidence_url' => $target['pivot']['evidence_url']
                     ];
                 })
-            ]; 
+            ];
         });
 
         return $purchase_offer;

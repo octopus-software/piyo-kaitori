@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseTarget;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseTarget;
-use Illuminate\Http\Request;
 
 class PurchaseTargetGetEditController extends Controller
 {

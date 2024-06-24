@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TestFormRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 
-class UserPostController extends Controller
+class UserStoreController extends Controller
 {
     public function __invoke(TestFormRequest $request){
         // $input = $request->input();

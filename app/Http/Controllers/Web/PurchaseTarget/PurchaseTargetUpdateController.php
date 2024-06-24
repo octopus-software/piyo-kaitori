@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseTarget;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PutPurchaseTargetRequest;
 use App\Models\PurchaseTarget;
 
-class PutPurchaseTargetController extends Controller
+class PurchaseTargetUpdateController extends Controller
 {
     public function __invoke(PutPurchaseTargetRequest $request){
         $purchase_target = PurchaseTarget::find($request->id);
@@ -16,7 +17,7 @@ class PutPurchaseTargetController extends Controller
             'image_url' => $request -> image_url,
             'amount' => $request -> amount
         ]);
-        
+
         return $purchase_target;
         // return redirect('/purchase_targets');
     }

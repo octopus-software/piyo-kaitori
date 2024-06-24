@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseOffer;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOfferPostRequest;
 use App\Models\PurchaseOffer;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseOfferPostController extends Controller
+class PurchaseOfferStoreController extends Controller
 {
     public function __invoke(PurchaseOfferPostRequest $request){
         return DB::transaction(function () use($request) {
@@ -17,7 +18,7 @@ class PurchaseOfferPostController extends Controller
                 'user_id' => 8,//←要修正！！！！！！！！！！！！！！！！！！
                 'status' => PurchaseOffer::STATUS['unapproved']
             ]);
-    
+
             $data = $request->toArray();
             foreach ($data as $item){
                 $created_offer->purchase_targets()->attach($item['purchase_target_id'],[

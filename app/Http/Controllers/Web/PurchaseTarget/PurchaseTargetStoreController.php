@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseTarget;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PostPurchaseTargetRequest;
 use App\Models\PurchaseTarget;
 
-class PostPurchaseTargetController extends Controller
+class PurchaseTargetStoreController extends Controller
 {
     public function __invoke(PostPurchaseTargetRequest $request){
-        
+
         PurchaseTarget::create([
             'name'=> $request -> name,
             'jan_code' => $request -> jan_code ,

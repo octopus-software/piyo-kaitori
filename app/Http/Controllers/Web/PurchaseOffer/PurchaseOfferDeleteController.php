@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseOffer;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseOfferDeleteController extends Controller
