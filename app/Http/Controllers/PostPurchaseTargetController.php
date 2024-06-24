@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostPurchaseTargetRequest;
 use App\Models\PurchaseTarget;
-use Illuminate\Http\Request;
 
 class PostPurchaseTargetController extends Controller
 {
