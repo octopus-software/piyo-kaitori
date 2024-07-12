@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
 class PutPurchaseTargetRequest extends FormRequest
 {
@@ -22,10 +23,11 @@ class PutPurchaseTargetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'jan_code' => 'required|string|max:13',
-            'image_url' => 'required|url', //実装の際は'active_url'に変更
-            'amount' => 'required|integer|min:1'
+//            'name' => 'required|string',
+//            'jan_code' => 'required|string|max:13',
+//            'image_url' => 'required|url', //実装の際は'active_url'に変更
+//            'amount' => 'required|integer|min:1',
+//            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 }

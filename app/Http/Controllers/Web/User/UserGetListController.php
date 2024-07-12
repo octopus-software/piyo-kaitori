@@ -30,6 +30,7 @@ class UserGetListController extends Controller
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'email' => $user['email'],
+                'is_active' => $user['is_active'],
                 'offers' => $user['purchase_offers']->map(function ($offer) {
                     return [
                         'id' => $offer['id'], // オファーID
@@ -52,7 +53,7 @@ class UserGetListController extends Controller
         return Inertia::render('User/UserList', [
             'users' => $users,
             'current_page' => $paginator->currentPage(),
-            'last_page' => (int)$paginator->lastPage(),
+            'last_page' => $paginator->lastPage(),
             'params' => [
                 'name' => $request['name'] ?? '',
                 'email' => $request['email'] ?? '',

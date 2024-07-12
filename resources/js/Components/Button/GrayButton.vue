@@ -5,17 +5,13 @@
     </button>
 </template>
 
-<script setup>
-const props = defineProps({
-    text: {
-        type: String,
-        required: true
-    },
-    onclick: {
-        type: Function,
-        required: true
-    }
-})
+<script setup lang="ts">
+import {defineProps} from 'vue';
+
+const props = defineProps<{
+    text: string,
+    onclick?: Function,
+}>()
 </script>
 
 <style scoped>
