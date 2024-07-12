@@ -16,7 +16,17 @@ class PurchaseTargetGetListController extends Controller
      */
     public function __invoke(Request $request): Response
     {
-        $paginator = PurchaseTarget::with(['purchase_offers' => function ($query) {
+        $paginator = PurchaseTarget::query()
+            ->when(isset($request['name']), function ($query) use ($request) {
+                return $query->where('name', 'LIKE', '%' . $request["name"] . '%');
+            })
+            ->when(isset($request['jan_code']), function ($query) use ($request) {
+                return $query->where('jan_code', $request['jan_code']);
+            })
+            ->when(isset($request['is_active']), function ($query) use ($request) {
+                return $query->where('is_active', (int)$request['is_active']);
+            })
+            ->with(['purchase_offers' => function ($query) {
             $query->where('status', PurchaseOffer::STATUS['unapproved']);
         }, 'purchase_offers.user'])
             ->skip(((int)$request['page'] - 1) * 5 ?? 0)
@@ -46,8 +56,9 @@ class PurchaseTargetGetListController extends Controller
             'current_page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),
             'params' => [
-//                'name' => $request['name'] ?? '',
-//                'email' => $request['email'] ?? '',
+                'name' => $request['name'] ?? '',
+                'jan_code' => $request['jan_code'] ?? '',
+                'is_active' => $request['is_active'] ?? '',
             ]
         ]);
     }

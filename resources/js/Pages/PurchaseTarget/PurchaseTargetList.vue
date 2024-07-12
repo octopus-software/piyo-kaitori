@@ -11,7 +11,7 @@
                     <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取商品名</label>
                             <input type="text" v-model="name" id="name"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
@@ -150,7 +150,8 @@ const props = defineProps({
     params: {
         type: {
             name: String,
-            email: String
+            jan_code: String,
+            is_active: Boolean
         },
         required: true
     },
@@ -164,10 +165,8 @@ const props = defineProps({
     }
 })
 
-console.log(props.purchase_targets)
-
 const name = ref(props.params.name)
-const janCode = ref(props.params.email)
+const janCode = ref(props.params.jan_code)
 const isActive = ref(props.params.is_active)
 
 onMounted(() => {
@@ -181,18 +180,24 @@ onMounted(() => {
 
 const clear = () => {
     name.value = ''
-    email.value = ''
-    location.href = `/purchase_target?page=1&name=${name.value}&email=${email.value}`;
+    janCode.value = ''
+    isActive.value = ''
+    location.href = `/purchase_target`;
 }
 
 const search = () => {
-    location.href = `/purchase_target?page=1&name=${name.value}&email=${email.value}`;
+    let url = `/purchase_target?page=1`
+    if (name.value) url += `&name=${name.value}`
+    if (janCode.value) url += `&jan_code=${janCode.value}`
+    if (isActive.value) url += `&is_active=${isActive.value}`
+    location.href = url
 }
 
 const goPage = page => {
     let url = `/purchase_target?page=${page}`
     if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
+    if (janCode.value) url += `&jan_code=${janCode.value}`
+    if (isActive.value) url += `&is_active=${isActive.value}`
     location.href = url
 }
 
@@ -200,7 +205,8 @@ const previousPage = () => {
     if (props.current_page - 1 < 1) return;
     let url = `/purchase_target?page=${props.current_page - 1}`
     if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
+    if (janCode.value) url += `&jan_code=${janCode.value}`
+    if (isActive.value) url += `&is_active=${isActive.value}`
     location.href = url
 }
 
@@ -208,7 +214,8 @@ const nextPage = () => {
     if (props.current_page + 1 > props.last_page) return;
     let url = `/purchase_target?page=${props.current_page + 1}`
     if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
+    if (janCode.value) url += `&jan_code=${janCode.value}`
+    if (isActive.value) url += `&is_active=${isActive.value}`
     location.href = url
 }
 
