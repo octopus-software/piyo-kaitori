@@ -40,6 +40,12 @@
                 </div>
             </div>
 
+            <div class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <div class="flex justify-end">
+                    <BlueButton text="新規作成" :onclick="storePurchaseTarget"/>
+                </div>
+            </div>
+
             <!-- ユーザーリスト -->
             <div v-if="purchase_targets.length !== 0">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -129,41 +135,50 @@
                 </div>
             </div>
             <div v-else>
-                <p class="text-center text-gray-500 dark:text-gray-400">該当するユーザーが見つかりませんでした</p>
+                <p class="text-center text-gray-500 dark:text-gray-400">該当する商品が見つかりませんでした</p>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {onMounted, ref} from "vue";
+import {defineProps, onMounted, ref} from "vue";
 import {useToast} from "vue-toast-notification";
 import BlueButton from "../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../Components/Button/OrangeButton.vue";
 
-const props = defineProps({
-    purchase_targets: {
-        type: Object,
-        required: true
-    },
-    params: {
-        type: {
-            name: String,
-            jan_code: String,
-            is_active: Boolean
-        },
-        required: true
-    },
-    current_page: {
-        type: Number,
-        required: true
-    },
-    last_page: {
-        type: Number,
-        required: true
-    }
-})
+type ParamType = {
+    name: string;
+    jan_code: string;
+    is_active: boolean;
+}
+
+type PurchaseOfferType = {
+    purchase_offer_id: number;
+    user_id: number;
+    user_name: string;
+    price: number;
+    amount: number;
+}
+
+type PurchaseTargetType = {
+    id: number;
+    name: string;
+    jan_code: string;
+    image_url: string;
+    is_active: boolean;
+    max_amount: number;
+    current_amount: number;
+    purchase_offers: PurchaseOfferType[];
+}
+
+const props = defineProps<{
+    purchase_targets: PurchaseTargetType
+    params: ParamType,
+    current_page: number,
+    last_page: number
+}>()
 
 const name = ref(props.params.name)
 const janCode = ref(props.params.jan_code)
@@ -181,7 +196,7 @@ onMounted(() => {
 const clear = () => {
     name.value = ''
     janCode.value = ''
-    isActive.value = ''
+    isActive.value = Boolean('')
     location.href = `/purchase_target`;
 }
 

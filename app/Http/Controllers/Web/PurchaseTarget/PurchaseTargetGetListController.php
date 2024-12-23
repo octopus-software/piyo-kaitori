@@ -51,7 +51,7 @@ class PurchaseTargetGetListController extends Controller
                 })
             ];
         });
-        return Inertia::render('PurchaseTarget/PurchaseTargetList', [
+        return Inertia::render('PurchaseTarget/List', [
             'purchase_targets' => $purchase_targets,
             'current_page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),

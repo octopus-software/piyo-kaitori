@@ -11,7 +11,7 @@ class PurchaseTargetGetEditController extends Controller
     public function __invoke($id)
     {
         $purchase_target = PurchaseTarget::query()->where('id', $id)->first();
-        return Inertia::render('PurchaseTarget/PurchaseTargetEdit', [
+        return Inertia::render('PurchaseTarget/Edit', [
             'purchase_target' => $purchase_target
         ]);
     }
