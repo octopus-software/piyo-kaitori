@@ -12,37 +12,42 @@
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取商品名</label>
-                            <input type="text" v-model="name" id="name"
+                            <input type="text" :value="values.name" id="name"
+                                   @input="(e) => setFieldValue('name', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   required/>
+                            />
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="jan_code"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
-                            <input type="text" v-model="janCode" id="jan_code"
+                            <input type="text" :value="values.jan_code" id="jan_code"
+                                   @input="(e) => setFieldValue('jan_code', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="" required/>
+                                   placeholder=""
+                            />
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="is_active"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
-                            <select v-model="isActive" id="is_active"
+                            <select :value="values.is_active" id="is_active"
+                                    @input="(e) => setFieldValue('is_active', e.target.value)"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required>
+                            >
                                 <option value=""></option>
                                 <option value="1">買取中</option>
                                 <option value="0">停止中</option>
                             </select>
                         </div>
                     </div>
-                    <BlueButton text="検索する" :onclick="search"/>
+                    <BlueButton text="検索する" :onclick="handleSubmit(search)"/>
                     <OrangeButton text="条件をクリア" :onclick="clear"/>
                 </div>
             </div>
 
-            <div class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <div
+                class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <div class="flex justify-end">
-                    <BlueButton text="新規作成" :onclick="storePurchaseTarget"/>
+                    <BlueButton text="新規作成" :onclick="goCreate"/>
                 </div>
             </div>
 
@@ -85,7 +90,7 @@
                             {{ purchase_target.current_amount }} / {{ purchase_target.max_amount }}
                         </td>
                         <td class="px-6 py-4">
-                            <span v-if="purchase_target.is_active === 1"
+                            <span v-if="purchase_target.is_active"
                                   class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">買取中</span>
                             <span v-else
                                   class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">停止中</span>
@@ -143,15 +148,18 @@
 
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {defineProps, onMounted, ref} from "vue";
+import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
 import BlueButton from "../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../Components/Button/OrangeButton.vue";
+import {router} from "@inertiajs/vue3";
+import {useForm} from "vee-validate";
+import {object, string} from "yup";
 
 type ParamType = {
-    name: string;
-    jan_code: string;
-    is_active: boolean;
+    name?: string;
+    jan_code?: string;
+    is_active?: boolean;
 }
 
 type PurchaseOfferType = {
@@ -174,64 +182,59 @@ type PurchaseTargetType = {
 }
 
 const props = defineProps<{
-    purchase_targets: PurchaseTargetType
+    purchase_targets: PurchaseTargetType[]
     params: ParamType,
     current_page: number,
     last_page: number
 }>()
 
-const name = ref(props.params.name)
-const janCode = ref(props.params.jan_code)
-const isActive = ref(props.params.is_active)
+const schema = object({
+    name: string(),
+    jan_code: string().max(13, 'JANコードは13桁以下で入力してください'),
+    is_active: string(),
+});
+
+const {handleSubmit, errors, values, setFieldValue} = useForm({
+    validationSchema: schema,
+    initialValues: {
+        name: props.params.name,
+        jan_code: props.params.jan_code,
+        is_active: props.params.is_active,
+    }
+});
 
 onMounted(() => {
-    const toast = useToast();
     const toastMessage = sessionStorage.getItem('toastMessage');
     if (toastMessage) {
-        toast.success(toastMessage);
+        useToast().success(toastMessage);
         sessionStorage.removeItem('toastMessage');
     }
-})
+});
 
-const clear = () => {
-    name.value = ''
-    janCode.value = ''
-    isActive.value = Boolean('')
-    location.href = `/purchase_target`;
-}
+const buildUrlWithParams = (page: number) => {
+    let params = {page: page}
+    if (values.name) params['name'] = values.name;
+    if (values.jan_code) params['jan_code'] = values.jan_code;
+    if (values.is_active) params['is_active'] = values.is_active;
+    return route('purchase_target.list', params);
+};
 
-const search = () => {
-    let url = `/purchase_target?page=1`
-    if (name.value) url += `&name=${name.value}`
-    if (janCode.value) url += `&jan_code=${janCode.value}`
-    if (isActive.value) url += `&is_active=${isActive.value}`
-    location.href = url
-}
+const clear = () => router.get(route('purchase_target.list'));
 
-const goPage = page => {
-    let url = `/purchase_target?page=${page}`
-    if (name.value) url += `&name=${name.value}`
-    if (janCode.value) url += `&jan_code=${janCode.value}`
-    if (isActive.value) url += `&is_active=${isActive.value}`
-    location.href = url
-}
+const search = () => router.get(buildUrlWithParams(1));
+
+const goPage = page => router.get(buildUrlWithParams(page));
 
 const previousPage = () => {
-    if (props.current_page - 1 < 1) return;
-    let url = `/purchase_target?page=${props.current_page - 1}`
-    if (name.value) url += `&name=${name.value}`
-    if (janCode.value) url += `&jan_code=${janCode.value}`
-    if (isActive.value) url += `&is_active=${isActive.value}`
-    location.href = url
+    if (props.current_page > 1) goPage(props.current_page - 1);
 }
 
 const nextPage = () => {
-    if (props.current_page + 1 > props.last_page) return;
-    let url = `/purchase_target?page=${props.current_page + 1}`
-    if (name.value) url += `&name=${name.value}`
-    if (janCode.value) url += `&jan_code=${janCode.value}`
-    if (isActive.value) url += `&is_active=${isActive.value}`
-    location.href = url
+    if (props.current_page < props.last_page) goPage(props.current_page + 1);
+}
+
+const goCreate = () => {
+    router.get(route('purchase_target.create'));
 }
 
 </script>

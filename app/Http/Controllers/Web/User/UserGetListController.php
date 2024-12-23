@@ -50,7 +50,7 @@ class UserGetListController extends Controller
             ];
         });
 
-        return Inertia::render('User/UserList', [
+        return Inertia::render('User/List', [
             'users' => $users,
             'current_page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),

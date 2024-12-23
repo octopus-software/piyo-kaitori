@@ -16,7 +16,7 @@ class UserGetEditController extends Controller
     public function __invoke(Request $request, int $id): Response
     {
         $user = User::query()->find($id);
-        return Inertia::render('User/UserEdit', [
+        return Inertia::render('User/Edit', [
             'user' => [
                 'id' => $id,
                 'name' => $user['name'],

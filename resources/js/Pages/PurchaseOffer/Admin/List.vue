@@ -11,22 +11,25 @@
                     <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取商品名</label>
-                            <input type="text" v-model="user_name" id="name"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">依頼者名</label>
+                            <input type="text" :value="values.user_name" id="name"
+                                   @input="(e) => setFieldValue('user_name', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="jan_code"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
-                            <input type="text" v-model="jan_code" id="jan_code"
+                            <input type="text" :value="values.jan_code" id="jan_code"
+                                   @input="(e) => setFieldValue('jan_code', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="" required/>
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="is_active"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
-                            <select v-model="status" id="is_active"
+                            <select :value="values.status" id="is_active"
+                                    @input="(e) => setFieldValue('status', e.target.value)"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required>
                                 <option value=""></option>
@@ -69,15 +72,6 @@
                         <th scope="col" class="px-6 py-3 w-[30%]">
                             ステータス
                         </th>
-                        <!--                        <th scope="col" class="px-6 py-3 w-[20%]">-->
-                        <!--                            JANコード-->
-                        <!--                        </th>-->
-                        <!--                        <th scope="col" class="px-6 py-3 w-[20%]">-->
-                        <!--                            買取希望数 (現在 / 上限)-->
-                        <!--                        </th>-->
-                        <!--                        <th scope="col" class="px-6 py-3 w-[20%]">-->
-                        <!--                            買取ステータス-->
-                        <!--                        </th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -108,15 +102,6 @@
                             <span v-if="purchase_offer.status === 4"
                                   class="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">取引完了</span>
                         </td>
-                        <!--                        <td class="px-6 py-4">-->
-                        <!--                            {{ purchase_target.current_amount }} / {{ purchase_target.max_amount }}-->
-                        <!--                        </td>-->
-                        <!--                        <td class="px-6 py-4">-->
-                        <!--                            <span v-if="purchase_target.is_active === 1"-->
-                        <!--                                  class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">買取中</span>-->
-                        <!--                            <span v-else-->
-                        <!--                                  class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">停止中</span>-->
-                        <!--                        </td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -170,11 +155,13 @@
 
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {defineProps, onMounted, ref} from "vue";
+import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
 import {router} from '@inertiajs/vue3';
 import BlueButton from "../../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../../Components/Button/OrangeButton.vue";
+import {object, string} from "yup";
+import {useForm} from "vee-validate";
 
 type ParamType = {
     user_name: string;
@@ -208,58 +195,49 @@ const props = defineProps<{
     last_page: number
 }>()
 
-const user_name = ref(props.params.user_name) // 名前を含む
-const jan_code = ref(props.params.jan_code) // JANコードを含む
-const status = ref(props.params.status) // ステータスが一致
+const schema = object({
+    user_name: string(),
+    jan_code: string().max(13, 'JANコードは13桁以下で入力してください'),
+    status: string(),
+});
+
+const {handleSubmit, errors, values, setFieldValue} = useForm({
+    validationSchema: schema,
+    initialValues: {
+        user_name: props.params.user_name,
+        jan_code: props.params.jan_code,
+        status: props.params.status,
+    }
+});
 
 onMounted(() => {
-    const toast = useToast();
     const toastMessage = sessionStorage.getItem('toastMessage');
     if (toastMessage) {
-        toast.success(toastMessage);
+        useToast().success(toastMessage);
         sessionStorage.removeItem('toastMessage');
     }
-})
+});
 
-const clear = () => {
-    user_name.value = ''
-    jan_code.value = ''
-    status.value = Number('')
-    location.href = `/purchase_offers`;
-}
+const buildUrlWithParams = (page: number) => {
+    let params = {page: page}
+    if (values.user_name) params['user_name'] = values.user_name;
+    if (values.jan_code) params['jan_code'] = values.jan_code;
+    if (values.status) params['status'] = values.status;
+    return route('purchase_offer.list', params);
+};
 
-const search = () => {
-    let url = `/purchase_offers?page=1`
-    if (user_name.value) url += `&user_name=${user_name.value}`
-    if (jan_code.value) url += `&jan_code=${jan_code.value}`
-    if (status.value) url += `&status=${status.value}`
-    location.href = url
-}
+const clear = () => router.get(route('purchase_offer.list'));
 
-const goPage = page => {
-    let url = `/purchase_offers?page=${page}`
-    if (user_name.value) url += `&user_name=${user_name.value}`
-    if (jan_code.value) url += `&jan_code=${jan_code.value}`
-    if (status.value) url += `&status=${status.value}`
-    location.href = url
-}
+const search = () => router.get(buildUrlWithParams(1));
+
+const goPage = page => router.get(buildUrlWithParams(page));
 
 const previousPage = () => {
-    if (props.current_page - 1 < 1) return;
-    let url = `/purchase_offers?page=${props.current_page - 1}`
-    if (user_name.value) url += `&user_name=${user_name.value}`
-    if (jan_code.value) url += `&jan_code=${jan_code.value}`
-    if (status.value) url += `&status=${status.value}`
-    location.href = url
+    if (props.current_page > 1) goPage(props.current_page - 1);
 }
 
 const nextPage = () => {
-    if (props.current_page + 1 > props.last_page) return;
-    let url = `/purchase_offers?page=${props.current_page + 1}`
-    if (user_name.value) url += `&name=${user_name.value}`
-    if (jan_code.value) url += `&jan_code=${jan_code.value}`
-    if (status.value) url += `&status=${status.value}`
-    location.href = url
+    if (props.current_page < props.last_page) goPage(props.current_page + 1);
 }
 
 const goEdit = (id: number) => {
