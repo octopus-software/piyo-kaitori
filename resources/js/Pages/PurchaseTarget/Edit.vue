@@ -93,7 +93,7 @@ const props = defineProps<{
         jan_code: string,
         image_url: string,
         amount: string,
-        is_active: boolean,
+        is_active: number,
         offers: Array<any>,
     }
 }>()
@@ -115,11 +115,11 @@ const {handleSubmit, errors} = useForm({
         name: purchaseTarget.value.name,
         jan_code: purchaseTarget.value.jan_code,
         amount: purchaseTarget.value.amount,
-        is_active: Boolean(purchaseTarget.value.is_active),
+        is_active: purchaseTarget.value.is_active,
     }
 });
 
-const handleUpdateChecked = (newValue: boolean) => {
+const handleUpdateChecked = (newValue: number) => {
     is_active.value = newValue;
 };
 

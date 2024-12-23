@@ -15,11 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('purchase_target_id');
-            $table->foreign('purchase_target_id')->references('id')->on('purchase_targets');
-            $table->unsignedInteger('price');
-            $table->unsignedInteger('amount');
-            $table->string('evidence_url',255);
+            $table->date('send_date')->nullable();
             $table->unsignedInteger('status');
             $table->timestamps();
         });

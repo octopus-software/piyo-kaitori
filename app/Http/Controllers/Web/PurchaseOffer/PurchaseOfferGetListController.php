@@ -2,54 +2,70 @@
 
 namespace App\Http\Controllers\Web\PurchaseOffer;
 
+use App\Helper\FormatHelper;
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PurchaseOfferGetListController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(){
-        return PurchaseOffer::with(['user','purchase_targets'])
-        ->get()->map(function($offer){
-            return [
-                'user_id' => $offer['user_id'],
-                'user_name' => $offer['user']['name'],
-                'status' => $offer['status'],
-                'detail' => $offer['purchase_targets']->map(function($target) {
-                    return [
-                        'target_id' => $target['pivot']['purchase_target_id'],
-                        'target_name' => $target['name'],
-                        'price' => $target['pivot']['price'],
-                        'amount' => $target['pivot']['amount'],
-                        'evidence_url' => $target['pivot']['evidence_url']
-                    ];
-                })
-            ];
-        });
-
-        // $responce = [];
-        // foreach ( $purchase_offers as $offer ){
-        //     $array_offer = [
-        //         'user_id' => $offer['user_id'],
-        //         'user_name' => $offer['user']['name'],
-        //         'status' => $offer['status'],
-        //     ];
-        //     $detail = [];
-        //     foreach ( $offer['purchase_targets'] as $target){
-        //         $detail[] = [
-        //             'target_id' => $target['pivot']['purchase_target_id'],
-        //             'target_name' => $target['name'],
-        //             'price' => $target['pivot']['price'],
-        //             'amount' => $target['pivot']['amount'],
-        //             'evidence_url' => $target['pivot']['evidence_url']
-        //         ];
-        //     }
-        //     $array_offer['detail'] = $detail;
-        //     $responce[] = $array_offer;
-        // }
-
-        // return $responce;
+    public function __invoke(Request $request)
+    {
+        $paginator = PurchaseOffer::with(['user', 'purchase_targets'])
+            ->when(isset($request['user_name']), function ($query) use ($request) {
+                $query->whereHas('user', function ($relation_query) use ($request) {
+                    $relation_query->where('name', 'LIKE', '%' . $request["user_name"] . '%');
+                });
+            })
+            ->when(isset($request['jan_code']), function ($query) use ($request) {
+                $query->whereHas('purchase_targets', function ($relation_query) use ($request) {
+                    $relation_query->where('jan_code', '=', $request["jan_code"]);
+                });
+            })
+            ->when(isset($request['status']), function ($query) use ($request) {
+                $query->where('status', '=', $request["status"]);
+            })
+            ->orderByDesc('created_at')
+            ->skip(((int)$request['page'] - 1) * 10 ?? 0)
+            ->paginate(10);
+        $purchase_offers = $paginator->getCollection()->map(function ($offer) {
+                return [
+                    'id' => $offer['id'],
+                    'user_id' => $offer['user_id'],
+                    'user_name' => $offer['user']['name'],
+                    'status' => $offer['status'],
+                    'summary' => implode(', ', $offer['purchase_targets']->map(function ($target) {
+                        return substr($target['name'], 0, 20) . '×' . $target['amount'];
+                    })->toArray()),
+                    'total_price' => FormatHelper::formatYen($offer['purchase_targets']->sum(function ($target) {
+                        return $target['pivot']['price'] * $target['pivot']['amount'];
+                    })),
+                    'offer_date' => (new Carbon($offer['created_at']))->format('Y年m月d日'),
+                    'detail' => $offer['purchase_targets']->map(function ($target) {
+                        return [
+                            'target_id' => $target['pivot']['purchase_target_id'],
+                            'target_name' => $target['name'],
+                            'price' => $target['pivot']['price'],
+                            'amount' => $target['pivot']['amount'],
+                            'evidence_url' => $target['pivot']['evidence_url']
+                        ];
+                    })
+                ];
+            });
+        return Inertia::render('PurchaseOffer/Admin/List', [
+            'purchase_offers' => $purchase_offers,
+            'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'params' => [
+                'user_name' => $request['user_name'] ?? '',
+                'jan_code' => $request['jan_code'] ?? '',
+                'status' => $request['status'] ?? '',
+            ]
+        ]);
     }
 }

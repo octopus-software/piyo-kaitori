@@ -4,9 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
- */
 class PurchaseTargetFactory extends Factory
 {
     /**
@@ -17,7 +14,7 @@ class PurchaseTargetFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->domainWord() . '-' . fake()->word(),
             'jan_code' => fake()->unique()->ean13(),
             'image_url' => "https://dummyimage.com/100x100/000/fff",
             'amount' => fake()->randomDigit(),
