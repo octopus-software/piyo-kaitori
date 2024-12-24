@@ -12,14 +12,16 @@
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
-                            <input type="text" v-model="name" id="name"
+                            <input type="text" :value="values.name" id="name"
+                                   @input="(e) => setFieldValue('name', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="email"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Eメール</label>
-                            <input type="email" v-model="email" id="email"
+                            <input type="email" :value="values.email" id="email"
+                                   @input="(e) => setFieldValue('email', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="" required/>
                         </div>
@@ -34,11 +36,14 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-[40%]">
+                        <th scope="col" class="px-6 py-3 w-[30%]">
                             ユーザー名
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[60%]">
+                        <th scope="col" class="px-6 py-3 w-[50%]">
                             Eメール
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[20%]">
+                            取引ステータス
                         </th>
                     </tr>
                     </thead>
@@ -49,7 +54,13 @@
                             <a :href="`/user/${user.id}/edit`">{{ user.name }}</a> <!-- ユーザーの名前などを表示する -->
                         </td>
                         <td class="px-6 py-4">
-                            {{ user.email }} <!-- ユーザーのメールアドレスなどを表示する -->
+                            {{ user.email }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span v-if="user.is_active"
+                                  class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">取引中</span>
+                            <span v-else
+                                  class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">停止中</span>
                         </td>
                     </tr>
                     </tbody>
@@ -102,38 +113,47 @@
     </AuthenticatedLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {onMounted, ref} from "vue";
+import {defineProps, onMounted, ref} from "vue";
 import BlueButton from "../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../Components/Button/OrangeButton.vue";
 import {useToast} from "vue-toast-notification";
+import {object, string} from "yup";
+import {useForm} from "vee-validate";
 import {router} from "@inertiajs/vue3";
 
-const props = defineProps({
-    users: {
-        type: Object,
-        required: true
-    },
-    params: {
-        type: {
-            name: String,
-            email: String
-        },
-        required: true
-    },
-    current_page: {
-        type: Number,
-        required: true
-    },
-    last_page: {
-        type: Number,
-        required: true
-    }
-})
+type ParamType = {
+    name: string,
+    email: string
+}
 
-const name = ref(props.params.name)
-const email = ref(props.params.email)
+type UserType = {
+    id: number;
+    name: string;
+    email: string;
+    is_active: number;
+}
+
+const props = defineProps<{
+    users: UserType[]
+    params: ParamType,
+    current_page: number,
+    last_page: number
+}>()
+
+const schema = object({
+    name: string(),
+    email: string(),
+});
+
+const {handleSubmit, errors, values, setFieldValue} = useForm({
+    validationSchema: schema,
+    initialValues: {
+        name: props.params.name,
+        email: props.params.email,
+    }
+});
 
 onMounted(() => {
     const toast = useToast();
@@ -144,37 +164,25 @@ onMounted(() => {
     }
 })
 
-const clear = () => {
-    name.value = ''
-    email.value = ''
-    location.href = `/user?page=1&name=${name.value}&email=${email.value}`;
-}
+const buildUrlWithParams = (page: number) => {
+    let params = {page: page}
+    if (values.name) params['name'] = values.name;
+    if (values.email) params['email'] = values.email;
+    return route('user.list', params);
+};
 
-const search = () => {
-    location.href = `/user?page=1&name=${name.value}&email=${email.value}`;
-}
+const clear = () => router.get(route('user.list'));
 
-const goPage = page => {
-    let url = `/user?page=${page}`
-    if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
-    location.href = url
-}
+const search = () => router.get(buildUrlWithParams(1));
+
+const goPage = page => router.get(buildUrlWithParams(page));
 
 const previousPage = () => {
-    if (props.current_page - 1 < 1) return;
-    let url = `/user?page=${props.current_page - 1}`
-    if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
-    location.href = url
+    if (props.current_page > 1) goPage(props.current_page - 1);
 }
 
 const nextPage = () => {
-    if (props.current_page + 1 > props.last_page) return;
-    let url = `/user?page=${props.current_page + 1}`
-    if (name.value) url += `&name=${name.value}`
-    if (email.value) url += `&email=${email.value}`
-    location.href = url
+    if (props.current_page < props.last_page) goPage(props.current_page + 1);
 }
 
 </script>

@@ -31,22 +31,22 @@ class UserGetListController extends Controller
                 'name' => $user['name'],
                 'email' => $user['email'],
                 'is_active' => $user['is_active'],
-                'offers' => $user['purchase_offers']->map(function ($offer) {
-                    return [
-                        'id' => $offer['id'], // オファーID
-                        'status' => $offer['status'],
-                        'total_price' => $offer['purchase_targets']->sum('pivot.price'),
-                        'total_amount' => $offer['purchase_targets']->sum('pivot.amount'),
-                        'targets' => $offer['purchase_targets']->map(function ($target) {
-                            return [
-                                'id' => $target['id'],
-                                'name' => $target['name'],
-                                'price' => $target['pivot']['price'],
-                                'amount' => $target['pivot']['amount']
-                            ];
-                        })
-                    ];
-                })
+//                'offers' => $user['purchase_offers']->map(function ($offer) {
+//                    return [
+//                        'id' => $offer['id'], // オファーID
+//                        'status' => $offer['status'],
+//                        'total_price' => $offer['purchase_targets']->sum('pivot.price'),
+//                        'total_amount' => $offer['purchase_targets']->sum('pivot.amount'),
+//                        'targets' => $offer['purchase_targets']->map(function ($target) {
+//                            return [
+//                                'id' => $target['id'],
+//                                'name' => $target['name'],
+//                                'price' => $target['pivot']['price'],
+//                                'amount' => $target['pivot']['amount']
+//                            ];
+//                        })
+//                    ];
+//                })
             ];
         });
 
