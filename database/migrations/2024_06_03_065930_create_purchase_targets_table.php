@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("jan_code",255)->unique();
-            $table->string("image_url",255);
+            $table->string("image_url",255)->nullable();
             $table->unsignedInteger("amount");
             $table->unsignedTinyInteger("is_active");
             $table->timestamps();

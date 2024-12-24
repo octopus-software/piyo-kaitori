@@ -7,12 +7,12 @@ use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetEditController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetListController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferStoreController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetDeleteController;
+use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetCreateController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetEditController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetListController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetStoreController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetUpdateController;
 use App\Http\Controllers\Web\User\UserDeleteController;
-use App\Http\Controllers\Web\User\UserGetCreateController;
 use App\Http\Controllers\Web\User\UserGetEditController;
 use App\Http\Controllers\Web\User\UserGetListController;
 use App\Http\Controllers\Web\User\UserStoreController;
@@ -40,6 +40,7 @@ Route::delete('purchase_offer/{id}',PurchaseOfferDeleteController::class)->name(
 
 Route::get('/purchase_target',PurchaseTargetGetListController::class)->name('purchase_target.list');
 Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditController::class)->name('purchase_target.edit');
+Route::get('/purchase_target/create',PurchaseTargetGetCreateController::class)->name('purchase_target.create');
 Route::post('/purchase_target',PurchaseTargetStoreController::class)->name('purchase_target.store');
 Route::put('/purchase_target/{id}',PurchaseTargetUpdateController::class)->name('purchase_target.update');
 Route::delete('/purchase_target/{id}',PurchaseTargetDeleteController::class)->name('purchase_target.delete');
