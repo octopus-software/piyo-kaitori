@@ -9,7 +9,7 @@
                 <!--                <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
                 <div class="mx-auto">
                     <div class="flex">
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[40%]">
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
                             <input type="text" :value="values.name" id="name"
@@ -17,13 +17,18 @@
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="email"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Eメール</label>
                             <input type="email" :value="values.email" id="email"
                                    @input="(e) => setFieldValue('email', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="" required/>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="mb-5 p-2 w-[50%] flex">
+                            <Checkbox value="1" :checked="Boolean(values.is_inactive_included)" label="取引停止中を含める" subLabel="取引停止中の買取依頼者も表示に含めます" @update:checked="handleUpdateChecked" />
                         </div>
                     </div>
                     <BlueButton text="検索する" :onclick="search"/>
@@ -115,17 +120,19 @@
 
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {defineProps, onMounted, ref} from "vue";
+import {defineProps, onMounted} from "vue";
 import BlueButton from "../../Components/Button/BlueButton.vue";
 import OrangeButton from "../../Components/Button/OrangeButton.vue";
 import {useToast} from "vue-toast-notification";
-import {object, string} from "yup";
+import {number, object, string} from "yup";
 import {useForm} from "vee-validate";
 import {router} from "@inertiajs/vue3";
+import Checkbox from "@/Components/Input/Checkbox.vue";
 
 type ParamType = {
-    name: string,
-    email: string
+    name: string;
+    email: string;
+    is_inactive_included: boolean;
 }
 
 type UserType = {
@@ -145,6 +152,7 @@ const props = defineProps<{
 const schema = object({
     name: string(),
     email: string(),
+    is_inactive_included: number()
 });
 
 const {handleSubmit, errors, values, setFieldValue} = useForm({
@@ -152,8 +160,11 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     initialValues: {
         name: props.params.name,
         email: props.params.email,
+        is_inactive_included: Boolean(props.params.is_inactive_included),
     }
 });
+
+const handleUpdateChecked = (newValue: number) => setFieldValue('is_inactive_included', newValue);
 
 onMounted(() => {
     const toast = useToast();
@@ -168,6 +179,7 @@ const buildUrlWithParams = (page: number) => {
     let params = {page: page}
     if (values.name) params['name'] = values.name;
     if (values.email) params['email'] = values.email;
+    if (values.is_inactive_included) params['is_inactive_included'] = values.is_inactive_included;
     return route('user.list', params);
 };
 

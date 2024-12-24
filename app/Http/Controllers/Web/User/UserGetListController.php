@@ -22,6 +22,9 @@ class UserGetListController extends Controller
             ->when($request['email'], function ($query, $email) {
                 return $query->where('email', 'LIKE', "%$email%");
             })
+            ->when(!$request['is_inactive_included'], function ($query) {
+                return $query->where('is_active', '=', 1);
+            })
             ->with(['purchase_offers', 'purchase_offers.purchase_targets'])
             ->skip(((int)$request['page'] - 1) * 10 ?? 0)
             ->paginate(10);
@@ -57,6 +60,7 @@ class UserGetListController extends Controller
             'params' => [
                 'name' => $request['name'] ?? '',
                 'email' => $request['email'] ?? '',
+                'is_inactive_included' => $request['is_inactive_included'] ?? '',
             ]
         ]);
     }
