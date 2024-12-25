@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferDeleteController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetEditController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetListController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferStoreController;
+use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferUpdateStatusController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetDeleteController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetEditController;
 use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetListController;
@@ -37,6 +38,7 @@ Route::get('/purchase_offers',PurchaseOfferGetListController::class)->name('purc
 Route::get('purchase_offer/{id}/edit',PurchaseOfferGetEditController::class)->name('purchase_offer.edit');
 Route::post('purchase_offer',PurchaseOfferStoreController::class)->name('purchase_offer.store');
 Route::delete('purchase_offer/{id}',PurchaseOfferDeleteController::class)->name('purchase_offer.delete');
+Route::put('purchase_offer/{id}/status',PurchaseOfferUpdateStatusController::class)->name('purchase_offer.update.status');
 
 Route::get('/purchase_target',PurchaseTargetGetListController::class)->name('purchase_target.list');
 Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditController::class)->name('purchase_target.edit');
