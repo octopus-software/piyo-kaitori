@@ -5,6 +5,14 @@
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">買取対象編集</h5>
                 <div class="mx-auto">
+                    <div v-if="Object.keys(serverErrors).length"
+                         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        <ul>
+                            <li v-for="(messages, field) in serverErrors" :key="field">
+                                <span v-for="message in messages" :key="message">{{ message }}</span>
+                            </li>
+                        </ul>
+                    </div>
                     <div>
                         <div class="flex">
                             <div class="mb-5 p-2 w-[20%]">
@@ -63,7 +71,8 @@
                         </div>
                     </div>
                     <div class="mb-5 p-2 w-[70%] flex">
-                        <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在買取中である" subLabel="チェックの入っていない買取対象はユーザーの買取一覧から非表示になります" @update:checked="handleUpdateChecked" />
+                        <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在買取中である"
+                                  subLabel="チェックの入っていない買取対象はユーザーの買取一覧から非表示になります" @update:checked="handleUpdateChecked"/>
                     </div>
                     <BlueButton text="編集する" :onclick="handleSubmit(updatePurchaseTarget)"/>
                     <DeleteButton text="削除する" :onclick="deletePurchaseTarget"/>
@@ -101,6 +110,7 @@ const props = defineProps<{
     }
 }>()
 
+const serverErrors = ref({});
 const previewImage = ref(props.purchase_target.image_url);
 const newImage = ref(null);
 
@@ -132,26 +142,29 @@ const goBack = async () => {
  * @returns {Promise<void>}
  */
 const updatePurchaseTarget = async () => {
-    try {
-        await router.post(route('purchase_target.update', props.purchase_target.id), {
-            _method: "PUT",
-            name: values.name,
-            jan_code: values.jan_code,
-            amount: values.amount,
-            image_file: newImage.value,
-            is_active: Number(values.is_active),
-            image_url: props.purchase_target.image_url,
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        const toast = useToast();
-        await toast.success('データが更新されました')
-    } catch (error) {
-        const toast = useToast();
-        toast.error(error.response.data.message);
-    }
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
+    resetServerErrors();
+    await router.post(route('purchase_target.update', props.purchase_target.id), {
+        _method: "PUT",
+        name: values.name,
+        jan_code: values.jan_code,
+        amount: values.amount,
+        image_file: newImage.value,
+        is_active: Number(values.is_active),
+        image_url: props.purchase_target.image_url,
+    }, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        onSuccess: () => toast.success('買取対象を更新しました', {duration: 5000}),
+        onError: (errors) => {
+            serverErrors.value = errors;
+        },
+    });
+};
+
+const resetServerErrors = () => {
+    serverErrors.value = {};
 };
 
 /**

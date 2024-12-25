@@ -122,12 +122,8 @@ const storePurchaseTarget = () => {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
-        onSuccess: () => {
-            toast.success('買取対象を作成しました', {duration: 5000});
-            router.get(route('purchase_target.list'));
-        },
+        onSuccess: () => toast.success('買取対象を作成しました', {duration: 5000}),
         onError: (errors) => {
-            console.log("エラー発生:", errors);
             serverErrors.value = errors;
         },
     });
