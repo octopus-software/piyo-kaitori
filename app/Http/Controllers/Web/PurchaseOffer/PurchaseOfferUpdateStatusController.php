@@ -5,18 +5,17 @@ namespace App\Http\Controllers\Web\PurchaseOffer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOfferUpdateStatusRequest;
 use App\Models\PurchaseOffer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 
 class PurchaseOfferUpdateStatusController extends Controller
 {
-    public function __invoke(PurchaseOfferUpdateStatusRequest $request, int $id){
+    public function __invoke(PurchaseOfferUpdateStatusRequest $request, int $id): RedirectResponse
+    {
         $purchase_offer = PurchaseOffer::query()->find($request['id']);
         $purchase_offer->update([
             'status' => $request['status']
         ]);
-        return [
-            'id' => $purchase_offer['id']
-        ];
+        return Redirect::route('purchase_offer.edit', ['id' => $purchase_offer['id']]);
     }
 }
