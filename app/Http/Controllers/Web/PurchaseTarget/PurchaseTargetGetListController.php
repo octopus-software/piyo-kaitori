@@ -29,6 +29,7 @@ class PurchaseTargetGetListController extends Controller
             ->with(['purchase_offers' => function ($query) {
             $query->where('status', PurchaseOffer::STATUS['unapproved']);
         }, 'purchase_offers.user'])
+            ->orderByDesc('created_at')
             ->skip(((int)$request['page'] - 1) * 5 ?? 0)
             ->paginate(5);
         $purchase_targets = $paginator->getCollection()->map(function ($target) {

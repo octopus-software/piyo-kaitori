@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\UploadedFile;
 
 class PutPurchaseTargetRequest extends FormRequest
 {
@@ -15,19 +13,31 @@ class PutPurchaseTargetRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-//            'name' => 'required|string',
-//            'jan_code' => 'required|string|max:13',
-//            'image_url' => 'required|url', //実装の際は'active_url'に変更
-//            'amount' => 'required|integer|min:1',
-//            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string',
+            'jan_code' => 'required|string|max:13|unique:purchase_targets,jan_code,' . $this->route('id'),
+            'amount' => 'required|integer|min:1',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => '商品名を入力してください',
+            'name.string' => '商品名は文字列で入力してください',
+            'jan_code.required' => 'JANコードを入力してください',
+            'jan_code.string' => 'JANコードは文字列で入力してください',
+            'jan_code.max' => 'JANコードは13文字以内で入力してください',
+            'jan_code.unique' => 'このJANコードは既に登録されています',
+            'amount.required' => '数量を入力してください',
+            'amount.integer' => '数量は整数で入力してください',
+            'amount.min' => '数量は1以上で入力してください',
+            'image_file.image' => '画像ファイルを選択してください',
+            'image_file.mimes' => '画像ファイルはjpeg,png,jpg,gif形式で選択してください',
+            'image_file.max' => '画像ファイルは2MB以内で選択してください',
         ];
     }
 }

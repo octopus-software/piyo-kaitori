@@ -77,7 +77,7 @@
                     <tr v-for="(purchase_target, index) in purchase_targets" :key="index"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
-                            <img :src="purchase_target.image_url" alt="商品画像">
+                            <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">
                         </td>
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
                             <a :href="`/purchase_target/${purchase_target.id}/edit`">{{ purchase_target.name }}</a>
