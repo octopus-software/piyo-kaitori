@@ -26,7 +26,6 @@ class PurchaseTargetStoreController extends Controller
             'amount' => $request['amount'],
             'is_active' => 1,
         ]);
-        session()->flash('toastMessage', '購入ターゲットが更新されました！');
         return redirect()->route('purchase_target.list');
     }
 }
