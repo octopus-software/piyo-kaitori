@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\Dashboard\GetDashboardController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetMyListController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferDeleteController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetEditController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetListController;
@@ -39,6 +40,7 @@ Route::get('purchase_offer/{id}/edit',PurchaseOfferGetEditController::class)->na
 Route::post('purchase_offer',PurchaseOfferStoreController::class)->name('purchase_offer.store');
 Route::delete('purchase_offer/{id}',PurchaseOfferDeleteController::class)->name('purchase_offer.delete');
 Route::put('purchase_offer/{id}/status',PurchaseOfferUpdateStatusController::class)->name('purchase_offer.update.status');
+Route::get('purchase_offers/myself',PurchaseOfferGetMyListController::class)->name('purchase_offer.list.myself');
 
 Route::get('/purchase_target',PurchaseTargetGetListController::class)->name('purchase_target.list');
 Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditController::class)->name('purchase_target.edit');
