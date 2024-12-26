@@ -74,7 +74,7 @@
                         <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在買取中である"
                                   subLabel="チェックの入っていない買取対象はユーザーの買取一覧から非表示になります" @update:checked="handleUpdateChecked"/>
                     </div>
-                    <BlueButton text="編集する" @click="handleSubmit(updatePurchaseTarget)"/>
+                    <BlueButton text="編集する" @click="updatePurchaseTarget"/>
                     <DeleteButton text="削除する" :onclick="deletePurchaseTarget"/>
                     <GrayButton text="戻る" @click="goBack"/>
                 </div>

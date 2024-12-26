@@ -26,18 +26,6 @@
                                    placeholder=""
                             />
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
-                            <label for="is_active"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
-                            <select :value="values.is_active" id="is_active"
-                                    @input="(e) => setFieldValue('is_active', e.target.value)"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option value=""></option>
-                                <option value="1">買取中</option>
-                                <option value="0">停止中</option>
-                            </select>
-                        </div>
                     </div>
                     <BlueButton text="検索する" @click="handleSubmit(search)"/>
                     <OrangeButton text="条件をクリア" @click="clear"/>
@@ -68,19 +56,16 @@
                         <th scope="col" class="px-6 py-3 w-[20%]">
                             買取希望数 (現在 / 上限)
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[20%]">
-                            買取ステータス
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-for="(purchase_target, index) in purchase_targets" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
                         <td class="px-6 py-4">
                             <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">
                         </td>
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
-                            <a :href="`/purchase_target/${purchase_target.id}/edit`">{{ purchase_target.name }}</a>
+                            {{ purchase_target.name }}
                             <!-- ユーザーの名前などを表示する -->
                         </td>
                         <td class="px-6 py-4">
@@ -88,12 +73,6 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ purchase_target.current_quantity }} / {{ purchase_target.max_quantity }}
-                        </td>
-                        <td class="px-6 py-4">
-                            <span v-if="purchase_target.is_active"
-                                  class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">買取中</span>
-                            <span v-else
-                                  class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">停止中</span>
                         </td>
                     </tr>
                     </tbody>
@@ -159,7 +138,6 @@ import {object, string} from "yup";
 type ParamType = {
     name?: string;
     jan_code?: string;
-    is_active?: boolean;
 }
 
 type PurchaseOfferType = {
@@ -191,7 +169,6 @@ const props = defineProps<{
 const schema = object({
     name: string(),
     jan_code: string().max(13, 'JANコードは13桁以下で入力してください'),
-    is_active: string(),
 });
 
 const {handleSubmit, errors, values, setFieldValue} = useForm({
@@ -199,7 +176,6 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     initialValues: {
         name: props.params.name,
         jan_code: props.params.jan_code,
-        is_active: props.params.is_active,
     }
 });
 
@@ -215,7 +191,6 @@ const buildUrlWithParams = (page: number) => {
     let params = {page: page}
     if (values.name) params['name'] = values.name;
     if (values.jan_code) params['jan_code'] = values.jan_code;
-    if (values.is_active) params['is_active'] = values.is_active;
     return route('client.purchase_target.list', params);
 };
 

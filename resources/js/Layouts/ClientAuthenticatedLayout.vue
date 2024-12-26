@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {initFlowbite} from 'flowbite'
 import {onMounted} from "vue";
-import {router} from '@inertiajs/inertia-vue3';
+import {router} from '@inertiajs/vue3';
 
 onMounted(() => {
     initFlowbite();
@@ -18,7 +18,7 @@ onMounted(() => {
                        aria-label="Sidebar">
                     <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                         <ul class="space-y-2 font-medium">
-                            <li @click="router(route('client.my_cart'))"
+                            <li @click="router.get(route('client.my_cart.list'))"
                                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
                                 <svg class="w-6 h-6 text-gray-500 dark:text-white group-hover:text-gray-900"
                                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -31,8 +31,8 @@ onMounted(() => {
 
                                 <span class="flex-1 ms-3 whitespace-nowrap">マイカート</span>
                             </li>
-                            <li @click="router(route('client.purchase_target.list'))"
-                               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            <li @click="router.get(route('client.purchase_target.list'))"
+                               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
                                 <svg class="w-6 h-6 text-gray-500 dark:text-white group-hover:text-gray-900"
                                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                      fill="currentColor" viewBox="0 0 24 24">
