@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Cart;
+namespace App\Http\Requests\MyCart\Client;
 
 
 use App\Http\Requests\FormRequest;
 
-class CartStoreRequest extends FormRequest
+class MyCartStoreClientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

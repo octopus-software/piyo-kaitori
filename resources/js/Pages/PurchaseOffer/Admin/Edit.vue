@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
             <div
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -97,22 +97,22 @@
                         </div>
                     </div>
 
-                    <BlueButton text="更新する" :onclick="updatePurchaseOfferStatus"/>
+                    <BlueButton text="更新する" @click="updatePurchaseOfferStatus"/>
                     <DeleteButton text="削除する" :onclick="deleteUser"/>
-                    <GrayButton text="戻る" :onclick="goBack"/>
+                    <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import GrayButton from "../../../Components/Button/GrayButton.vue";
-import DeleteButton from "../../../Components/Button/DeleteButton.vue";
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import GrayButton from "@/Components/Button/GrayButton.vue";
+import DeleteButton from "@/Components/Button/DeleteButton.vue";
 import {router} from '@inertiajs/vue3';
 import {defineProps, ref} from 'vue';
 import {useForm} from "vee-validate";
@@ -157,12 +157,12 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 });
 
 const goBack = () => {
-    router.get(route('purchase_offer.list'));
+    router.get(route('admin.purchase_offer.list'));
 }
 
 const updatePurchaseOfferStatus = () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
-    router.put(route('purchase_offer.update.status', {id: props.purchase_offer.id}), {
+    router.put(route('admin.purchase_offer.update.status', {id: props.purchase_offer.id}), {
         status: values.status,
     }, {
         headers: {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\PurchaseOffer;
+namespace App\Http\Requests\PurchaseOffer\Client;
 
 
 use App\Http\Requests\FormRequest;
 
-class PurchaseOfferStoreRequest extends FormRequest
+class PurchaseOfferStoreClientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

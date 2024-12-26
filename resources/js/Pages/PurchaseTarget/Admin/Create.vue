@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
             <div
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -62,21 +62,21 @@
                             </div>
                         </div>
                     </div>
-                    <BlueButton text="作成する" :onclick="handleSubmit(storePurchaseTarget)"/>
-                    <GrayButton text="戻る" :onclick="goBack"/>
+                    <BlueButton text="作成する" @click="handleSubmit(storePurchaseTarget)"/>
+                    <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import {ref} from "vue";
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import GrayButton from "../../../Components/Button/GrayButton.vue";
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import GrayButton from "@/Components/Button/GrayButton.vue";
 import {router} from "@inertiajs/vue3";
 import {string, object} from "yup";
 import {useForm} from "vee-validate";
@@ -103,7 +103,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 });
 
 const goBack = async () => {
-    await router.get(route('purchase_target.list'));
+    await router.get(route('admin.purchase_target.list'));
 }
 
 /**
@@ -113,7 +113,7 @@ const goBack = async () => {
 const storePurchaseTarget = () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
     resetServerErrors();
-    router.post(route('purchase_target.store'), {
+    router.post(route('admin.purchase_target.store'), {
         name: values.name,
         jan_code: values.jan_code,
         max_quantity: values.max_quantity,

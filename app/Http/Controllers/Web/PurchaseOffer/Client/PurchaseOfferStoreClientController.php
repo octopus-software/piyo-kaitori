@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Web\PurchaseOffer\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PurchaseOffer\PurchaseOfferStoreRequest;
+use App\Http\Requests\PurchaseOffer\Client\PurchaseOfferStoreClientRequest;
 use App\Models\PurchaseOffer;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseOfferStoreController extends Controller
+class PurchaseOfferStoreClientController extends Controller
 {
-    public function __invoke(PurchaseOfferStoreRequest $request){
+    public function __invoke(PurchaseOfferStoreClientRequest $request){
         return DB::transaction(function () use($request) {
             // =====================
             // 登録や更新などの複数の処理

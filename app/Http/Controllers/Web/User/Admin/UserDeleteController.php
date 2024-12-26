@@ -15,6 +15,6 @@ class UserDeleteController extends Controller
     public function __invoke(Request $request, int $id): RedirectResponse
     {
         User::destroy($id);
-        return redirect()->route('user.list');
+        return redirect()->route('admin.user.list');
     }
 }

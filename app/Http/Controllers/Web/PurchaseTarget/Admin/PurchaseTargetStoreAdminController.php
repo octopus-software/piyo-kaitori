@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Web\PurchaseTarget\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PurchaseTarget\PurchaseTargetStoreRequest;
+use App\Http\Requests\PurchaseTarget\Admin\PurchaseTargetStoreAdminRequest;
 use App\Models\PurchaseTarget;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
-class PurchaseTargetStoreController extends Controller
+class PurchaseTargetStoreAdminController extends Controller
 {
-    public function __invoke(PurchaseTargetStoreRequest $request): Response
+    public function __invoke(PurchaseTargetStoreAdminRequest $request): Response
     {
         // 画像がアップロードされている場合
         $image_url = null;
@@ -26,6 +27,6 @@ class PurchaseTargetStoreController extends Controller
             'max_quantity' => $request['max_quantity'],
             'is_active' => 1,
         ]);
-        return redirect()->route('purchase_target.list');
+        return Redirect::route('admin.purchase_target.list');
     }
 }

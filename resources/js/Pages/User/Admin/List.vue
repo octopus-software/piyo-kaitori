@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
 
             <!-- 検索フィルター -->
@@ -31,8 +31,8 @@
                             <Checkbox value="1" :checked="Boolean(values.is_inactive_included)" label="取引停止中を含める" subLabel="取引停止中の買取依頼者も表示に含めます" @update:checked="handleUpdateChecked" />
                         </div>
                     </div>
-                    <BlueButton text="検索する" :onclick="search"/>
-                    <OrangeButton text="条件をクリア" :onclick="clear"/>
+                    <BlueButton text="検索する" @click="search"/>
+                    <OrangeButton text="条件をクリア" @click="clear"/>
                 </div>
             </div>
 
@@ -53,10 +53,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(user, index) in users" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr v-for="(user, index) in users" :key="index" @click="router.get(route('admin.user.edit', {id: user.id}))"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
-                            <a :href="`/user/${user.id}/edit`">{{ user.name }}</a> <!-- ユーザーの名前などを表示する -->
+                            {{ user.name }} <!-- ユーザーの名前などを表示する -->
                         </td>
                         <td class="px-6 py-4">
                             {{ user.email }}
@@ -115,14 +115,14 @@
                 <p class="text-center text-gray-500 dark:text-gray-400">該当するユーザーが見つかりませんでした</p>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import OrangeButton from "../../../Components/Button/OrangeButton.vue";
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {useToast} from "vue-toast-notification";
 import {number, object, string} from "yup";
 import {useForm} from "vee-validate";
@@ -180,10 +180,10 @@ const buildUrlWithParams = (page: number) => {
     if (values.name) params['name'] = values.name;
     if (values.email) params['email'] = values.email;
     if (values.is_inactive_included) params['is_inactive_included'] = values.is_inactive_included;
-    return route('user.list', params);
+    return route('admin.user.list', params);
 };
 
-const clear = () => router.get(route('user.list'));
+const clear = () => router.get(route('admin.user.list'));
 
 const search = () => router.get(buildUrlWithParams(1));
 

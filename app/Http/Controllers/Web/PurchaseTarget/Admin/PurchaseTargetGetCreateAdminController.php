@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web\PurchaseTarget\Admin;
 
 use Inertia\Inertia;
 
-class PurchaseTargetGetCreateController
+class PurchaseTargetGetCreateAdminController
 {
     public function __invoke()
     {

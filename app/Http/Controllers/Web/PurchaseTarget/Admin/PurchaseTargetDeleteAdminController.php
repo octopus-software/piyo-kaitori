@@ -7,7 +7,7 @@ use App\Models\PurchaseTarget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 
-class PurchaseTargetDeleteController extends Controller
+class PurchaseTargetDeleteAdminController extends Controller
 {
     /**
      * @param $id
@@ -16,6 +16,6 @@ class PurchaseTargetDeleteController extends Controller
     public function __invoke($id): RedirectResponse
     {
         PurchaseTarget::query()->find($id)->delete();
-        return Redirect::route('purchase_target.list', [], 302, ['X-Inertia', true]);
+        return Redirect::route('admin.purchase_target.list', [], 302, ['X-Inertia', true]);
     }
 }

@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class PurchaseOfferGetListController extends Controller
+class PurchaseOfferGetListAdminController extends Controller
 {
     /**
      * Handle the incoming request.

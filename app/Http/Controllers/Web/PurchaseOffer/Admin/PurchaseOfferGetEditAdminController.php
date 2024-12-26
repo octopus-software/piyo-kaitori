@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Inertia\Inertia;
 
-class PurchaseOfferGetEditController extends Controller
+class PurchaseOfferGetEditAdminController extends Controller
 {
     public function __invoke($id)
     {

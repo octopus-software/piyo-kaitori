@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PurchaseTarget;
 use Inertia\Inertia;
 
-class PurchaseTargetGetEditController extends Controller
+class PurchaseTargetGetEditAdminController extends Controller
 {
     public function __invoke($id)
     {

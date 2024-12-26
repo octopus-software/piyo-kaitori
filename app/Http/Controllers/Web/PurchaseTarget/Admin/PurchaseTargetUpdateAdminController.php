@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Web\PurchaseTarget\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PurchaseTarget\PurchaseTargetUpdateRequest;
+use App\Http\Requests\PurchaseTarget\Admin\PurchaseTargetUpdateAdminRequest;
 use App\Models\PurchaseTarget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
-class PurchaseTargetUpdateController extends Controller
+class PurchaseTargetUpdateAdminController extends Controller
 {
     /**
-     * @param PurchaseTargetUpdateRequest $request
+     * @param PurchaseTargetUpdateAdminRequest $request
      * @param int $id
      * @return RedirectResponse
      */
-    public function __invoke(PurchaseTargetUpdateRequest $request, int $id): RedirectResponse
+    public function __invoke(PurchaseTargetUpdateAdminRequest $request, int $id): RedirectResponse
     {
         // 新しい画像がアップロードされている場合
         if ($request['image_file']) {
@@ -35,7 +35,7 @@ class PurchaseTargetUpdateController extends Controller
             'max_quantity' => $request['max_quantity'],
             'is_active' => $request['is_active']
         ]);
-        return Redirect::route('purchase_target.edit', [
+        return Redirect::route('admin.purchase_target.edit', [
             'id' => $purchase_target['id']
         ]);
     }

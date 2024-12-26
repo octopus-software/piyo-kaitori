@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseOfferDeleteController extends Controller
+class PurchaseOfferDeleteAdminController extends Controller
 {
     public function __invoke($id){
         return DB::transaction(function () use($id) {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\PurchaseOffer;
+namespace App\Http\Requests\PurchaseOffer\Client;
 
 use App\Models\PurchaseOffer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PurchaseOfferUpdateStatusRequest extends FormRequest
+class PurchaseOfferUpdateStatusClientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

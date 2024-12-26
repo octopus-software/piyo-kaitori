@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Web\Cart;
+namespace App\Http\Controllers\Web\MyCart\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Cart\CartStoreRequest;
+use App\Http\Requests\MyCart\Client\MyCartStoreClientRequest;
 
-class CartStoreController extends Controller
+class MyCartStoreClientController extends Controller
 {
-    public function __invoke(CartStoreRequest $request)
+    public function __invoke(MyCartStoreClientRequest $request)
     {
         $cart = session()->get('cart', []);
         if (isset($cart[$request['purchase_target_id']])) {

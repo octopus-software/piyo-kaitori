@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
 
             <!-- 検索フィルター -->
@@ -40,8 +40,8 @@
                             </select>
                         </div>
                     </div>
-                    <BlueButton text="検索する" :onclick="search"/>
-                    <OrangeButton text="条件をクリア" :onclick="clear"/>
+                    <BlueButton text="検索する" @click="search"/>
+                    <OrangeButton text="条件をクリア" @click="clear"/>
                 </div>
             </div>
 
@@ -143,16 +143,16 @@
                 <p class="text-center text-gray-500 dark:text-gray-400">該当するユーザーが見つかりませんでした</p>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
 import {router} from '@inertiajs/vue3';
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import OrangeButton from "../../../Components/Button/OrangeButton.vue";
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {object, string} from "yup";
 import {useForm} from "vee-validate";
 
@@ -216,10 +216,10 @@ const buildUrlWithParams = (page: number) => {
     if (values.user_name) params['user_name'] = values.user_name;
     if (values.jan_code) params['jan_code'] = values.jan_code;
     if (values.status) params['status'] = values.status;
-    return route('purchase_offer.list', params);
+    return route('admin.purchase_offer.list', params);
 };
 
-const clear = () => router.get(route('purchase_offer.list'));
+const clear = () => router.get(route('admin.purchase_offer.list'));
 
 const search = () => router.get(buildUrlWithParams(1));
 
@@ -234,7 +234,7 @@ const nextPage = () => {
 }
 
 const goEdit = (id: number) => {
-    router.get(route('purchase_offer.edit', {id: id}))
+    router.get(route('admin.purchase_offer.edit', {id: id}))
 }
 
 </script>

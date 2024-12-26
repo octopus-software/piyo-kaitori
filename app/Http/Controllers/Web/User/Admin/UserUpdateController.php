@@ -16,6 +16,6 @@ class UserUpdateController extends Controller
         User::query()->where('id', $id)->update([
             'is_active' => $request['is_active'],
         ]);
-        return redirect()->route('user.edit', ['id' => $id]);
+        return redirect()->route('admin.user.edit', ['id' => $id]);
     }
 }

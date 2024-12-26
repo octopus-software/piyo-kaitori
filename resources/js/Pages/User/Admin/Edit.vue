@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
             <div
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -46,22 +46,22 @@
                         </div>
                     </div>
 
-                    <BlueButton text="編集する" :onclick="updateUser"/>
+                    <BlueButton text="編集する" @click="updateUser"/>
                     <DeleteButton text="削除する" :onclick="deleteUser"/>
-                    <GrayButton text="戻る" :onclick="goBack"/>
+                    <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import GrayButton from "../../../Components/Button/GrayButton.vue";
-import DeleteButton from "../../../Components/Button/DeleteButton.vue";
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import GrayButton from "@/Components/Button/GrayButton.vue";
+import DeleteButton from "@/Components/Button/DeleteButton.vue";
 import {router} from '@inertiajs/vue3';
 import {defineProps} from 'vue';
 import {bool, object} from "yup";
@@ -93,12 +93,12 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 
 const handleUpdateChecked = (newValue: number) => setFieldValue('is_active', newValue);
 
-const goBack = () => router.get(route('user.list'));
+const goBack = () => router.get(route('admin.user.list'));
 
 const updateUser = async () => {
     console.log(values)
     try {
-        await router.put(route('user.update', props.user.id), {
+        await router.put(route('admin.user.update', props.user.id), {
             is_active: values.is_active,
         });
         toast.success('データが更新されました');
@@ -109,7 +109,7 @@ const updateUser = async () => {
 
 const deleteUser = async (): Promise<void> => {
     try {
-        await router.delete(route('user.delete', props.user.id));
+        await router.delete(route('admin.user.delete', props.user.id));
         sessionStorage.setItem('toastMessage', 'データが削除されました');
     } catch (error) {
         const toast = useToast();

@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
             <div
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -74,23 +74,23 @@
                         <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在買取中である"
                                   subLabel="チェックの入っていない買取対象はユーザーの買取一覧から非表示になります" @update:checked="handleUpdateChecked"/>
                     </div>
-                    <BlueButton text="編集する" :onclick="handleSubmit(updatePurchaseTarget)"/>
+                    <BlueButton text="編集する" @click="handleSubmit(updatePurchaseTarget)"/>
                     <DeleteButton text="削除する" :onclick="deletePurchaseTarget"/>
-                    <GrayButton text="戻る" :onclick="goBack"/>
+                    <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import {ref} from "vue";
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import GrayButton from "../../../Components/Button/GrayButton.vue";
-import DeleteButton from "../../../Components/Button/DeleteButton.vue";
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import GrayButton from "@/Components/Button/GrayButton.vue";
+import DeleteButton from "@/Components/Button/DeleteButton.vue";
 import {defineProps} from 'vue';
 import {router} from "@inertiajs/vue3";
 import {string, object, bool} from "yup";
@@ -134,7 +134,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 const handleUpdateChecked = (newValue: number) => setFieldValue('is_active', newValue);
 
 const goBack = async () => {
-    await router.get(route('purchase_target.list'));
+    await router.get(route('admin.purchase_target.list'));
 }
 
 /**
@@ -144,7 +144,7 @@ const goBack = async () => {
 const updatePurchaseTarget = async () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
     resetServerErrors();
-    await router.post(route('purchase_target.update', props.purchase_target.id), {
+    await router.post(route('admin.purchase_target.update', props.purchase_target.id), {
         _method: "PUT",
         name: values.name,
         jan_code: values.jan_code,
@@ -173,7 +173,7 @@ const resetServerErrors = () => {
  */
 const deletePurchaseTarget = async () => {
     try {
-        await router.delete(route('purchase_target.delete', props.purchase_target.id), {
+        await router.delete(route('admin.purchase_target.delete', props.purchase_target.id), {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

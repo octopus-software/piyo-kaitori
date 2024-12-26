@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\PurchaseTarget;
+namespace App\Http\Requests\PurchaseTarget\Admin;
 
 use App\Http\Requests\FormRequest;
 
-class PurchaseTargetStoreRequest extends FormRequest
+class PurchaseTargetStoreAdminRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

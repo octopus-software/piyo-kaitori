@@ -1,5 +1,5 @@
 <template>
-    <AdminAuthenticatedLayout>
+    <ClientAuthenticatedLayout>
         <div class="relative overflow-x-auto">
 
             <!-- 検索フィルター -->
@@ -39,7 +39,7 @@
                             </select>
                         </div>
                     </div>
-                    <BlueButton text="検索する" @click="search"/>
+                    <BlueButton text="検索する" @click="handleSubmit(search)"/>
                     <OrangeButton text="条件をクリア" @click="clear"/>
                 </div>
             </div>
@@ -74,13 +74,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(purchase_target, index) in purchase_targets" :key="index" @click="router.get(route('admin.purchase_target.edit', {id: purchase_target.id}))"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <tr v-for="(purchase_target, index) in purchase_targets" :key="index"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
                             <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">
                         </td>
-                        <td class="cursor-pointer px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
-                            {{ purchase_target.name }}
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
+                            <a :href="`/purchase_target/${purchase_target.id}/edit`">{{ purchase_target.name }}</a>
                             <!-- ユーザーの名前などを表示する -->
                         </td>
                         <td class="px-6 py-4">
@@ -143,11 +143,11 @@
                 <p class="text-center text-gray-500 dark:text-gray-400">該当する商品が見つかりませんでした</p>
             </div>
         </div>
-    </AdminAuthenticatedLayout>
+    </ClientAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
-import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
+import ClientAuthenticatedLayout from '@/Layouts/ClientAuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
 import BlueButton from "@/Components/Button/BlueButton.vue";
@@ -216,10 +216,10 @@ const buildUrlWithParams = (page: number) => {
     if (values.name) params['name'] = values.name;
     if (values.jan_code) params['jan_code'] = values.jan_code;
     if (values.is_active) params['is_active'] = values.is_active;
-    return route('admin.purchase_target.list', params);
+    return route('client.purchase_target.list', params);
 };
 
-const clear = () => router.get(route('admin.purchase_target.list'));
+const clear = () => router.get(route('client.purchase_target.list'));
 
 const search = () => router.get(buildUrlWithParams(1));
 
@@ -234,7 +234,7 @@ const nextPage = () => {
 }
 
 const goCreate = () => {
-    router.get(route('admin.purchase_target.create'));
+    router.get(route('client.purchase_target.create'));
 }
 
 </script>
