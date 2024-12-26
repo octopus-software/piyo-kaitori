@@ -39,14 +39,14 @@
                     <div>
                         <div class="flex">
                             <div class="mb-5 p-2 w-[20%]">
-                                <label for="amount"
+                                <label for="max_quantity"
                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取希望数</label>
-                                <input type="number" :value="values.amount" id="amount" min="1"
-                                       @input="(e) => setFieldValue('amount', e.target.value)"
+                                <input type="number" :value="values.max_quantity" id="max_quantity" min="1"
+                                       @input="(e) => setFieldValue('max_quantity', e.target.value)"
                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                       :class="{ 'bg-red-100': errors.amount, 'border-red-300': errors.amount }"
+                                       :class="{ 'bg-red-100': errors.max_quantity, 'border-red-300': errors.max_quantity }"
                                        required/>
-                                <InputError v-if="errors.amount" :message="errors.amount" class="text-red-500"/>
+                                <InputError v-if="errors.max_quantity" :message="errors.max_quantity" class="text-red-500"/>
                             </div>
                         </div>
                     </div>
@@ -75,8 +75,8 @@ import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {ref} from "vue";
-import BlueButton from "../../Components/Button/BlueButton.vue";
-import GrayButton from "../../Components/Button/GrayButton.vue";
+import BlueButton from "../../../Components/Button/BlueButton.vue";
+import GrayButton from "../../../Components/Button/GrayButton.vue";
 import {router} from "@inertiajs/vue3";
 import {string, object} from "yup";
 import {useForm} from "vee-validate";
@@ -90,7 +90,7 @@ const image = ref(null);
 const schema = object({
     name: string().required('買取対象名は必須項目です'),
     jan_code: string().required('JANコードは必須項目です').max(13, 'JANコードは13桁以下で入力してください'),
-    amount: string().required('買取希望数は必須項目です').min(1, '少なくとも1以上を指定してください'),
+    max_quantity: string().required('買取希望数は必須項目です').min(1, '少なくとも1以上を指定してください'),
 });
 
 const {handleSubmit, errors, values, setFieldValue} = useForm({
@@ -98,7 +98,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     initialValues: {
         name: '',
         jan_code: '',
-        amount: 1,
+        max_quantity: 1,
     }
 });
 
@@ -116,7 +116,7 @@ const storePurchaseTarget = () => {
     router.post(route('purchase_target.store'), {
         name: values.name,
         jan_code: values.jan_code,
-        amount: values.amount,
+        max_quantity: values.max_quantity,
         image_file: image.value,
     }, {
         headers: {

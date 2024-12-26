@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseOffer;
+namespace App\Http\Controllers\Web\PurchaseOffer\Admin;
 
 use App\Helper\FormatHelper;
 use App\Http\Controllers\Controller;
@@ -40,10 +40,10 @@ class PurchaseOfferGetListController extends Controller
                     'user_name' => $offer['user']['name'],
                     'status' => $offer['status'],
                     'summary' => implode(', ', $offer['purchase_targets']->map(function ($target) {
-                        return substr($target['name'], 0, 20) . '×' . $target['amount'];
+                        return substr($target['name'], 0, 20) . '×' . $target['pivot']['quantity'];
                     })->toArray()),
                     'total_price' => FormatHelper::formatYen($offer['purchase_targets']->sum(function ($target) {
-                        return $target['pivot']['price'] * $target['pivot']['amount'];
+                        return $target['pivot']['price'] * $target['pivot']['quantity'];
                     })),
                     'offer_date' => (new Carbon($offer['created_at']))->format('Y年m月d日'),
                     'detail' => $offer['purchase_targets']->map(function ($target) {
@@ -51,7 +51,7 @@ class PurchaseOfferGetListController extends Controller
                             'target_id' => $target['pivot']['purchase_target_id'],
                             'target_name' => $target['name'],
                             'price' => $target['pivot']['price'],
-                            'amount' => $target['pivot']['amount'],
+                            'quantity' => $target['pivot']['quantity'],
                             'evidence_url' => $target['pivot']['evidence_url']
                         ];
                     })

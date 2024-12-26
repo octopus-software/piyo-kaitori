@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PurchaseOffer;
 
 
-class PurchaseOfferPostRequest extends FormRequest
+use App\Http\Requests\FormRequest;
+
+class PurchaseOfferStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +25,7 @@ class PurchaseOfferPostRequest extends FormRequest
         return [
             '*.purchase_target_id' => 'required|exists:purchase_targets,id',
             '*.price' => 'required|integer|min:0',
-            '*.amount' => 'required|integer|min:1',
+            '*.quantity' => 'required|integer|min:1',
             '*.evidence_url' => 'required|url'
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseTarget;
+namespace App\Http\Controllers\Web\PurchaseTarget\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
@@ -39,20 +39,20 @@ class PurchaseTargetGetListController extends Controller
                 'jan_code' => $target['jan_code'],
                 'image_url' => $target['image_url'],
                 'is_active' => $target['is_active'],
-                'max_amount' => $target['amount'],
-                'current_amount' => $target['purchase_offers']->sum('pivot.amount'),
+                'max_quantity' => $target['max_quantity'],
+                'current_quantity' => $target['purchase_offers']->sum('pivot.quantity'),
                 'purchase_offers' => $target['purchase_offers']->map(function ($offer) {
                     return [
                         'purchase_offer_id' => $offer['id'],
                         'user_id' => $offer['user_id'],
                         'user_name' => $offer['user']['name'],
                         'price' => $offer['pivot']['price'],
-                        'amount' => $offer['pivot']['amount'],
+                        'quantity' => $offer['pivot']['quantity'],
                     ];
                 })
             ];
         });
-        return Inertia::render('PurchaseTarget/List', [
+        return Inertia::render('PurchaseTarget/Admin/List', [
             'purchase_targets' => $purchase_targets,
             'current_page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),

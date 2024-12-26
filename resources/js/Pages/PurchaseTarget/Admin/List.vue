@@ -87,7 +87,7 @@
                             {{ purchase_target.jan_code }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ purchase_target.current_amount }} / {{ purchase_target.max_amount }}
+                            {{ purchase_target.current_quantity }} / {{ purchase_target.max_quantity }}
                         </td>
                         <td class="px-6 py-4">
                             <span v-if="purchase_target.is_active"
@@ -150,8 +150,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
-import BlueButton from "../../Components/Button/BlueButton.vue";
-import OrangeButton from "../../Components/Button/OrangeButton.vue";
+import BlueButton from "../../../Components/Button/BlueButton.vue";
+import OrangeButton from "../../../Components/Button/OrangeButton.vue";
 import {router} from "@inertiajs/vue3";
 import {useForm} from "vee-validate";
 import {object, string} from "yup";
@@ -167,7 +167,7 @@ type PurchaseOfferType = {
     user_id: number;
     user_name: string;
     price: number;
-    amount: number;
+    quantity: number;
 }
 
 type PurchaseTargetType = {
@@ -176,8 +176,8 @@ type PurchaseTargetType = {
     jan_code: string;
     image_url: string;
     is_active: boolean;
-    max_amount: number;
-    current_amount: number;
+    max_quantity: number;
+    current_quantity: number;
     purchase_offers: PurchaseOfferType[];
 }
 

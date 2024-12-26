@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseOffer;
+namespace App\Http\Controllers\Web\PurchaseOffer\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;

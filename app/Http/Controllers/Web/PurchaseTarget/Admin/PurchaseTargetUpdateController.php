@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseTarget;
+namespace App\Http\Controllers\Web\PurchaseTarget\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PutPurchaseTargetRequest;
+use App\Http\Requests\PurchaseTarget\PurchaseTargetUpdateRequest;
 use App\Models\PurchaseTarget;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Storage;
 class PurchaseTargetUpdateController extends Controller
 {
     /**
-     * @param PutPurchaseTargetRequest $request
+     * @param PurchaseTargetUpdateRequest $request
      * @param int $id
      * @return RedirectResponse
      */
-    public function __invoke(PutPurchaseTargetRequest $request, int $id): RedirectResponse
+    public function __invoke(PurchaseTargetUpdateRequest $request, int $id): RedirectResponse
     {
         // 新しい画像がアップロードされている場合
         if ($request['image_file']) {
@@ -32,7 +32,7 @@ class PurchaseTargetUpdateController extends Controller
             'name'=> $request['name'],
             'jan_code' => $request['jan_code'] ,
             'image_url' => $image_url,
-            'amount' => $request['amount'],
+            'max_quantity' => $request['max_quantity'],
             'is_active' => $request['is_active']
         ]);
         return Redirect::route('purchase_target.edit', [

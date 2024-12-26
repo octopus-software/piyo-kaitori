@@ -121,8 +121,8 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
-import BlueButton from "../../Components/Button/BlueButton.vue";
-import OrangeButton from "../../Components/Button/OrangeButton.vue";
+import BlueButton from "../../../Components/Button/BlueButton.vue";
+import OrangeButton from "../../../Components/Button/OrangeButton.vue";
 import {useToast} from "vue-toast-notification";
 import {number, object, string} from "yup";
 import {useForm} from "vee-validate";
@@ -132,7 +132,7 @@ import Checkbox from "@/Components/Input/Checkbox.vue";
 type ParamType = {
     name: string;
     email: string;
-    is_inactive_included: boolean;
+    is_inactive_included: number;
 }
 
 type UserType = {
@@ -160,7 +160,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     initialValues: {
         name: props.params.name,
         email: props.params.email,
-        is_inactive_included: Boolean(props.params.is_inactive_included),
+        is_inactive_included: props.params.is_inactive_included,
     }
 });
 

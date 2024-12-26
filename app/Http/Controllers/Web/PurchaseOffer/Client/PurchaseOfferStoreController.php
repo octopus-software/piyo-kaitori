@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseOffer;
+namespace App\Http\Controllers\Web\PurchaseOffer\Client;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PurchaseOfferPostRequest;
+use App\Http\Requests\PurchaseOffer\PurchaseOfferStoreRequest;
 use App\Models\PurchaseOffer;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseOfferStoreController extends Controller
 {
-    public function __invoke(PurchaseOfferPostRequest $request){
+    public function __invoke(PurchaseOfferStoreRequest $request){
         return DB::transaction(function () use($request) {
             // =====================
             // 登録や更新などの複数の処理
@@ -25,7 +25,7 @@ class PurchaseOfferStoreController extends Controller
                     'purchase_offer_id' => $created_offer['id'],
                     'purchase_target_id' => $item['purchase_target_id'],
                     'price' => $item['price'],
-                    'amount' => $item['amount'],
+                    'max_quantity' => $item['max_quantity'],
                     'evidence_url' => $item['evidence_url']
                 ]);
             }

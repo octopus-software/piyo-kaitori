@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\PurchaseOffer;
+namespace App\Http\Controllers\Web\PurchaseOffer\Admin;
 
 use App\Helper\FormatHelper;
 use App\Http\Controllers\Controller;
@@ -32,15 +32,15 @@ class PurchaseOfferGetEditController extends Controller
             'status' => $purchase_offer['status'],
             'offer_date' => (new Carbon($purchase_offer['created_at']))->format('Y-m-d'),
             'send_date' => $purchase_offer['send_date'],
-            'total_price' => FormatHelper::formatYen($purchase_offer['purchase_targets']->sum(fn ($target) => $target['pivot']['price'] * $target['pivot']['amount'])),
+            'total_price' => FormatHelper::formatYen($purchase_offer['purchase_targets']->sum(fn ($target) => $target['pivot']['price'] * $target['pivot']['quantity'])),
             'purchase_targets' => $purchase_offer['purchase_targets']->map(function ($target) {
                 return [
                     'id' => $target['pivot']['purchase_target_id'],
                     'name' => $target['name'],
                     'jan_code' => $target['jan_code'],
                     'price' => FormatHelper::formatYen($target['pivot']['price']),
-                    'amount' => $target['pivot']['amount'] . '点',
-                    'total_price' => FormatHelper::formatYen($target['pivot']['price'] * $target['pivot']['amount']),
+                    'quantity' => $target['pivot']['quantity'] . '点',
+                    'total_price' => FormatHelper::formatYen($target['pivot']['price'] * $target['pivot']['quantity']),
                     'evidence_url' => $target['pivot']['evidence_url']
                 ];
             })->toArray()

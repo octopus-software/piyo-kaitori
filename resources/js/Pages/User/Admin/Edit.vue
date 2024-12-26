@@ -59,9 +59,9 @@
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import BlueButton from "../../Components/Button/BlueButton.vue";
-import GrayButton from "../../Components/Button/GrayButton.vue";
-import DeleteButton from "../../Components/Button/DeleteButton.vue";
+import BlueButton from "../../../Components/Button/BlueButton.vue";
+import GrayButton from "../../../Components/Button/GrayButton.vue";
+import DeleteButton from "../../../Components/Button/DeleteButton.vue";
 import {router} from '@inertiajs/vue3';
 import {defineProps} from 'vue';
 import {bool, object} from "yup";

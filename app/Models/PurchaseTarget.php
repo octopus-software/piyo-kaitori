@@ -25,13 +25,13 @@ class PurchaseTarget extends Model
         'name',
         'jan_code',
         'image_url',
-        'amount',
+        'max_quantity',
         'is_active'
     ];
 
     // リレーション設定
     public function purchase_offers(): BelongsToMany
     {
-        return $this->belongsToMany(PurchaseOffer::class,'offer_target')->withPivot(['price','amount','evidence_url']);
+        return $this->belongsToMany(PurchaseOffer::class,'offer_target')->withPivot(['price','quantity','evidence_url']);
     }
 }

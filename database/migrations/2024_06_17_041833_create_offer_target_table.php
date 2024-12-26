@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedInteger('purchase_offer_id')->references('id')->on('purchase_offers');
             $table->unsignedInteger('purchase_target_id')->references('id')->on('purchase_targets');
             $table->unsignedInteger('price');
-            $table->unsignedInteger('amount');
+            $table->unsignedInteger('quantity');
             $table->string('evidence_url',255);
             $table->timestamps();
         });

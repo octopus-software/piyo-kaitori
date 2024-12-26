@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\User;
+namespace App\Http\Controllers\Web\User\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -39,13 +39,13 @@ class UserGetListController extends Controller
 //                        'id' => $offer['id'], // オファーID
 //                        'status' => $offer['status'],
 //                        'total_price' => $offer['purchase_targets']->sum('pivot.price'),
-//                        'total_amount' => $offer['purchase_targets']->sum('pivot.amount'),
+//                        'total_quantity' => $offer['purchase_targets']->sum('pivot.quantity'),
 //                        'targets' => $offer['purchase_targets']->map(function ($target) {
 //                            return [
 //                                'id' => $target['id'],
 //                                'name' => $target['name'],
 //                                'price' => $target['pivot']['price'],
-//                                'amount' => $target['pivot']['amount']
+//                                'quantity' => $target['pivot']['quantity']
 //                            ];
 //                        })
 //                    ];
@@ -53,7 +53,7 @@ class UserGetListController extends Controller
             ];
         });
 
-        return Inertia::render('User/List', [
+        return Inertia::render('User/Admin/List', [
             'users' => $users,
             'current_page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),

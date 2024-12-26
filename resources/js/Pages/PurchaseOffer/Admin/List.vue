@@ -36,19 +36,12 @@
                                 <option value="1">未承認</option>
                                 <option value="2">承認済み</option>
                                 <option value="3">発送済み</option>
-                                <option value="4">完了</option>
+                                <option value="4">取引完了</option>
                             </select>
                         </div>
                     </div>
                     <BlueButton text="検索する" :onclick="search"/>
                     <OrangeButton text="条件をクリア" :onclick="clear"/>
-                </div>
-            </div>
-
-            <div
-                class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <div class="flex justify-end">
-                    <BlueButton text="新規作成" :onclick="() => console.log('buy')"/>
                 </div>
             </div>
 
@@ -173,7 +166,7 @@ type PurchaseTargetType = {
     target_id: number;
     target_name: string;
     price: number;
-    amount: number;
+    max_quantity: number;
     evidence_url: string;
 }
 

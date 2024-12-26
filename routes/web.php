@@ -1,23 +1,24 @@
 <?php
 
+use App\Http\Controllers\Web\Cart\CartStoreController;
 use App\Http\Controllers\Web\Dashboard\GetDashboardController;
 use App\Http\Controllers\Web\ProfileController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferDeleteController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetEditController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetListController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferStoreController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreController;
 use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferUpdateStatusController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetDeleteController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetCreateController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetEditController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetListController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetStoreController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetUpdateController;
-use App\Http\Controllers\Web\User\UserDeleteController;
-use App\Http\Controllers\Web\User\UserGetEditController;
-use App\Http\Controllers\Web\User\UserGetListController;
-use App\Http\Controllers\Web\User\UserStoreController;
-use App\Http\Controllers\Web\User\UserUpdateController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetDeleteController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetCreateController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetEditController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetListController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetStoreController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetUpdateController;
+use App\Http\Controllers\Web\User\Admin\UserDeleteController;
+use App\Http\Controllers\Web\User\Admin\UserGetEditController;
+use App\Http\Controllers\Web\User\Admin\UserGetListController;
+use App\Http\Controllers\Web\User\Admin\UserStoreController;
+use App\Http\Controllers\Web\User\Admin\UserUpdateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,12 +41,15 @@ Route::post('purchase_offer',PurchaseOfferStoreController::class)->name('purchas
 Route::delete('purchase_offer/{id}',PurchaseOfferDeleteController::class)->name('purchase_offer.delete');
 Route::put('purchase_offer/{id}/status',PurchaseOfferUpdateStatusController::class)->name('purchase_offer.update.status');
 
-Route::get('/purchase_target',PurchaseTargetGetListController::class)->name('purchase_target.list');
+Route::get('/purchase_targets',PurchaseTargetGetListController::class)->name('purchase_target.list');
 Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditController::class)->name('purchase_target.edit');
 Route::get('/purchase_target/create',PurchaseTargetGetCreateController::class)->name('purchase_target.create');
 Route::post('/purchase_target',PurchaseTargetStoreController::class)->name('purchase_target.store');
 Route::put('/purchase_target/{id}',PurchaseTargetUpdateController::class)->name('purchase_target.update');
 Route::delete('/purchase_target/{id}',PurchaseTargetDeleteController::class)->name('purchase_target.delete');
+
+// 買取依頼カート
+Route::post('/cart', CartStoreController::class)->name('cart.store');
 
 Route::post('/test',UserStoreController::class);
 
