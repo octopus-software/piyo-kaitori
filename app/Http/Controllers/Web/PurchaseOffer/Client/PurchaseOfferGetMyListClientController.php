@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
 use Illuminate\Http\Request;
 
-class PurchaseOfferGetMyListController extends Controller
+class PurchaseOfferGetMyListClientController extends Controller
 {
     /**
      * Handle the incoming request.
