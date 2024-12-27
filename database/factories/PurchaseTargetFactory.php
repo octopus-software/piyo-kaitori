@@ -16,8 +16,8 @@ class PurchaseTargetFactory extends Factory
         return [
             'name' => fake()->domainWord() . '-' . fake()->word(),
             'jan_code' => fake()->unique()->ean13(),
-            'image_url' => "https://dummyimage.com/100x100/000/fff",
-            'amount' => fake()->randomDigit(),
+            'image_url' => "",
+            'max_quantity' => fake()->randomDigit(),
             'is_active' => fake()->numberBetween($min = 0, $max = 1)
         ];
     }

@@ -1,24 +1,27 @@
 <?php
 
-use App\Http\Controllers\Web\Dashboard\GetDashboardController;
+use App\Http\Controllers\Web\Dashboard\GetDashboardAdminController;
+use App\Http\Controllers\Web\MyCart\Client\MyCartGetListClientController;
+use App\Http\Controllers\Web\MyCart\Client\MyCartStoreClientController;
 use App\Http\Controllers\Web\ProfileController;
-use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetMyListController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferDeleteController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetEditController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferGetListController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferStoreController;
-use App\Http\Controllers\Web\PurchaseOffer\PurchaseOfferUpdateStatusController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetDeleteController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetEditController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetGetListController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetStoreController;
-use App\Http\Controllers\Web\PurchaseTarget\PurchaseTargetUpdateController;
-use App\Http\Controllers\Web\User\UserDeleteController;
-use App\Http\Controllers\Web\User\UserGetCreateController;
-use App\Http\Controllers\Web\User\UserGetEditController;
-use App\Http\Controllers\Web\User\UserGetListController;
-use App\Http\Controllers\Web\User\UserStoreController;
-use App\Http\Controllers\Web\User\UserUpdateController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetDeleteAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetCreateAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetEditAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetListAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetStoreAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetUpdateAdminController;
+use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetListClientController;
+use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetShowClientController;
+use App\Http\Controllers\Web\User\Admin\UserDeleteController;
+use App\Http\Controllers\Web\User\Admin\UserGetEditController;
+use App\Http\Controllers\Web\User\Admin\UserGetListController;
+use App\Http\Controllers\Web\User\Admin\UserStoreController;
+use App\Http\Controllers\Web\User\Admin\UserUpdateController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,28 +38,49 @@ Route::get('/token',function(){
     return csrf_token();
 });
 
-Route::get('/purchase_offers',PurchaseOfferGetListController::class)->name('purchase_offer.list');
-Route::get('purchase_offer/{id}/edit',PurchaseOfferGetEditController::class)->name('purchase_offer.edit');
-Route::post('purchase_offer',PurchaseOfferStoreController::class)->name('purchase_offer.store');
-Route::delete('purchase_offer/{id}',PurchaseOfferDeleteController::class)->name('purchase_offer.delete');
-Route::put('purchase_offer/{id}/status',PurchaseOfferUpdateStatusController::class)->name('purchase_offer.update.status');
-Route::get('purchase_offers/myself',PurchaseOfferGetMyListController::class)->name('purchase_offer.list.myself');
+// 接頭辞adminをつけたルートグループ
+Route::prefix('admin')->group(function () {
+    // 買取オファー
+    Route::get('/purchase_offers',PurchaseOfferGetListAdminController::class)->name('admin.purchase_offer.list');
+    Route::get('purchase_offer/{id}/edit',PurchaseOfferGetEditAdminController::class)->name('admin.purchase_offer.edit');
+    Route::delete('purchase_offer/{id}',PurchaseOfferDeleteAdminController::class)->name('admin.purchase_offer.delete');
+    Route::put('purchase_offer/{id}/status',PurchaseOfferUpdateStatusAdminController::class)->name('admin.purchase_offer.update.status');
 
-Route::get('/purchase_target',PurchaseTargetGetListController::class)->name('purchase_target.list');
-Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditController::class)->name('purchase_target.edit');
-Route::post('/purchase_target',PurchaseTargetStoreController::class)->name('purchase_target.store');
-Route::put('/purchase_target/{id}',PurchaseTargetUpdateController::class)->name('purchase_target.update');
-Route::delete('/purchase_target/{id}',PurchaseTargetDeleteController::class)->name('purchase_target.delete');
+    // 買取対象
+    Route::get('/purchase_targets',PurchaseTargetGetListAdminController::class)->name('admin.purchase_target.list');
+    Route::get('/purchase_target/{id}/edit',PurchaseTargetGetEditAdminController::class)->name('admin.purchase_target.edit');
+    Route::get('/purchase_target/create',PurchaseTargetGetCreateAdminController::class)->name('admin.purchase_target.create');
+    Route::post('/purchase_target',PurchaseTargetStoreAdminController::class)->name('admin.purchase_target.store');
+    Route::put('/purchase_target/{id}',PurchaseTargetUpdateAdminController::class)->name('admin.purchase_target.update');
+    Route::delete('/purchase_target/{id}',PurchaseTargetDeleteAdminController::class)->name('admin.purchase_target.delete');
+
+    // ダッシュボード
+    Route::get('/dashboard', GetDashboardAdminController::class)->middleware(['auth', 'verified'])->name('admin.dashboard');
+
+    // 買取依頼者
+    Route::get('/users', UserGetListController::class)->name('admin.user.list');
+    Route::get('/user/{id}/edit', UserGetEditController::class)->name('admin.user.edit');
+    Route::put('/user/{id}', UserUpdateController::class)->name('admin.user.update');
+    Route::delete('/user/{id}/delete', UserDeleteController::class)->name('admin.user.delete');
+});
+
+Route::prefix('client')->group(function () {
+    // 買取対象
+    Route::get('/purchase_targets',PurchaseTargetGetListClientController::class)->name('client.purchase_target.list');
+    Route::get('/purchase_target/{id}/show',PurchaseTargetGetShowClientController::class)->name('client.purchase_target.show');
+
+    // 買取オファー
+    Route::post('purchase_offer',PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
+
+    // 買取依頼カート
+    Route::get('/my_cart', MyCartGetListClientController::class)->name('client.my_cart.list');
+    Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');
+});
 
 Route::post('/test',UserStoreController::class);
 
-Route::get('/dashboard', GetDashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/user', UserGetListController::class)->name('user.list');
-    Route::get('/user/{id}/edit', UserGetEditController::class)->name('user.edit');
-    Route::put('/user/{id}', UserUpdateController::class)->name('user.update');
-    Route::delete('/user/{id}/delete', UserDeleteController::class)->name('user.delete');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

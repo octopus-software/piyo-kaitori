@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
 
             <!-- 検索フィルター -->
@@ -36,19 +36,12 @@
                                 <option value="1">未承認</option>
                                 <option value="2">承認済み</option>
                                 <option value="3">発送済み</option>
-                                <option value="4">完了</option>
+                                <option value="4">取引完了</option>
                             </select>
                         </div>
                     </div>
-                    <BlueButton text="検索する" :onclick="search"/>
-                    <OrangeButton text="条件をクリア" :onclick="clear"/>
-                </div>
-            </div>
-
-            <div
-                class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <div class="flex justify-end">
-                    <BlueButton text="新規作成" :onclick="() => console.log('buy')"/>
+                    <BlueButton text="検索する" @click="search"/>
+                    <OrangeButton text="条件をクリア" @click="clear"/>
                 </div>
             </div>
 
@@ -150,16 +143,16 @@
                 <p class="text-center text-gray-500 dark:text-gray-400">該当するユーザーが見つかりませんでした</p>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AdminAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import {defineProps, onMounted} from "vue";
 import {useToast} from "vue-toast-notification";
 import {router} from '@inertiajs/vue3';
-import BlueButton from "../../../Components/Button/BlueButton.vue";
-import OrangeButton from "../../../Components/Button/OrangeButton.vue";
+import BlueButton from "@/Components/Button/BlueButton.vue";
+import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {object, string} from "yup";
 import {useForm} from "vee-validate";
 
@@ -173,7 +166,7 @@ type PurchaseTargetType = {
     target_id: number;
     target_name: string;
     price: number;
-    amount: number;
+    max_quantity: number;
     evidence_url: string;
 }
 
@@ -223,10 +216,10 @@ const buildUrlWithParams = (page: number) => {
     if (values.user_name) params['user_name'] = values.user_name;
     if (values.jan_code) params['jan_code'] = values.jan_code;
     if (values.status) params['status'] = values.status;
-    return route('purchase_offer.list', params);
+    return route('admin.purchase_offer.list', params);
 };
 
-const clear = () => router.get(route('purchase_offer.list'));
+const clear = () => router.get(route('admin.purchase_offer.list'));
 
 const search = () => router.get(buildUrlWithParams(1));
 
@@ -241,7 +234,7 @@ const nextPage = () => {
 }
 
 const goEdit = (id: number) => {
-    router.get(route('purchase_offer.edit', {id: id}))
+    router.get(route('admin.purchase_offer.edit', {id: id}))
 }
 
 </script>

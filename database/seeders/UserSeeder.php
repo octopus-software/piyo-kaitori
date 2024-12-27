@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
                     $offer->purchase_targets()
                         ->attach($purchase_target['id'],[
                             'price' => fake()->randomElement([5000,10000,15000,20000,25000,30000,35000,40000,45000,50000]),
-                            'amount' => rand(1,10),
+                            'quantity' => rand(1,10),
                             'evidence_url' => fake()->url()
                         ]);
                 }
