@@ -16,6 +16,7 @@ use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetListAdminCont
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetStoreAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetUpdateAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetListClientController;
+use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetShowClientController;
 use App\Http\Controllers\Web\User\Admin\UserDeleteController;
 use App\Http\Controllers\Web\User\Admin\UserGetEditController;
 use App\Http\Controllers\Web\User\Admin\UserGetListController;
@@ -66,6 +67,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('client')->group(function () {
     // 買取対象
     Route::get('/purchase_targets',PurchaseTargetGetListClientController::class)->name('client.purchase_target.list');
+    Route::get('/purchase_target/{id}/show',PurchaseTargetGetShowClientController::class)->name('client.purchase_target.show');
 
     // 買取オファー
     Route::post('purchase_offer',PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
