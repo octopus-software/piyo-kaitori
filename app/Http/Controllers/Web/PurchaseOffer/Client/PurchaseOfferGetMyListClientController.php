@@ -13,8 +13,9 @@ class PurchaseOfferGetMyListClientController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $my_list = PurchaseOffer::with('purchase_targets')
-        ->where('id',$request['user_id'])
+        $my_list = PurchaseOffer::query()
+        ->with('purchase_targets')
+        ->where('user_id',$request['user_id'])
         ->orderByDesc('created_at')
         ->get()
         ->map(function($purchase_offer){
@@ -30,9 +31,9 @@ class PurchaseOfferGetMyListClientController extends Controller
                         "name" => $purchase_target['name'],
                         "jan_code" => $purchase_target['jan_code'],
                         "image_url" => $purchase_target['image_url'],
-                        "quantity" => $purchase_target['pivot']['amount'],
+                        "quantity" => $purchase_target['pivot']['quantity'],
                         "price" => $purchase_target['pivot']['price'],
-                        "max_quantity" => $purchase_target['amount'],
+                        "max_quantity" => $purchase_target['max_quantity'],
                         'is_active' => $purchase_target['is_active']
                     ];
                 }),
