@@ -32,14 +32,6 @@
                 </div>
             </div>
 
-            <div
-                class="block w-full mb-4 p-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <div class="flex justify-end">
-                    <BlueButton text="新規作成" @click="goCreate"/>
-                </div>
-            </div>
-
-            <!-- ユーザーリスト -->
             <div v-if="purchase_targets.length !== 0">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -56,6 +48,7 @@
                         <th scope="col" class="px-6 py-3 w-[20%]">
                             買取希望数 (現在 / 上限)
                         </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -73,6 +66,22 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ purchase_target.current_quantity }} / {{ purchase_target.max_quantity }}
+                        </td>
+                        <td>
+                            <button v-if="purchase_target.current_quantity < purchase_target.max_quantity" data-modal-target="add-cart-modal"
+                                    data-modal-toggle="add-cart-modal"
+                                    :data-purchase-target-id="purchase_target.id"
+                                    :data-purchase-target-name="purchase_target.name"
+                                    :data-current-quantity="purchase_target.current_quantity"
+                                    :data-max-quantity="purchase_target.max_quantity"
+                                    class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
+                            >
+                                カートに追加する
+                            </button>
+                            <button v-else class="block text-white bg-gray-400 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button"
+                            >
+                                カートに追加する
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -122,18 +131,61 @@
                 <p class="text-center text-gray-500 dark:text-gray-400">該当する商品が見つかりませんでした</p>
             </div>
         </div>
+
+        <div id="add-cart-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-2xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                            下記の買取商品をカートに追加します
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="add-cart-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5 space-y-4">
+                        <p>買取商品名：<span id="name"></span></p>
+                        <label for="price"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取希望価格</label>
+                        <input type="number" min=1 name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               :class="{ 'bg-red-100': errors.max_quantity, 'border-red-300': errors.max_quantity }" />
+                        <label for="quantity"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取希望個数</label>
+                        <input type="number" name="quantity" id="quantity" :max="modalPurchaseMaxQuantity - modalPurchaseCurrentQuantity" min=1 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               :class="{ 'bg-red-100': errors.max_quantity, 'border-red-300': errors.max_quantity }" />
+
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+<!--                        <button data-modal-hide="add-cart-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I accept</button>-->
+<!--                        <button data-modal-hide="add-cart-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
     </ClientAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
 import ClientAuthenticatedLayout from '@/Layouts/ClientAuthenticatedLayout.vue';
-import {defineProps, onMounted} from "vue";
+import {defineProps, InputHTMLAttributes, onMounted, ref} from "vue";
 import {useToast} from "vue-toast-notification";
 import BlueButton from "@/Components/Button/BlueButton.vue";
 import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {router} from "@inertiajs/vue3";
 import {useForm} from "vee-validate";
 import {object, string} from "yup";
+
+const modalPurchaseTargetId = ref(0);
+const modalPurchaseTargetName = ref('');
+const modalPurchaseMaxQuantity = ref(0);
+const modalPurchaseCurrentQuantity = ref(0);
 
 type ParamType = {
     name?: string;
@@ -185,6 +237,32 @@ onMounted(() => {
         useToast().success(toastMessage);
         sessionStorage.removeItem('toastMessage');
     }
+
+    const modalToggleButtons = document.querySelectorAll('[data-modal-toggle]');
+
+    // 各ボタンにイベントリスナーを追加
+    modalToggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modalId = button.getAttribute('data-modal-target');
+            const modal = document.getElementById(modalId);
+
+            // モーダル内の要素を更新
+            if (modal) {
+                modalPurchaseTargetId.value = Number(button.getAttribute('data-purchase-target-id')) || 0;
+                modalPurchaseTargetName.value = button.getAttribute('data-purchase-target-name');
+                modalPurchaseMaxQuantity.value = Number(button.getAttribute('data-max-quantity')) || 0;
+                modalPurchaseCurrentQuantity.value = Number(button.getAttribute('data-current-quantity')) || 0;
+                // let idDisplay = modal.querySelector('#id');
+                let nameDisplay = modal.querySelector('#name');
+                let priceDisplay: InputHTMLAttributes = modal.querySelector('input#price');
+                let quantityDisplay: InputHTMLAttributes = modal.querySelector('input#quantity');
+                // モーダル情報の更新
+                if (nameDisplay) nameDisplay.innerHTML = modalPurchaseTargetName.value || ''; // ユーザーのメールを設定
+                if (priceDisplay) priceDisplay.value = 0; // ユーザーのメールを設定
+                if (quantityDisplay) quantityDisplay.value = 1; // ユーザーのメールを設定
+            }
+        });
+    });
 });
 
 const buildUrlWithParams = (page: number) => {
@@ -208,9 +286,27 @@ const nextPage = () => {
     if (props.current_page < props.last_page) goPage(props.current_page + 1);
 }
 
-const goCreate = () => {
-    router.get(route('client.purchase_target.create'));
+const openAddCartDialog = (purchase_target: PurchaseTargetType) => {
+    console.log(purchase_target)
 }
+
+
+const addCart = async (purchase_target: PurchaseTargetType) => {
+    console.log('add cart !!')
+    // const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
+    // await router.post(route('client.cart.store'), {
+    //     purchase_target_id: purchase_target.id,
+    //     name: purchase_target.name,
+    // }, {
+    //     headers: {
+    //         'Content-Type': 'multipart/form-data'
+    //     },
+    //     onSuccess: () => toast.success('買取対象を更新しました', {duration: 5000}),
+    //     onError: (errors) => {
+    //         serverErrors.value = errors;
+    //     },
+    // });
+};
 
 </script>
 
