@@ -12,22 +12,23 @@
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取商品名</label>
-                            <input type="text" :value="values.name" id="name"
-                                   @input="(e) => setFieldValue('name', e.target.value)"
+                            <input type="text" :value="searchValues.name" id="name"
+                                   @input="(e) => setSearchFieldValue('name', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
+                            <InputError v-if="searchErrors.name" :message="searchErrors.name" class="text-red-500"/>
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="jan_code"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
-                            <input type="text" :value="values.jan_code" id="jan_code"
-                                   @input="(e) => setFieldValue('jan_code', e.target.value)"
+                            <input type="text" :value="searchValues.jan_code" id="jan_code"
+                                   @input="(e) => setSearchFieldValue('jan_code', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder=""
                             />
                         </div>
                     </div>
-                    <BlueButton text="検索する" @click="handleSubmit(search)"/>
+                    <BlueButton text="検索する" @click="search"/>
                     <OrangeButton text="条件をクリア" @click="clear"/>
                 </div>
             </div>
@@ -138,8 +139,15 @@
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                     <!-- Modal header -->
                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <div v-if="Object.keys(serverErrors).length" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                            <ul>
+                                <li v-for="(messages, field) in serverErrors" :key="field">
+                                    <span v-for="message in messages" :key="message">{{ message }}</span>
+                                </li>
+                            </ul>
+                        </div>
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            下記の買取商品をカートに追加します
+                            下記の買取商品をカートに追加・更新します
                         </h3>
                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="add-cart-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -148,18 +156,29 @@
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
+                    <div class="p-4">
+                        <p class="text-red-600 block">※同一の商品を追加する場合は上書きされます。</p>
+                    </div>
                     <!-- Modal body -->
                     <div class="p-4 md:p-5 space-y-4">
                         <p>買取商品名：<span id="name"></span></p>
                         <label for="price"
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取希望価格</label>
                         <input type="number" min=1 name="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               :class="{ 'bg-red-100': errors.max_quantity, 'border-red-300': errors.max_quantity }" />
+                               :class="{ 'bg-red-100': storeErrors.price, 'border-red-300': storeErrors.price }"
+                               :value="storeValues.price"
+                               @input="(e) => setStoreFieldValue('price', e.target.value)"
+                        />
+                        <InputError v-if="storeErrors.price" :message="storeErrors.price" class="text-red-500"/>
                         <label for="quantity"
                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取希望個数</label>
                         <input type="number" name="quantity" id="quantity" :max="modalPurchaseMaxQuantity - modalPurchaseCurrentQuantity" min=1 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                               :class="{ 'bg-red-100': errors.max_quantity, 'border-red-300': errors.max_quantity }" />
-
+                               :class="{ 'bg-red-100': storeErrors.quantity, 'border-red-300': storeErrors.quantity }"
+                               :value="storeValues.quantity"
+                               @input="(e) => setStoreFieldValue('quantity', e.target.value)"
+                        />
+                        <InputError v-if="storeErrors.quantity" :message="storeErrors.quantity" class="text-red-500"/>
+                        <BlueButton text="カートに追加する" @click="addCart"/>
                     </div>
                     <!-- Modal footer -->
                     <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -180,12 +199,15 @@ import BlueButton from "@/Components/Button/BlueButton.vue";
 import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {router} from "@inertiajs/vue3";
 import {useForm} from "vee-validate";
-import {object, string} from "yup";
+import {number, object, string} from "yup";
+import InputError from "@/Components/InputError.vue";
 
 const modalPurchaseTargetId = ref(0);
 const modalPurchaseTargetName = ref('');
 const modalPurchaseMaxQuantity = ref(0);
 const modalPurchaseCurrentQuantity = ref(0);
+
+const serverErrors = ref({});
 
 type ParamType = {
     name?: string;
@@ -218,16 +240,29 @@ const props = defineProps<{
     last_page: number
 }>()
 
-const schema = object({
+const storeSchema = object({
+    price: number().min(1, '希望買取価格は1円以上を指定してください。').required('希望買取価格は必須です。'),
+    quantity: number().min(1, '希望買取個数は1個以上を指定してください。').required('希望買取個数は必須です。'),
+});
+
+const {handleSubmit: handleStoreSubmit, errors: storeErrors, values: storeValues, setFieldValue: setStoreFieldValue} = useForm({
+    validationSchema: storeSchema,
+    initialValues: {
+        price: 1000,
+        quantity: 1,
+    }
+});
+
+const searchSchema = object({
     name: string(),
     jan_code: string().max(13, 'JANコードは13桁以下で入力してください'),
 });
 
-const {handleSubmit, errors, values, setFieldValue} = useForm({
-    validationSchema: schema,
+const {handleSubmit: handleSearchSubmit, errors: searchErrors, values: searchValues, setFieldValue: setSearchFieldValue} = useForm({
+    validationSchema: searchSchema,
     initialValues: {
-        name: props.params.name,
-        jan_code: props.params.jan_code,
+        name: props.params.name || '',
+        jan_code: props.params.jan_code || '',
     }
 });
 
@@ -266,9 +301,10 @@ onMounted(() => {
 });
 
 const buildUrlWithParams = (page: number) => {
+    console.log(searchValues)
     let params = {page: page}
-    if (values.name) params['name'] = values.name;
-    if (values.jan_code) params['jan_code'] = values.jan_code;
+    if (searchValues.name) params['name'] = searchValues.name;
+    if (searchValues.jan_code) params['jan_code'] = searchValues.jan_code;
     return route('client.purchase_target.list', params);
 };
 
@@ -291,21 +327,26 @@ const openAddCartDialog = (purchase_target: PurchaseTargetType) => {
 }
 
 
-const addCart = async (purchase_target: PurchaseTargetType) => {
-    console.log('add cart !!')
-    // const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
-    // await router.post(route('client.cart.store'), {
-    //     purchase_target_id: purchase_target.id,
-    //     name: purchase_target.name,
-    // }, {
-    //     headers: {
-    //         'Content-Type': 'multipart/form-data'
-    //     },
-    //     onSuccess: () => toast.success('買取対象を更新しました', {duration: 5000}),
-    //     onError: (errors) => {
-    //         serverErrors.value = errors;
-    //     },
-    // });
+const addCart = async () => {
+    console.log(modalPurchaseTargetId.value)
+    console.log(modalPurchaseTargetName.value)
+    console.log(storeValues.price)
+    console.log(storeValues.quantity)
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
+    await router.post(route('client.cart.store'), {
+        purchase_target_id: modalPurchaseTargetId.value,
+        name: modalPurchaseTargetName.value,
+        price: storeValues.price,
+        quantity: storeValues.quantity,
+    }, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        onSuccess: () => toast.success('カートに追加しました', {duration: 5000}),
+        onError: (errors) => {
+            serverErrors.value = errors;
+        },
+    });
 };
 
 </script>

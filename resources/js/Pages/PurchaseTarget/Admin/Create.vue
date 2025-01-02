@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <BlueButton text="作成する" @click="handleSubmit(storePurchaseTarget)"/>
+                    <BlueButton text="作成する" @click="storePurchaseTarget"/>
                     <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>

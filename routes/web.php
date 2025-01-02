@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
-use App\Http\Controllers\Web\MyCart\Client\MyCartGetListClientController;
+use App\Http\Controllers\Web\MyCart\Client\MyCartGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartStoreClientController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteAdminController;
@@ -83,7 +83,7 @@ Route::prefix('client')
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
 
         // 買取依頼カート
-        Route::get('/my_cart', MyCartGetListClientController::class)->name('client.my_cart.list');
+        Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');
         Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');
     });
 
