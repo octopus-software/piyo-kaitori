@@ -105,6 +105,9 @@ Route::prefix('debug')->group(function () {
         auth()->logout();
         return redirect('/');
     })->name('debug.logout');
+    Route::get('/get_my_cart', function () {
+        return dd(session()->get('cart', []));
+    })->name('debug.get_my_cart');
 });
 
 require __DIR__ . '/auth.php';
