@@ -15,7 +15,7 @@ class UserGetListController extends Controller
      */
     public function __invoke(Request $request): Response
     {
-        $paginator = User::query()->where('role', User::USER_ROLE['user'])
+        $paginator = User::query()->where('role', User::USER_ROLE['client'])
             ->when($request['name'], function ($query, $name) {
                 return $query->where('name', 'LIKE', "%$name%");
             })

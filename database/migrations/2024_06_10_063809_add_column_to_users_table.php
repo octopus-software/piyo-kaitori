@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('role')->default(User::USER_ROLE['user'])->after('remember_token');
+            $table->unsignedInteger('role')->default(User::USER_ROLE['client'])->after('remember_token');
         });
     }
 

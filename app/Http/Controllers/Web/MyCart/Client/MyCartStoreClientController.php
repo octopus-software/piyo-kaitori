@@ -10,10 +10,12 @@ class MyCartStoreClientController extends Controller
     public function __invoke(MyCartStoreClientRequest $request)
     {
         $cart = session()->get('cart', []);
+        // 商品をカートに追加・更新
         if (isset($cart[$request['purchase_target_id']])) {
-            $cart[$request['purchase_target_id']]['quantity'] += $request['quantity'];
+            $cart[$request['purchase_target_id']]['price'] = $request['price'];
+            $cart[$request['purchase_target_id']]['quantity'] = $request['quantity'];
         } else {
-            // 商品をカートに追加
+
             $cart[$request['purchase_target_id']] = [
                 'name' => $request['name'],
                 'price' => $request['price'],

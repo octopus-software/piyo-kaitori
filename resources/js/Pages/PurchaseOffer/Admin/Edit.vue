@@ -82,7 +82,7 @@
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.name }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.jan_code }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.price }}</td>
-                                    <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.max_quantity }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.quantity }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.total_price }}</td>
                                 </tr>
                                 <tr>
@@ -123,7 +123,7 @@ type PurchaseTargetType = {
     name: string;
     jan_code: string;
     price: string;
-    max_quantity: string;
+    quantity: string;
     total_price: string;
     evidence_url: string;
 }
