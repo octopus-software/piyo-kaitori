@@ -12,7 +12,7 @@ export default {
         './resources/js/**/*.vue',
         "./node_modules/flowbite/**/*.js"
     ],
-
+    darkMode: 'class', // ダークモード無効化用の設定
     theme: {
         extend: {
             fontFamily: {
