@@ -15,7 +15,7 @@ class PurchaseOffer extends Model
     const STATUS = [
         "unapproved" => 1,
         "approved" => 2,
-        "send" => 3,
+        "shipped" => 3,
         "paid" => 4
     ];
 
