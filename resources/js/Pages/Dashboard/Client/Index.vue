@@ -14,7 +14,6 @@ import {Head, router} from '@inertiajs/vue3';
         </template>
         <p class="font-semibold text-green-600 text-lg">買取依頼者用のダッシュボード</p>
         <ul>
-            <li class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('debug.logout'))">・ログアウトする</li>
             <li class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('debug.get_my_cart'))">・マイカートの中身を確認する</li>
         </ul>
     </ClientAuthenticatedLayout>
