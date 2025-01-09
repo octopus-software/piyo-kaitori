@@ -16,6 +16,7 @@ class PurchaseOfferGetListClientController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $user_id = session()->id();//sessionからuser_idを取得
         $paginator = PurchaseOffer::with(['user', 'purchase_targets'])
             ->when(isset($request['user_name']), function ($query) use ($request) {
                 $query->whereHas('user', function ($relation_query) use ($request) {
@@ -30,11 +31,11 @@ class PurchaseOfferGetListClientController extends Controller
             ->when(isset($request['status']), function ($query) use ($request) {
                 $query->where('status', '=', $request["status"]);
             })
+            ->where('user_id',$user_id)
             ->orderByDesc('created_at')
             ->skip(((int)$request['page'] - 1) * 10 ?? 0)
             ->paginate(10);
-        $user_id = session()->id();//sessionからuser_idを取得
-        $purchase_offers = $paginator->getCollection()->where('user_id',$user_id)->map(function ($offer) {
+        $purchase_offers = $paginator->getCollection()->map(function ($offer) {
                 return [
                     'id' => $offer['id'],
                     'user_id' => $offer['user_id'],
