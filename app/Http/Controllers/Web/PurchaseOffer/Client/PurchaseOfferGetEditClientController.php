@@ -31,7 +31,7 @@ class PurchaseOfferGetEditClientController extends Controller
             'user_name' => $purchase_offer['user']['name'],
             'status' => $purchase_offer['status'],
             'offer_date' => (new Carbon($purchase_offer['created_at']))->format('Y-m-d'),
-            'send_date' => $purchase_offer['send_date'],
+            'shipped_date' => $purchase_offer['shipped_date'],
             'total_price' => FormatHelper::formatYen($purchase_offer['purchase_targets']->sum(fn ($target) => $target['pivot']['price'] * $target['pivot']['quantity'])),
             'purchase_targets' => $purchase_offer['purchase_targets']->map(function ($target) {
                 return [

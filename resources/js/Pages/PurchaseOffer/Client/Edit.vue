@@ -6,7 +6,8 @@
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">買取オファー編集</h5>
                 <!--                <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
                 <div class="mx-auto">
-                    <div v-if="Object.keys(serverErrors).length" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <div v-if="Object.keys(serverErrors).length"
+                         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                         <ul>
                             <li v-for="(messages, field) in serverErrors" :key="field">
                                 <span v-for="message in messages" :key="message">{{ message }}</span>
@@ -45,9 +46,11 @@
                     </div>
                     <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
-                            <label for="send_date"
+                            <label for="shipped_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">商品発送日</label>
-                            <input type="date" :value="purchase_offer.send_date" id="send_date" :disabled="purchase_offer.status === 1 || purchase_offer.status === 4"
+                            <input type="date" :value="purchase_offer.shipped_date" id="shipped_date"
+                                   :disabled="purchase_offer.status === 1 || purchase_offer.status === 4"
+                                   @input="(e) => setFieldValue('shipped_date', e.target.value)"
                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    :class="{'bg-gray-200': purchase_offer.status === 1 || purchase_offer.status === 4, 'bg-gray-50': purchase_offer.status === 2 || purchase_offer.status === 3}"
                                    required/>
@@ -110,7 +113,7 @@ import DeleteButton from "@/Components/Button/DeleteButton.vue";
 import {router} from '@inertiajs/vue3';
 import {defineProps, ref} from 'vue';
 import {useForm} from "vee-validate";
-import {number, object} from "yup";
+import {date, number, object} from "yup";
 import ClientAuthenticatedLayout from "@/Layouts/ClientAuthenticatedLayout.vue";
 
 type PurchaseTargetType = {
@@ -129,7 +132,7 @@ type PurchaseOfferType = {
     user_name: string;
     status: number;
     offer_date: string;
-    send_date: string;
+    shipped_date: string;
     total_price: string;
     purchase_targets: PurchaseTargetType[]
 }
@@ -142,12 +145,14 @@ const props = defineProps<{
 
 const schema = object({
     status: number(),
+    shipped_date: date().nullable(),
 });
 
 const {handleSubmit, errors, values, setFieldValue} = useForm({
     validationSchema: schema,
     initialValues: {
         status: props.purchase_offer.status,
+        shipped_date: props.purchase_offer.shipped_date,
     }
 });
 
@@ -159,11 +164,15 @@ const updatePurchaseOfferStatus = () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
     router.put(route('client.purchase_offer.update.status', {id: props.purchase_offer.id}), {
         status: values.status,
+        shipped_date: values.shipped_date,
     }, {
         headers: {
             'Content-Type': 'application/json'
         },
-        onSuccess: () => toast.success('買取オファーのステータスを更新しました', {duration: 5000}),
+        onSuccess: () => {
+            toast.success('買取オファーのステータスを更新しました', {duration: 5000})
+            serverErrors.value = {};
+        },
         onError: (errors) => {
             serverErrors.value = errors;
         },

@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminC
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetEditClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetListClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferUpdateStatusClientController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetDeleteAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetCreateAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetEditAdminController;
@@ -85,6 +86,7 @@ Route::prefix('client')
         Route::get('/purchase_offers',PurchaseOfferGetListClientController::class)->name('client.purchase_offer.list');
         Route::get('purchase_offer/{id}/edit', PurchaseOfferGetEditClientController::class)->name('client.purchase_offer.edit');
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
+        Route::put('purchase_offer/{id}/status', PurchaseOfferUpdateStatusClientController::class)->name('client.purchase_offer.update.status');
 
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');

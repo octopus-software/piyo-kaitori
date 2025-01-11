@@ -24,7 +24,20 @@ class PurchaseOfferUpdateStatusClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required','integer',Rule::in(array_values(PurchaseOffer::STATUS))]
+            'status' => ['required', 'integer', Rule::in(array_values(PurchaseOffer::STATUS))],
+            'shipped_date' => ['nullable', 'date', 'after_or_equal:today', 'required_if:status,3'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'status.required' => 'ステータスを選択してください。',
+            'status.integer' => 'ステータスは数値で入力してください。',
+            'status.in' => 'ステータスが不正です。',
+            'shipped_date.required_if' => '商品発送日を入力してください。',
+            'shipped_date.date' => '商品発送日は日付で入力してください。',
+            'shipped_date.after_or_equal' => '商品発送日は今日以降の日付を入力してください。',
         ];
     }
 }

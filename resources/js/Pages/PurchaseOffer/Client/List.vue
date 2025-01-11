@@ -45,14 +45,17 @@
                         <th scope="col" class="px-6 py-3 w-[10%]">
                             依頼日
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[10%]">
+                        <th scope="col" class="px-6 py-3 w-[30%]">
                             買取品概略
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[10%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
                             買取合計金額
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[30%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
                             ステータス
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[20%]">
+                            商品発送日
                         </th>
                     </tr>
                     </thead>
@@ -79,6 +82,12 @@
                                   class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">発送済み</span>
                             <span v-if="purchase_offer.status === 4"
                                   class="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">取引完了</span>
+                        </td>
+                        <td v-if="purchase_offer.shipped_date" class="px-6 py-4">
+                            <p>{{ purchase_offer.shipped_date }}</p>
+                        </td>
+                        <td v-else class="px-6 py-4">
+                            <p class="text-red-600">未発送</p>
                         </td>
                     </tr>
                     </tbody>

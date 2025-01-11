@@ -52,9 +52,9 @@
                             </select>
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
-                            <label for="send_date"
+                            <label for="shipped_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">商品発送日</label>
-                            <input type="date" :value="purchase_offer.send_date" id="send_date" disabled
+                            <input type="date" :value="purchase_offer.shipped_date" id="shipped_date" disabled
                                    class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
@@ -134,7 +134,7 @@ type PurchaseOfferType = {
     user_name: string;
     status: number;
     offer_date: string;
-    send_date: string;
+    shipped_date: string;
     total_price: string;
     purchase_targets: PurchaseTargetType[]
 }
@@ -153,6 +153,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     validationSchema: schema,
     initialValues: {
         status: props.purchase_offer.status,
+        shipped_date: props.purchase_offer.shipped_date,
     }
 });
 
