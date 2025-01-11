@@ -110,6 +110,9 @@ Route::prefix('debug')->group(function () {
     Route::get('/get_my_cart', function () {
         return dd(session()->get('cart', []));
     })->name('debug.get_my_cart');
+    Route::get('/auth', function () {
+        return auth()->user();
+    });
 });
 
 require __DIR__ . '/auth.php';
