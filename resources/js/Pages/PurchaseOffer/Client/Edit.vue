@@ -1,5 +1,5 @@
 <template>
-    <AdminAuthenticatedLayout>
+    <ClientAuthenticatedLayout>
         <div class="relative overflow-x-auto">
             <div
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
@@ -15,21 +15,12 @@
                     </div>
                     <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
-                            <label for="name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取依頼者名</label>
-                            <input type="text" :value="purchase_offer.user_name" id="name" disabled
-                                   class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   required/>
-                        </div>
-                        <div class="mb-5 p-2 w-[50%]">
                             <label for="offer_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取依頼日</label>
                             <input type="date" :value="purchase_offer.offer_date" id="offer_date" disabled
                                    class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
-                    </div>
-                    <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="status"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
@@ -37,25 +28,28 @@
                                     @input="(e) => setFieldValue('status', e.target.value)"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required>
-                                <option v-if="purchase_offer.status === 1 || purchase_offer.status === 2" value="1">
+                                <option v-if="purchase_offer.status === 1" value="1">
                                     未承認
                                 </option>
-                                <option v-if="purchase_offer.status === 1 || purchase_offer.status === 2" value="2">
+                                <option v-if="purchase_offer.status === 2 || purchase_offer.status === 3" value="2">
                                     承認済み
                                 </option>
-                                <option v-if="purchase_offer.status === 3 || purchase_offer.status === 4" value="3">
+                                <option v-if="purchase_offer.status === 2 || purchase_offer.status === 3" value="3">
                                     発送済み
                                 </option>
-                                <option v-if="purchase_offer.status === 3 || purchase_offer.status === 4" value="4">
+                                <option v-if="purchase_offer.status === 4" value="4">
                                     取引完了
                                 </option>
                             </select>
                         </div>
+                    </div>
+                    <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
                             <label for="send_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">商品発送日</label>
-                            <input type="date" :value="purchase_offer.send_date" id="send_date" disabled
-                                   class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            <input type="date" :value="purchase_offer.send_date" id="send_date" :disabled="purchase_offer.status === 1 || purchase_offer.status === 4"
+                                   class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   :class="{'bg-gray-200': purchase_offer.status === 1 || purchase_offer.status === 4, 'bg-gray-50': purchase_offer.status === 2 || purchase_offer.status === 3}"
                                    required/>
                         </div>
                     </div>
@@ -103,7 +97,7 @@
                 </div>
             </div>
         </div>
-    </AdminAuthenticatedLayout>
+    </ClientAuthenticatedLayout>
 </template>
 
 <script setup lang="ts">
@@ -117,6 +111,7 @@ import {router} from '@inertiajs/vue3';
 import {defineProps, ref} from 'vue';
 import {useForm} from "vee-validate";
 import {number, object} from "yup";
+import ClientAuthenticatedLayout from "@/Layouts/ClientAuthenticatedLayout.vue";
 
 type PurchaseTargetType = {
     id: number;
@@ -157,12 +152,12 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 });
 
 const goBack = () => {
-    router.get(route('admin.purchase_offer.list'));
+    router.get(route('client.purchase_offer.list'));
 }
 
 const updatePurchaseOfferStatus = () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
-    router.put(route('admin.purchase_offer.update.status', {id: props.purchase_offer.id}), {
+    router.put(route('client.purchase_offer.update.status', {id: props.purchase_offer.id}), {
         status: values.status,
     }, {
         headers: {
@@ -177,30 +172,6 @@ const updatePurchaseOfferStatus = () => {
 
 const resetServerErrors = () => {
     serverErrors.value = {};
-};
-
-const updateUser = async () => {
-    console.log(values);
-    // try {
-    //     await router.put(route('user.update', user.value.id), {
-    //         is_active: user.value.is_active,
-    //     });
-    //     toast.success('データが更新されました');
-    // } catch (error) {
-    //     toast.error(error.response.data.message);
-    // }
-};
-
-const deleteUser = async (): Promise<void> => {
-    console.log(props.purchase_offer.id)
-    // try {
-    //     await router.delete(route('user.delete', user.value.id));
-    //     sessionStorage.setItem('toastMessage', 'データが削除されました');
-    //     // Inertia.visit(route('user.list'));
-    // } catch (error) {
-    //     const toast = useToast();
-    //     toast.error(error.response.data.message);
-    // }
 };
 
 </script>

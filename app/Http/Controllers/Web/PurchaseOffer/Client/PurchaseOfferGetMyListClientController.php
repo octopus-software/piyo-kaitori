@@ -15,7 +15,7 @@ class PurchaseOfferGetMyListClientController extends Controller
     {
         $my_list = PurchaseOffer::query()
         ->with('purchase_targets')
-        ->where('user_id',$request['user_id'])
+        ->where('user_id', auth()->id())
         ->orderByDesc('created_at')
         ->get()
         ->map(function($purchase_offer){

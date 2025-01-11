@@ -9,8 +9,8 @@ use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteAdminControl
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetEditClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetListClientController;
-use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetMyListClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetDeleteAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetCreateAdminController;
@@ -83,8 +83,9 @@ Route::prefix('client')
 
         // 買取オファー
         Route::get('/purchase_offers',PurchaseOfferGetListClientController::class)->name('client.purchase_offer.list');
+        Route::get('purchase_offer/{id}/edit', PurchaseOfferGetEditClientController::class)->name('client.purchase_offer.edit');
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
-        Route::get('purchase_offer/myself', PurchaseOfferGetMyListClientController::class)->name('purchase_offer.list.myself');
+
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');
         Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');

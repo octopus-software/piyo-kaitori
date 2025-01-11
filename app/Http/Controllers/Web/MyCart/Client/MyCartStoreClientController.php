@@ -14,12 +14,14 @@ class MyCartStoreClientController extends Controller
         if (isset($cart[$request['purchase_target_id']])) {
             $cart[$request['purchase_target_id']]['price'] = $request['price'];
             $cart[$request['purchase_target_id']]['quantity'] = $request['quantity'];
+            $cart[$request['purchase_target_id']]['evidence_url'] = $request['evidence_url'];
         } else {
-
             $cart[$request['purchase_target_id']] = [
+                'purchase_target_id' => $request['purchase_target_id'],
                 'name' => $request['name'],
                 'price' => $request['price'],
                 'quantity' => $request['quantity'],
+                'evidence_url' => $request['evidence_url'],
             ];
         }
         session()->put('cart', $cart);

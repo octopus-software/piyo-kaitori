@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchaseOffer\Client\PurchaseOfferStoreClientRequest;
 use App\Models\PurchaseOffer;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class PurchaseOfferStoreClientController extends Controller
 {
@@ -17,17 +18,19 @@ class PurchaseOfferStoreClientController extends Controller
             ]);
 
             $data = $request->session()->get('cart');
-            
+
             foreach ($data as $item){
                 $created_offer->purchase_targets()->attach($item['purchase_target_id'],[
                     'purchase_offer_id' => $created_offer['id'],
-                    'purchase_target_id' => $item['purchase_target_id'],
+//                    'purchase_target_id' => $item['purchase_target_id'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
                     'evidence_url' => $item['evidence_url']
                 ]);
             }
-            return $created_offer;
+            // セッションからcartを削除する
+            session()->forget('cart');
+            return Redirect::route('client.purchase_offer.list');
         });
     }
 }
