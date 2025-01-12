@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteAdminControl
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferDeleteClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetEditClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetListClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
@@ -87,6 +88,7 @@ Route::prefix('client')
         Route::get('purchase_offer/{id}/edit', PurchaseOfferGetEditClientController::class)->name('client.purchase_offer.edit');
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
         Route::put('purchase_offer/{id}/status', PurchaseOfferUpdateStatusClientController::class)->name('client.purchase_offer.update.status');
+        Route::delete('purchase_offer/{id}', PurchaseOfferDeleteClientController::class)->name('client.purchase_offer.delete');
 
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');

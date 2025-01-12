@@ -95,7 +95,7 @@
                     </div>
 
                     <BlueButton text="更新する" @click="updatePurchaseOfferStatus"/>
-                    <DeleteButton text="削除する" :onclick="deleteUser"/>
+                    <DeleteButton v-if="purchase_offer.status === 1" text="削除する" :onclick="deletePurchaseOffer"/>
                     <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
@@ -158,6 +158,19 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
 
 const goBack = () => {
     router.get(route('client.purchase_offer.list'));
+}
+
+const deletePurchaseOffer = () => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
+    router.delete(route('client.purchase_offer.delete', {id: props.purchase_offer.id}), {
+        onSuccess: () => {
+            toast.success('買取オファーを削除しました', {duration: 5000})
+            serverErrors.value = {};
+        },
+        onError: (errors) => {
+            serverErrors.value = errors;
+        }
+    });
 }
 
 const updatePurchaseOfferStatus = () => {
