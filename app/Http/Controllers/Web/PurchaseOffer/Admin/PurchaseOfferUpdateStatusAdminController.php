@@ -16,6 +16,6 @@ class PurchaseOfferUpdateStatusAdminController extends Controller
         $purchase_offer->update([
             'status' => $request['status']
         ]);
-        return Redirect::route('admin.purchase_offer.edit', ['id' => $purchase_offer['id']]);
+        return Redirect::route('admin.purchase_offer.list');
     }
 }
