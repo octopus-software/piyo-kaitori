@@ -98,7 +98,7 @@
                     </div>
 
                     <BlueButton text="更新する" @click="updatePurchaseOfferStatus"/>
-                    <DeleteButton text="削除する" :onclick="deleteUser"/>
+                    <DeleteButton text="削除する" :onclick="deletePurchaseOffer"/>
                     <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
@@ -180,29 +180,18 @@ const resetServerErrors = () => {
     serverErrors.value = {};
 };
 
-const updateUser = async () => {
-    console.log(values);
-    // try {
-    //     await router.put(route('user.update', user.value.id), {
-    //         is_active: user.value.is_active,
-    //     });
-    //     toast.success('データが更新されました');
-    // } catch (error) {
-    //     toast.error(error.response.data.message);
-    // }
-};
-
-const deleteUser = async (): Promise<void> => {
-    console.log(props.purchase_offer.id)
-    // try {
-    //     await router.delete(route('user.delete', user.value.id));
-    //     sessionStorage.setItem('toastMessage', 'データが削除されました');
-    //     // Inertia.visit(route('user.list'));
-    // } catch (error) {
-    //     const toast = useToast();
-    //     toast.error(error.response.data.message);
-    // }
-};
+const deletePurchaseOffer = () => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
+    router.delete(route('admin.purchase_offer.delete', {id: props.purchase_offer.id}), {
+        onSuccess: () => {
+            toast.success('買取オファーを削除しました', {duration: 5000})
+            serverErrors.value = {};
+        },
+        onError: (errors) => {
+            serverErrors.value = errors;
+        }
+    });
+}
 
 </script>
 
