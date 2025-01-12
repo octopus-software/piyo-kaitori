@@ -25,7 +25,7 @@
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.name }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.price }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.quantity }}個</td>
-                            <td v-if="item.evidence_url" class="px-4 py-2 text-sm text-blue-900 hover:text-blue-400">
+                            <td v-if="item.evidence_url" class="px-4 py-2 text-sm text-blue-800 hover:text-blue-400">
                                 <a :href="item.evidence_url"><p>参考価格URLを確認</p></a>
                             </td>
                             <td v-else></td>

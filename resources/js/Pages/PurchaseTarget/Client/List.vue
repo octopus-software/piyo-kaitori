@@ -37,9 +37,9 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-[10%]">
-                            商品画像
-                        </th>
+<!--                        <th scope="col" class="px-6 py-3 w-[10%]">-->
+<!--                            商品画像-->
+<!--                        </th>-->
                         <th scope="col" class="px-6 py-3 w-[30%]">
                             商品名
                         </th>
@@ -54,11 +54,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(purchase_target, index) in purchase_targets" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <td class="px-6 py-4">
-                            <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100">
+<!--                        <td class="px-6 py-4">-->
+<!--                            <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">-->
+<!--                        </td>-->
+                        <td class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                             {{ purchase_target.name }}
                             <!-- ユーザーの名前などを表示する -->
                         </td>
