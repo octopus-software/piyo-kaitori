@@ -23,11 +23,11 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    
+
      public function definition(): array
      {
          $faker = FakerFactory::create('ja_JP'); // 日本語のロケールを指定
- 
+
          return [
              'name' => $faker->name(),
              'email' => $faker->unique()->safeEmail(),
@@ -38,21 +38,21 @@ class UserFactory extends Factory
              'role' => $faker->numberBetween(1, 2), // 1: admin, 2: client
              'name_kana' => $faker->kanaName(),
              'birthday' => $faker->date(),
-             'gender' => $faker->randomElement(['male', 'female', 'other']),
+             'gender' => $faker->numberBetween(1, 3),
              'post_code' => $faker->postcode1().'-'.$faker->postcode2(),
              'address' => $faker->prefecture().$faker->city().$faker->streetAddress().$faker->secondaryAddress(),
              'tel' => $faker->phoneNumber(),
              'job' => $faker->jobTitle(),
              'bank_name' => $faker->randomElement(['みずほ銀行','三菱ＵＦＪ銀行','三井住友銀行','りそな銀行','埼玉りそな銀行','ゆうちょ銀行']),
              'bank_branch_name' => $faker->city(),
-             'branch_number' => $faker->randomNumber(3),
-             'account_type' => $faker->randomElement(['普通', '当座', '定期']),
-             'account_number' => $faker->randomNumber(7),
-             'account_name_kana' => $faker->kanaName(),
+             'bank_branch_code' => $faker->randomNumber(3),
+             'bank_account_type' => $faker->randomElement(['普通', '当座', '定期']),
+             'bank_account_number' => $faker->randomNumber(7),
+             'bank_account_name_kana' => $faker->kanaName(),
              'is_qualified_supplier' => true,
              'invoice_number' => $faker->numberBetween(1000000000000, 9999999999999),
          ];
-     } 
+     }
 
     /**
      * Indicate that the model's email address should be unverified.

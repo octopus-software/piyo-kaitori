@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('name_kana')->nullable();
             $table->date('birthday')->nullable();
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->unsignedSmallInteger('gender')->nullable();
             $table->string('post_code')->nullable();
             $table->string('address')->nullable();
             $table->string('tel')->nullable();
             $table->string('job')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('bank_branch_name')->nullable();
-            $table->string('branch_number')->nullable();
-            $table->string('account_type')->nullable();
-            $table->string('account_number')->nullable();
-            $table->string('account_name_kana')->nullable();
+            $table->string('bank_branch_code')->nullable();
+            $table->string('bank_account_type')->nullable();
+            $table->string('bank_account_number')->nullable();
+            $table->string('bank_account_name_kana')->nullable();
             $table->boolean('is_qualified_supplier')->default(false);
             $table->string('invoice_number')->nullable();
         });

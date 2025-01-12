@@ -27,6 +27,7 @@ use App\Http\Controllers\Web\User\Admin\UserGetEditController;
 use App\Http\Controllers\Web\User\Admin\UserGetListController;
 use App\Http\Controllers\Web\User\Admin\UserStoreController;
 use App\Http\Controllers\Web\User\Admin\UserUpdateController;
+use App\Http\Controllers\Web\User\Client\UserGetEditClientController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -93,6 +94,9 @@ Route::prefix('client')
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');
         Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');
+
+        // 買取依頼者プロフィール
+        Route::get('/user/{id}/edit', UserGetEditClientController::class)->name('client.user.edit');
     });
 
 Route::post('/test', UserStoreController::class);
