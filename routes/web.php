@@ -22,11 +22,11 @@ use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetStoreAdminContro
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetUpdateAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetListClientController;
 use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetShowClientController;
-use App\Http\Controllers\Web\User\Admin\UserDeleteController;
-use App\Http\Controllers\Web\User\Admin\UserGetEditController;
-use App\Http\Controllers\Web\User\Admin\UserGetListController;
-use App\Http\Controllers\Web\User\Admin\UserStoreController;
-use App\Http\Controllers\Web\User\Admin\UserUpdateController;
+use App\Http\Controllers\Web\User\Admin\UserDeleteAdminController;
+use App\Http\Controllers\Web\User\Admin\UserGetEditAdminController;
+use App\Http\Controllers\Web\User\Admin\UserGetListAdminController;
+use App\Http\Controllers\Web\User\Admin\UserStoreAdminController;
+use App\Http\Controllers\Web\User\Admin\UserUpdateAdminController;
 use App\Http\Controllers\Web\User\Client\UserGetEditClientController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\User;
@@ -68,10 +68,10 @@ Route::prefix('admin')
         Route::get('/dashboard', DashboardGetAdminController::class)->middleware(['auth', 'verified'])->name('admin.dashboard');
 
         // 買取依頼者
-        Route::get('/users', UserGetListController::class)->name('admin.user.list');
-        Route::get('/user/{id}/edit', UserGetEditController::class)->name('admin.user.edit');
-        Route::put('/user/{id}', UserUpdateController::class)->name('admin.user.update');
-        Route::delete('/user/{id}/delete', UserDeleteController::class)->name('admin.user.delete');
+        Route::get('/users', UserGetListAdminController::class)->name('admin.user.list');
+        Route::get('/user/{id}/edit', UserGetEditAdminController::class)->name('admin.user.edit');
+        Route::put('/user/{id}', UserUpdateAdminController::class)->name('admin.user.update');
+        Route::delete('/user/{id}/delete', UserDeleteAdminController::class)->name('admin.user.delete');
     });
 
 Route::prefix('client')
@@ -99,7 +99,7 @@ Route::prefix('client')
         Route::get('/user/{id}/edit', UserGetEditClientController::class)->name('client.user.edit');
     });
 
-Route::post('/test', UserStoreController::class);
+Route::post('/test', UserStoreAdminController::class);
 
 Route::middleware('auth')->group(function () {
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserUpdateController extends Controller
+class UserUpdateAdminController extends Controller
 {
     /**
      * Handle the incoming request.

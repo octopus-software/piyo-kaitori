@@ -41,11 +41,20 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-[30%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
                             ユーザー名
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[50%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
+                            ユーザー名(かな)
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[30%]">
                             Eメール
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[10%]">
+                            未承認の取引件数
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[10%]">
+                            発送済みの取引件数
                         </th>
                         <th scope="col" class="px-6 py-3 w-[20%]">
                             取引ステータス
@@ -58,8 +67,17 @@
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
                             {{ user.name }} <!-- ユーザーの名前などを表示する -->
                         </td>
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
+                            {{ user.name_kana }} <!-- ユーザーの名前などを表示する -->
+                        </td>
                         <td class="px-6 py-4">
                             {{ user.email }}
+                        </td>
+                        <td class="px-6 py-4" :class="{'text-red-600': user.unapproved_offer_count > 0}">
+                            {{ user.unapproved_offer_count }}件
+                        </td>
+                        <td class="px-6 py-4" :class="{'text-red-600': user.shipped_offer_count > 0}">
+                            {{ user.shipped_offer_count }}件
                         </td>
                         <td class="px-6 py-4">
                             <span v-if="user.is_active"
@@ -138,7 +156,10 @@ type ParamType = {
 type UserType = {
     id: number;
     name: string;
+    name_kana: string;
     email: string;
+    unapproved_offer_count: number;
+    shipped_offer_count: number;
     is_active: number;
 }
 

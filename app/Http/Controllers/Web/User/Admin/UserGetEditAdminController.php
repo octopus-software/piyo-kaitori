@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UserGetEditController extends Controller
+class UserGetEditAdminController extends Controller
 {
     /**
      * Handle the incoming request.

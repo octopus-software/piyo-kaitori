@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Web\User\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PurchaseOffer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UserGetListController extends Controller
+class UserGetListAdminController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -29,10 +30,20 @@ class UserGetListController extends Controller
             ->skip(((int)$request['page'] - 1) * 10 ?? 0)
             ->paginate(10);
         $users = $paginator->getCollection()->map(function ($user) {
+            // 取引完了以外の買取ステータスを持つpurchase_offerの数をカウントする
+            $unapproved_offer_count = $user['purchase_offers']->filter(function ($offer) {
+                return $offer['status'] === PurchaseOffer::STATUS['unapproved'];
+            })->count();
+            $shipped_offer_count = $user['purchase_offers']->filter(function ($offer) {
+                return $offer['status'] === PurchaseOffer::STATUS['shipped'];
+            })->count();
             return [
                 'id' => $user['id'],
                 'name' => $user['name'],
+                'name_kana' => $user['name_kana'],
                 'email' => $user['email'],
+                'unapproved_offer_count' => $unapproved_offer_count,
+                'shipped_offer_count' => $shipped_offer_count,
                 'is_active' => $user['is_active'],
 //                'offers' => $user['purchase_offers']->map(function ($offer) {
 //                    return [
