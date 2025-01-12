@@ -5,35 +5,91 @@
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">ユーザー編集</h5>
                 <div class="mx-auto">
-                    <div class="flex">
-                        <div class="mb-5 p-2 w-[20%]">
-                            <label for="id"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザーID</label>
-                            <input type="text" :value="user.id" id="name" disabled
-                                   class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   required/>
-                        </div>
-                        <div class="mb-5 p-2 w-[30%]">
-                            <label for="name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ユーザー名</label>
-                            <input type="text" :value="user.name" id="name" disabled
-                                   class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   required/>
-                        </div>
-                        <div class="mb-5 p-2 w-[50%]">
-                            <label for="email"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Eメール</label>
-                            <input type="email" :value="user.email" id="email" disabled
-                                   class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="name@flowbite.com" required/>
-                        </div>
-                    </div>
+                    <table class="w-full border-collapse">
+                        <tbody>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">ID</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.id }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">メールアドレス</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.email }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">名前</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.name }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">名前（かな）</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.name_kana }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">生年月日</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.birthday }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">性別</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.gender }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">郵便番号</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.post_code }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">住所</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.address }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">電話番号</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.tel }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">職業</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.job }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">銀行名</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_name }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">支店名</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_branch_name }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">支店コード</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_branch_code }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">口座種別</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_account_type }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">口座番号</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_account_number }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">口座名義（かな）</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.bank_account_name_kana }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">適格請求書発行事業者である</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.is_qualified_supplier ? 'はい' : 'いいえ' }}</td>
+                        </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">インボイス番号</td>
+                            <td class="w-4/5 p-2 border">{{ props.user.invoice_number }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                    <div class="flex">
+
+                    <div class="flex mt-6">
                         <div class="mb-5 p-2 w-[100%]">
                             <div class="inline-flex items-center">
                                 <label class="relative flex items-center p-3 -mt-5 rounded-full cursor-pointer">
-                                    <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在取引中である" subLabel="チェックの入っていないユーザーの買取オファーは非表示となります" @update:checked="handleUpdateChecked" />
+                                    <Checkbox value="1" :checked="Boolean(values.is_active)" label="現在取引中である"
+                                              subLabel="チェックの入っていないユーザーの買取オファーは非表示となります"
+                                              @update:checked="handleUpdateChecked"/>
                                     <span
                                         class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
@@ -70,8 +126,23 @@ import Checkbox from "@/Components/Input/Checkbox.vue";
 
 type UserType = {
     id: number,
-    name: string,
     email: string,
+    name: string,
+    name_kana: string,
+    birthday: string,
+    gender: number,
+    post_code: string,
+    address: string,
+    tel: string,
+    job: string,
+    bank_name: string,
+    bank_branch_name: string,
+    bank_branch_code: string,
+    bank_account_type: number,
+    bank_account_number: string,
+    bank_account_name_kana: string,
+    is_qualified_supplier: number,
+    invoice_number: string | null,
     is_active: number,
 }
 
