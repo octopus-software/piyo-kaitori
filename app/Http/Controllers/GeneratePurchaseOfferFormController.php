@@ -28,7 +28,7 @@ class GeneratePurchaseOfferFormController extends Controller
         //$user = auth()->user();
         $user = array(
             'id' => 1,
-            'name' => 'りゅうせいくん'
+            'name' => '山田太郎',
         );
 
         // シートを取得してデータを変更
