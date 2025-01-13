@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneratePurchaseOfferFormController;
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartGetClientController;
@@ -91,6 +92,8 @@ Route::prefix('client')
     });
 
 Route::post('/test', UserStoreController::class);
+
+Route::get('/export_to_pdf', [GeneratePurchaseOfferFormController::class, 'exportToPdf']);
 
 Route::middleware('auth')->group(function () {
 
