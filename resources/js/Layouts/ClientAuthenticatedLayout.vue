@@ -74,8 +74,8 @@ onMounted(() => {
 
                             <div class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $page.props.auth.user.name }}<span class="text-base">　様</span></h5>
-                                <p class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('debug.logout'))">ログアウト</p>
                                 <p class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('client.user.edit', {id: $page.props.auth.user.id}))">プロフィールを編集</p>
+                                <p class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('debug.logout'))">ログアウト</p>
                             </div>
                         </ul>
                     </div>
