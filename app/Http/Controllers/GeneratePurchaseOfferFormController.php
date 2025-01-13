@@ -45,7 +45,7 @@ class GeneratePurchaseOfferFormController extends Controller
         //取引方法
         $sheet->setCellValue('X2', '');
         //確認書類
-        $sheet->setCellValue('H2', '');
+        $sheet->setCellValue('H5', '');
         //フリガナ
         $sheet->setCellValue('F2', '');
         //氏名
@@ -79,10 +79,6 @@ class GeneratePurchaseOfferFormController extends Controller
                 ],
             ],
             'default_font' => 'notosansjp', // デフォルトフォントを指定
-            'margin_left' => 10,  // 左余白（ミリメートル）
-            'margin_right' => 10, // 右余白
-            'margin_top' => 20,   // 上余白
-            'margin_bottom' => 20 // 下余白
         ]);
 
         $htmlContent = '<style>
