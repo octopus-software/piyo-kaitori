@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseOffer;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Illuminate\Http\Request;
+use Mpdf\Mpdf;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class GeneratePurchaseOfferFormController extends Controller
@@ -15,24 +14,8 @@ class GeneratePurchaseOfferFormController extends Controller
         // 実行時間の制限を解除または延長
         set_time_limit(120); // 120秒 (2分) に設定
 
-        // 日本語フォントを有効にするためのDompdfオプションの設定
-        $options = new Options();
-        $options->set('isPhpEnabled', true);          // PHP機能を有効にする（必要な場合）
-        $options->setFontDir(storage_path('fonts/')); // フォントディレクトリを指定
-        $options->setFontCache(storage_path('fonts/cache/')); // キャッシュディレクトリを指定
-        $options->set('defaultFont', 'Noto Sans JP');   // デフォルトフォントの指定
-        $options->set('isHtml5ParserEnabled', true);  // HTML5パーサーを有効にする
-        $options->set('isRemoteEnabled', true);       // 外部リソースを有効化
-        $options->set('isFontSubsettingEnabled', true);       // フォントのサブセット化を有効にする
-
-        // Dompdfインスタンスの作成
-        $dompdf = new Dompdf($options);
-        $dompdf->getOptions()->setFontDir(storage_path('fonts/'));
-        $dompdf->getOptions()->setFontCache(storage_path('fonts/cache/'));
-        $dompdf->getOptions()->setDefaultFont('Noto Sans JP');
-
         // ファイルを読み込み
-        $filePath = storage_path('app/public/template.xlsx');
+        $filePath = public_path('excel/purchase_offer_form_template.xlsx');
         $spreadsheet = IOFactory::load($filePath);
 
         // ページ設定の調整
@@ -45,7 +28,7 @@ class GeneratePurchaseOfferFormController extends Controller
         //$user = auth()->user();
         $user = array(
             'id' => 1,
-            'name' => 'RYUSEI'
+            'name' => 'りゅうせいくん'
         );
 
         // シートを取得してデータを変更
@@ -78,11 +61,6 @@ class GeneratePurchaseOfferFormController extends Controller
         //生年月日（年）
         $sheet->setCellValue('S8', '');
 
-        $sheet->getPageMargins()->setTop(1);    // 上マージン
-        $sheet->getPageMargins()->setRight(0.75); // 右マージン
-        $sheet->getPageMargins()->setLeft(0.75);  // 左マージン
-        $sheet->getPageMargins()->setBottom(1); // 下マージン
-
         // HTML出力を作成
         $writer = IOFactory::createWriter($spreadsheet, 'Html');
         $writer->setPreCalculateFormulas(true);  // 数式の事前計算を有効にする
@@ -90,11 +68,26 @@ class GeneratePurchaseOfferFormController extends Controller
         $writer->save('php://output');
         $htmlContent = ob_get_clean();
 
-        //$htmlContent = '<meta charset="UTF-8">' . $htmlContent;
+        $mpdf = new Mpdf([
+            'format' => 'A4', // 用紙サイズ
+            'tempDir' => storage_path('mpdf'), // 一時ファイルディレクトリ
+            'fontDir' => [storage_path('fonts')], // フォントディレクトリ
+            'fontdata' => [
+                'notosansjp' => [
+                    'R' => 'NotoSansJP-Regular.ttf', // Regularフォント
+                    'B' => 'NotoSansJP-Bold.ttf', // Boldフォント
+                ],
+            ],
+            'default_font' => 'notosansjp', // デフォルトフォントを指定
+            'margin_left' => 10,  // 左余白（ミリメートル）
+            'margin_right' => 10, // 右余白
+            'margin_top' => 20,   // 上余白
+            'margin_bottom' => 20 // 下余白
+        ]);
 
         $htmlContent = '<style>
             body, table, th, td {
-                font-family: ”NotoSansJP", sans-serif;
+                font-family: "NotoSansJP, sans-serif";
             }
             table {
                 width: 100%;
@@ -107,25 +100,14 @@ class GeneratePurchaseOfferFormController extends Controller
             }
         </style>' . $htmlContent;
 
-        //$htmlContent = mb_convert_encoding($htmlContent, 'SJIS', 'UTF-8');
+        $mpdf->WriteHTML($htmlContent);
 
-        // DompdfにHTMLをロード
-        $dompdf->loadHtml($htmlContent);
-
-        // 用紙サイズと向きを設定
-        $dompdf->setPaper('A4','portrait');
-
-        // PDFのレンダリング
-        $dompdf->render();
-
-        // PDFファイルを保存
+        // PDFを保存
         $pdfFilePath = storage_path('app/public/example.pdf');
-        file_put_contents($pdfFilePath, $dompdf->output());
+        $mpdf->Output($pdfFilePath, 'F');
 
         // PDFファイルをダウンロードさせる
-        return response()
-        ->download($pdfFilePath);
-        //->deleteFileAfterSend(true);
+        return response()->download($pdfFilePath)->deleteFileAfterSend(true);
     }
 }
 
