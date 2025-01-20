@@ -12,10 +12,10 @@
 ## 作業開始時の手順
  
 ```bash
-docker-compose exec laravel.test composer install
-docker-compose exec laravel.test npm install
-docker-compose exec laravel.test php artisan migrate
-docker-compose exec laravel.test npm run dev
+docker compose exec laravel.test composer install
+docker compose exec laravel.test npm install
+docker compose exec laravel.test php artisan migrate
+docker compose exec laravel.test npm run dev
 ```
 
 
