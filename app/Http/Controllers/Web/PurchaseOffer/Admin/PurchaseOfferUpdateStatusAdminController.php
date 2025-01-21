@@ -23,15 +23,13 @@ class PurchaseOfferUpdateStatusAdminController extends Controller
         $purchase_offer = PurchaseOffer::query()
             ->with('purchase_targets')
             ->where('id',$request['id'])
-            ->first()
-        ;
+            ->first();
 
         //purchase_targetを取得
         $purchase_targets = $purchase_offer['purchase_targets'];
 
         //USER情報取得
         $user_info = User::query()->find($purchase_offer['user_id']);
-        //return $user_info;
 
         //ステータスを更新
         $purchase_offer->update([
