@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PurchaseOfferApprovedMail extends Mailable
+class PurchaseOfferPaidMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,6 @@ class PurchaseOfferApprovedMail extends Mailable
     {
         $this->purchase_offer_id = $purchase_offer_id;
         $this->purchase_targets = $purchase_targets;
-
     }
 
     /**
@@ -32,7 +31,7 @@ class PurchaseOfferApprovedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '【ぴよ買取】買取オファーが承認されました ※郵送買取は元払いでご発送ください',
+            subject: '【ぴよ買取】買取代金の支払いが完了しました',
         );
     }
 
@@ -42,7 +41,7 @@ class PurchaseOfferApprovedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.purchase_offer_approved_mail',
+            view: 'emails.purchase_offer_paid_mail',
             with: [
                 'purchase_offer_id' => $this->purchase_offer_id,
                 'purchase_targets' => $this->purchase_targets,
