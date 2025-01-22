@@ -10,9 +10,9 @@
 <br>
 @foreach($purchase_targets as $purchase_target)
 {{ $purchase_target['name'] }} <br>
-金額：{{ number_format($purchase_target->pivot['price']) }} <br>
+金額：¥{{ number_format($purchase_target->pivot['price']) }} <br>
 数量：{{ $purchase_target->pivot['quantity'] }} <br>
-小計：{{ number_format($purchase_target->pivot['price'] * $purchase_target->pivot['quantity']) }} <br>
+小計：¥{{ number_format($purchase_target->pivot['price'] * $purchase_target->pivot['quantity']) }} <br>
 @endforeach
 <br>
 【ご注意事項】<br>
