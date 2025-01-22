@@ -17,7 +17,8 @@ class PurchaseOfferStoreClientController extends Controller
             //買取依頼を作成
             $created_offer = PurchaseOffer::create([
                 'user_id' => auth()->id(),
-                'status' => PurchaseOffer::STATUS['unapproved']
+                'status'  => PurchaseOffer::STATUS['unapproved'],
+                'remark'  => $request['remark']
             ]);
 
             //カート内容を取得
