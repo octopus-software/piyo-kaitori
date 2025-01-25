@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\User\Client;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,7 +14,7 @@ class UserGetEditClientController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, int $id): Response
+    public function __invoke(Request $request, int $id)//: Response
     {
         $user = User::query()->find($id);
         return Inertia::render('User/Client/Edit', [
@@ -37,6 +38,7 @@ class UserGetEditClientController extends Controller
                 'is_qualified_supplier' => (bool)$user['is_qualified_supplier'],
                 'invoice_number' => $user['invoice_number'],
                 'is_active' => (bool)$user['is_active'],
+                'identification_file_url' => Storage::url($user['identification_file_url']),
             ]
         ]);
     }
