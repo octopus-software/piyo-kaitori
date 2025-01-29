@@ -43,6 +43,12 @@ class CsvDownloadController extends Controller
         //CSVの項目名を定義
         $csvHeader = ['作成日', '買取依頼者名', '買取グループID', '買取商品名', 'JANコード','買取価格','買取個数','買取総額','買取総額内税'];
 
+        //本日を取得
+        $today = now()->format('Ymd');
+
+        //ファイル名生成
+        $file_name = "買取依頼一覧_".$today;
+
         //CSV書き込み
         $response = new StreamedResponse(function () use ($csvHeader, $formattedData) {
             $handle = fopen('php://output', 'w');
@@ -55,17 +61,9 @@ class CsvDownloadController extends Controller
             fclose($handle);
         }, 200, [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="users.csv"',
+            'Content-Disposition' => 'attachment; filename='.$file_name.'.csv', //ファイル名を指定
         ]);
-
-        //本日を取得
-        $today = now()->format('Ymd');
-
-        //ファイル名生成
-        $file_name = "買取依頼一覧_".$today;
         
-        //ファイル名設定
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$file_name.'.csv');
         return $response;
     }
 }
