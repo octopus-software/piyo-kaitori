@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CsvDownloadController;
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartGetClientController;
@@ -102,6 +103,8 @@ Route::prefix('client')
     });
 
 Route::post('/test', UserStoreAdminController::class);
+
+Route::get('/csv_download', CsvDownloadController::class);
 
 Route::middleware('auth')->group(function () {
 
