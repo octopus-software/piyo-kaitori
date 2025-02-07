@@ -5,6 +5,14 @@
                 class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">ユーザー編集</h5>
                 <div class="mx-auto">
+                    <div v-if="Object.keys(serverErrors).length"
+                         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        <ul>
+                            <li v-for="(messages, field) in serverErrors" :key="field">
+                                <span v-for="message in messages" :key="message">{{ message }}</span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="flex">
                         <div class="mb-5 p-2 w-[30%]">
                             <label for="name"
@@ -49,7 +57,7 @@
                                     <input type="radio" id="male" value="1"
                                            :checked="values.gender === 1"
                                            @change="() => setFieldValue('gender', 1)"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500" />
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500"/>
                                     <label for="male" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">男性</label>
                                 </div>
 
@@ -58,8 +66,9 @@
                                     <input type="radio" id="female" value="2"
                                            :checked="values.gender === 2"
                                            @change="() => setFieldValue('gender', 2)"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500" />
-                                    <label for="female" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">女性</label>
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500"/>
+                                    <label for="female"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">女性</label>
                                 </div>
 
                                 <!-- その他 -->
@@ -67,8 +76,9 @@
                                     <input type="radio" id="other" value="3"
                                            :checked="values.gender === 3"
                                            @change="() => setFieldValue('gender', 3)"
-                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500" />
-                                    <label for="other" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">その他</label>
+                                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 dark:bg-gray-600 dark:border-gray-500"/>
+                                    <label for="other"
+                                           class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">その他</label>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +145,7 @@
                             <input type="text" :value="values.bank_branch_code" id="bank_branch_code"
                                    @input="(e) => setFieldValue('bank_branch_code', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                      required/>
+                                   required/>
                         </div>
                     </div>
 
@@ -170,7 +180,9 @@
                         <div class="mb-5 p-2 w-[50%]">
                             <div class="inline-flex items-center">
                                 <label class="relative flex items-center p-3 -mt-5 rounded-full cursor-pointer">
-                                    <Checkbox value="1" :checked="Boolean(values.is_qualified_supplier)" label="適格請求書発行事業者である" subLabel="インボイス番号をお持ちの場合はチェックを入れてください" @update:checked="handleUpdateChecked" />
+                                    <Checkbox value="1" :checked="Boolean(values.is_qualified_supplier)"
+                                              label="適格請求書発行事業者である" subLabel="インボイス番号をお持ちの場合はチェックを入れてください"
+                                              @update:checked="handleUpdateChecked"/>
                                     <span
                                         class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
@@ -183,11 +195,25 @@
                         </div>
                         <div class="mb-5 p-2 w-[30%]">
                             <label for="invoice_number"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">インボイス番号 ※先頭のTは不要です。</label>
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">インボイス番号
+                                ※先頭のTは不要です。</label>
                             <input type="text" :value="values.invoice_number" id="invoice_number"
                                    @input="(e) => setFieldValue('invoice_number', e.target.value)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex">
+                            <div class="mb-5 p-2 w-[30%]">
+                                <label for="image_url"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">本人確認書類の画像</label>
+                                <img :src="previewImage" alt="image" class="w-52"/>
+                                <input type="file" id="image_url" @input="onFileChange"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="name@flowbite.com" required/>
+                            </div>
                         </div>
                     </div>
 
@@ -201,13 +227,13 @@
 <script setup lang="ts">
 import {useToast} from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
-import AdminAuthenticatedLayout from '@/Layouts/AdminAuthenticatedLayout.vue';
 import BlueButton from "@/Components/Button/BlueButton.vue";
-import {defineProps} from 'vue';
+import {defineProps, ref} from 'vue';
 import {number, object, string} from "yup";
 import {useForm} from "vee-validate";
 import Checkbox from "@/Components/Input/Checkbox.vue";
 import ClientAuthenticatedLayout from "@/Layouts/ClientAuthenticatedLayout.vue";
+import {router} from "@inertiajs/vue3";
 
 type UserType = {
     id: number,
@@ -227,8 +253,9 @@ type UserType = {
     bank_account_number: string,
     bank_account_name_kana: string,
     is_qualified_supplier: number,
-    invoice_number: string|null,
+    invoice_number: string | null,
     is_active: number,
+    identification_file_url: string | null
 }
 
 const toast = useToast();
@@ -237,6 +264,9 @@ const props = defineProps<{
 }>();
 
 const handleUpdateChecked = (newValue: number) => setFieldValue('is_qualified_supplier', newValue);
+const previewImage = ref(props.user.identification_file_url);
+const newImage = ref(null);
+const serverErrors = ref({});
 
 const schema = object({
     email: string().email('メールアドレスの形式が正しくありません').required('メールアドレスは必須項目です'),
@@ -257,6 +287,7 @@ const schema = object({
     is_qualified_supplier: number(),
     invoice_number: string().nullable(),
     is_active: number(),
+    // identification_file_url: string().nullable()
 });
 
 const {handleSubmit, errors, values, setFieldValue} = useForm({
@@ -280,19 +311,54 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
         is_qualified_supplier: props.user.is_qualified_supplier,
         invoice_number: props.user.invoice_number,
         is_active: props.user.is_active,
+        identification_file_url: props.user.identification_file_url,
     }
 });
 
+const onFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.value = e.target.result.toString();
+            newImage.value = file;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
 const updateUser = async () => {
-    console.log(values)
-    // try {
-    //     await router.put(route('client.user.update', props.user.id), {
-    //         //,
-    //     });
-    //     toast.success('データが更新されました');
-    // } catch (error) {
-    //     toast.error(error.response.data.message);
-    // }
+        await router.post(route('client.user.update', props.user.id), {
+            _method: 'PUT',
+            email: values.email,
+            name: values.name,
+            name_kana: values.name_kana,
+            birthday: values.birthday,
+            gender: values.gender,
+            post_code: values.post_code,
+            address: values.address,
+            tel: values.tel,
+            job: values.job,
+            bank_name: values.bank_name,
+            bank_branch_name: values.bank_branch_name,
+            bank_branch_code: values.bank_branch_code,
+            bank_account_type: values.bank_account_type,
+            bank_account_number: values.bank_account_number,
+            bank_account_name_kana: values.bank_account_name_kana,
+            is_qualified_supplier: values.is_qualified_supplier,
+            invoice_number: values.invoice_number,
+            is_active: values.is_active,
+            identification_file_url: values.identification_file_url,
+            identification_file: newImage.value,
+        }, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+            onSuccess: () => toast.success('買取対象を更新しました', {duration: 5000}),
+            onError: (errors) => {
+                serverErrors.value = errors;
+            },
+        });
 };
 
 </script>

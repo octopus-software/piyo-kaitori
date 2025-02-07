@@ -38,6 +38,7 @@ class UserGetEditAdminController extends Controller
                 'is_qualified_supplier' => (bool)$user['is_qualified_supplier'],
                 'invoice_number' => $user['invoice_number'],
                 'is_active' => (bool)$user['is_active'],
+                'identification_file_url' => $user['identification_file_url'],
             ]
         ]);
     }

@@ -79,9 +79,15 @@
                             <td class="w-1/5 p-2 border">インボイス番号</td>
                             <td class="w-4/5 p-2 border">{{ props.user.invoice_number }}</td>
                         </tr>
+                        <tr class="odd:bg-white even:bg-gray-100">
+                            <td class="w-1/5 p-2 border">本人確認書類の画像</td>
+                            <td class="w-4/5 p-2 border">
+                                <img v-if="props.user.identification_file_url" :src="props.user.identification_file_url" alt="image" class="w-52"/>
+                                <p v-else class="text-red-600">※本人確認書類がアップロードされていません。</p>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
-
 
                     <div class="flex mt-6">
                         <div class="mb-5 p-2 w-[100%]">
@@ -144,6 +150,7 @@ type UserType = {
     is_qualified_supplier: number,
     invoice_number: string | null,
     is_active: number,
+    identification_file_url: string | null,
 }
 
 const toast = useToast();
