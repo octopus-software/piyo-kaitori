@@ -94,6 +94,7 @@
                         </div>
                     </div>
 
+                    <OrangeButton v-if="props.purchase_offer.status >= 2" text="買取依頼書を発行する" @click=""/>
                     <BlueButton text="更新する" @click="updatePurchaseOfferStatus"/>
                     <DeleteButton v-if="purchase_offer.status === 1" text="削除する" :onclick="deletePurchaseOffer"/>
                     <GrayButton text="戻る" @click="goBack"/>
@@ -115,6 +116,7 @@ import {defineProps, ref} from 'vue';
 import {useForm} from "vee-validate";
 import {date, number, object} from "yup";
 import ClientAuthenticatedLayout from "@/Layouts/ClientAuthenticatedLayout.vue";
+import OrangeButton from "@/Components/Button/OrangeButton.vue";
 
 type PurchaseTargetType = {
     id: number;
@@ -174,6 +176,25 @@ const deletePurchaseOffer = () => {
 }
 
 const updatePurchaseOfferStatus = () => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
+    router.put(route('client.purchase_offer.update.status', {id: props.purchase_offer.id}), {
+        status: values.status,
+        shipped_date: values.shipped_date,
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        onSuccess: () => {
+            toast.success('買取オファーのステータスを更新しました', {duration: 5000})
+            serverErrors.value = {};
+        },
+        onError: (errors) => {
+            serverErrors.value = errors;
+        },
+    });
+};
+
+const generatePurchaseOfferForm = () => {
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
     router.put(route('client.purchase_offer.update.status', {id: props.purchase_offer.id}), {
         status: values.status,
