@@ -28,6 +28,7 @@ use App\Http\Controllers\Web\User\Admin\UserGetListAdminController;
 use App\Http\Controllers\Web\User\Admin\UserStoreAdminController;
 use App\Http\Controllers\Web\User\Admin\UserUpdateAdminController;
 use App\Http\Controllers\Web\User\Client\UserGetEditClientController;
+use App\Http\Controllers\Web\User\Client\UserUpdateClientController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -97,6 +98,7 @@ Route::prefix('client')
 
         // 買取依頼者プロフィール
         Route::get('/user/{id}/edit', UserGetEditClientController::class)->name('client.user.edit');
+        Route::put('/user/{id}',UserUpdateClientController::class)->name('client.user.update');
     });
 
 Route::post('/test', UserStoreAdminController::class);
