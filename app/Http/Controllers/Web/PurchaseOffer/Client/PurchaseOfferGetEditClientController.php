@@ -26,21 +26,22 @@ class PurchaseOfferGetEditClientController extends Controller
     private function transformPurchaseOffer(Model $purchase_offer): array
     {
         return [
-            'id' => $purchase_offer['id'],
-            'user_id' => $purchase_offer['user_id'],
-            'user_name' => $purchase_offer['user']['name'],
-            'status' => $purchase_offer['status'],
-            'offer_date' => (new Carbon($purchase_offer['created_at']))->format('Y-m-d'),
+            'id'           => $purchase_offer['id'],
+            'user_id'      => $purchase_offer['user_id'],
+            'user_name'    => $purchase_offer['user']['name'],
+            'status'       => $purchase_offer['status'],
+            'offer_date'   => (new Carbon($purchase_offer['created_at']))->format('Y-m-d'),
             'shipped_date' => $purchase_offer['shipped_date'],
-            'total_price' => FormatHelper::formatYen($purchase_offer['purchase_targets']->sum(fn ($target) => $target['pivot']['price'] * $target['pivot']['quantity'])),
+            'total_price'  => FormatHelper::formatYen($purchase_offer['purchase_targets']->sum(fn ($target) => $target['pivot']['price'] * $target['pivot']['quantity'])),
+            'remark'       => $purchase_offer['remark'],
             'purchase_targets' => $purchase_offer['purchase_targets']->map(function ($target) {
                 return [
-                    'id' => $target['pivot']['purchase_target_id'],
-                    'name' => $target['name'],
-                    'jan_code' => $target['jan_code'],
-                    'price' => FormatHelper::formatYen($target['pivot']['price']),
-                    'quantity' => $target['pivot']['quantity'] . '点',
-                    'total_price' => FormatHelper::formatYen($target['pivot']['price'] * $target['pivot']['quantity']),
+                    'id'           => $target['pivot']['purchase_target_id'],
+                    'name'         => $target['name'],
+                    'jan_code'     => $target['jan_code'],
+                    'price'        => FormatHelper::formatYen($target['pivot']['price']),
+                    'quantity'     => $target['pivot']['quantity'] . '点',
+                    'total_price'  => FormatHelper::formatYen($target['pivot']['price'] * $target['pivot']['quantity']),
                     'evidence_url' => $target['pivot']['evidence_url']
                 ];
             })->toArray()
