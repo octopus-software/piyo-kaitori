@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TestFormRequest;
 use App\Models\User;
 
-class UserStoreController extends Controller
+class UserStoreAdminController extends Controller
 {
     public function __invoke(TestFormRequest $request){
         User::query()->create([

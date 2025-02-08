@@ -12,6 +12,7 @@
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">商品名</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望金額</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望個数</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">参考価格URL</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取合計金額</th>
                         </tr>
                         </thead>
@@ -24,6 +25,10 @@
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.name }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.price }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.quantity }}個</td>
+                            <td v-if="item.evidence_url" class="px-4 py-2 text-sm text-blue-800 hover:text-blue-400">
+                                <a :href="item.evidence_url"><p>参考価格URLを確認</p></a>
+                            </td>
+                            <td v-else></td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.total_price }}</td>
                         </tr>
                         <tr>
@@ -31,14 +36,14 @@
                             <td></td>
                             <td></td>
                             <td></td>
-<!--                            <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_offer.total_price }}</td>-->
+                            <td class="px-4 py-2 text-sm text-gray-900">{{ total_price }}</td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="mt-6">
                         <p class="text-xl">カート合計金額：{{ total_price }}</p>
                     </div>
-                    <BlueButton text="買取オファーを作成する" @click="() => console.log('create offer.')"/>
+                    <BlueButton text="買取オファーを作成する" @click="storePurchaseOffer"/>
                 </div>
             </div>
             <div v-else>
@@ -55,12 +60,14 @@ import {useToast} from "vue-toast-notification";
 import BlueButton from "@/Components/Button/BlueButton.vue";
 import {useForm} from "vee-validate";
 import {object} from "yup";
+import {router} from "@inertiajs/vue3";
 
 type CartType = {
     purchase_target_id: number;
     name: string;
     price: number;
     quantity: number;
+    evidence_url: string;
     total_price: number;
 }
 
@@ -91,6 +98,19 @@ onMounted(() => {
         sessionStorage.removeItem('toastMessage');
     }
 });
+
+const storePurchaseOffer = () => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
+    router.post(route('client.purchase_offer.store'), {}, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        onSuccess: () => toast.success('買取オファーを作成しました', {duration: 5000}),
+        onError: (errors) => {
+            // serverErrors.value = errors;
+        },
+    });
+};
 
 // const buildUrlWithParams = (page: number) => {
 //     let params = {page: page}

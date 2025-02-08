@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeneratePurchaseOfferFormController;
+use App\Http\Controllers\CsvDownloadController;
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartGetClientController;
@@ -10,9 +11,11 @@ use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferDeleteAdminControl
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferDeleteClientController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetEditClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetListClientController;
-use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetMyListClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferUpdateStatusClientController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetDeleteAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetCreateAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetGetEditAdminController;
@@ -21,11 +24,13 @@ use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetStoreAdminContro
 use App\Http\Controllers\Web\PurchaseTarget\Admin\PurchaseTargetUpdateAdminController;
 use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetListClientController;
 use App\Http\Controllers\Web\PurchaseTarget\Client\PurchaseTargetGetShowClientController;
-use App\Http\Controllers\Web\User\Admin\UserDeleteController;
-use App\Http\Controllers\Web\User\Admin\UserGetEditController;
-use App\Http\Controllers\Web\User\Admin\UserGetListController;
-use App\Http\Controllers\Web\User\Admin\UserStoreController;
-use App\Http\Controllers\Web\User\Admin\UserUpdateController;
+use App\Http\Controllers\Web\User\Admin\UserDeleteAdminController;
+use App\Http\Controllers\Web\User\Admin\UserGetEditAdminController;
+use App\Http\Controllers\Web\User\Admin\UserGetListAdminController;
+use App\Http\Controllers\Web\User\Admin\UserStoreAdminController;
+use App\Http\Controllers\Web\User\Admin\UserUpdateAdminController;
+use App\Http\Controllers\Web\User\Client\UserGetEditClientController;
+use App\Http\Controllers\Web\User\Client\UserUpdateClientController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -66,10 +71,10 @@ Route::prefix('admin')
         Route::get('/dashboard', DashboardGetAdminController::class)->middleware(['auth', 'verified'])->name('admin.dashboard');
 
         // 買取依頼者
-        Route::get('/users', UserGetListController::class)->name('admin.user.list');
-        Route::get('/user/{id}/edit', UserGetEditController::class)->name('admin.user.edit');
-        Route::put('/user/{id}', UserUpdateController::class)->name('admin.user.update');
-        Route::delete('/user/{id}/delete', UserDeleteController::class)->name('admin.user.delete');
+        Route::get('/users', UserGetListAdminController::class)->name('admin.user.list');
+        Route::get('/user/{id}/edit', UserGetEditAdminController::class)->name('admin.user.edit');
+        Route::put('/user/{id}', UserUpdateAdminController::class)->name('admin.user.update');
+        Route::delete('/user/{id}/delete', UserDeleteAdminController::class)->name('admin.user.delete');
     });
 
 Route::prefix('client')
@@ -84,14 +89,23 @@ Route::prefix('client')
 
         // 買取オファー
         Route::get('/purchase_offers',PurchaseOfferGetListClientController::class)->name('client.purchase_offer.list');
+        Route::get('purchase_offer/{id}/edit', PurchaseOfferGetEditClientController::class)->name('client.purchase_offer.edit');
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
-        Route::get('purchase_offer/myself', PurchaseOfferGetMyListClientController::class)->name('purchase_offer.list.myself');
+        Route::put('purchase_offer/{id}/status', PurchaseOfferUpdateStatusClientController::class)->name('client.purchase_offer.update.status');
+        Route::delete('purchase_offer/{id}', PurchaseOfferDeleteClientController::class)->name('client.purchase_offer.delete');
+
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');
         Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');
+
+        // 買取依頼者プロフィール
+        Route::get('/user/{id}/edit', UserGetEditClientController::class)->name('client.user.edit');
+        Route::put('/user/{id}',UserUpdateClientController::class)->name('client.user.update');
     });
 
-Route::post('/test', UserStoreController::class);
+Route::post('/test', UserStoreAdminController::class);
+
+Route::get('/csv_download', CsvDownloadController::class);
 
 Route::get('/export_to_pdf', [GeneratePurchaseOfferFormController::class, 'exportToPdf']);
 
@@ -113,6 +127,9 @@ Route::prefix('debug')->group(function () {
     Route::get('/get_my_cart', function () {
         return dd(session()->get('cart', []));
     })->name('debug.get_my_cart');
+    Route::get('/auth', function () {
+        return auth()->user();
+    });
 });
 
 require __DIR__ . '/auth.php';

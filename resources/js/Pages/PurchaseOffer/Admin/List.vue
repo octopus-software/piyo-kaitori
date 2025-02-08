@@ -56,24 +56,32 @@
                         <th scope="col" class="px-6 py-3 w-[10%]">
                             買取依頼者名
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[10%]">
+                        <th scope="col" class="px-6 py-3 w-[30%]">
                             買取品概略
                         </th>
                         <th scope="col" class="px-6 py-3 w-[10%]">
                             買取合計金額
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[30%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
                             ステータス
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[20%]">
+                            商品発送日
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(purchase_offer, index) in purchase_offers" :key="index" @click="goEdit(purchase_offer.id)"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <td class="px-6 py-4">
-                            <p>{{ purchase_offer.offer_date }}</p>
+                    <tr v-for="(purchase_offer, index) in purchase_offers" :key="index"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100">
+                        <td class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                            <div class="flex inline-block">
+                                <svg @click="goEdit(purchase_offer.id)" class="cursor-pointer mr-4 w-6 h-6 text-blue-800 dark:text-white hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                </svg>
+                                <p>{{ purchase_offer.offer_date }}</p> <!-- ユーザーの名前などを表示する -->
+                            </div>
                         </td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <td class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                             <p>{{ purchase_offer.user_name }}</p>
                             <!-- ユーザーの名前などを表示する -->
                         </td>
@@ -94,6 +102,12 @@
                                   class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">発送済み</span>
                             <span v-if="purchase_offer.status === 4"
                                   class="bg-gray-100 text-gray-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">取引完了</span>
+                        </td>
+                        <td v-if="purchase_offer.shipped_date" class="px-6 py-4">
+                            <p>{{ purchase_offer.shipped_date }}</p>
+                        </td>
+                        <td v-else class="px-6 py-4">
+                            <p class="text-red-600">未発送</p>
                         </td>
                     </tr>
                     </tbody>

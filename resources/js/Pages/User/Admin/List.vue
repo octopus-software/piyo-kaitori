@@ -41,11 +41,20 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-[30%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
                             ユーザー名
                         </th>
-                        <th scope="col" class="px-6 py-3 w-[50%]">
+                        <th scope="col" class="px-6 py-3 w-[20%]">
+                            ユーザー名(かな)
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[30%]">
                             Eメール
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[10%]">
+                            未承認の取引件数
+                        </th>
+                        <th scope="col" class="px-6 py-3 w-[10%]">
+                            発送済みの取引件数
                         </th>
                         <th scope="col" class="px-6 py-3 w-[20%]">
                             取引ステータス
@@ -53,13 +62,28 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(user, index) in users" :key="index" @click="router.get(route('admin.user.edit', {id: user.id}))"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
-                            {{ user.name }} <!-- ユーザーの名前などを表示する -->
+                    <tr v-for="(user, index) in users" :key="index"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100">
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <div class="flex inline-block">
+                                <svg @click="router.get(route('admin.user.edit', {id: user.id}))" class="cursor-pointer mr-4 w-6 h-6 text-blue-800 dark:text-white hover:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                </svg>
+                                <p class="text-gray-900">{{ user.name }}</p> <!-- ユーザーの名前などを表示する -->
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
+                            {{ user.name_kana }} <!-- ユーザーの名前などを表示する -->
                         </td>
                         <td class="px-6 py-4">
                             {{ user.email }}
+                        </td>
+                        <td class="px-6 py-4" :class="{'text-red-600': user.unapproved_offer_count > 0}">
+                            {{ user.unapproved_offer_count }}件
+                        </td>
+                        <td class="px-6 py-4" :class="{'text-red-600': user.shipped_offer_count > 0}">
+                            {{ user.shipped_offer_count }}件
                         </td>
                         <td class="px-6 py-4">
                             <span v-if="user.is_active"
@@ -138,7 +162,10 @@ type ParamType = {
 type UserType = {
     id: number;
     name: string;
+    name_kana: string;
     email: string;
+    unapproved_offer_count: number;
+    shipped_offer_count: number;
     is_active: number;
 }
 

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class UserDeleteController extends Controller
+class UserDeleteAdminController extends Controller
 {
     /**
      * Handle the incoming request.

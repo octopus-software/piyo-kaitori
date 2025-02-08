@@ -51,10 +51,10 @@
                                 </option>
                             </select>
                         </div>
-                        <div v-if="purchase_offer.send_date" class="mb-5 p-2 w-[50%]">
-                            <label for="send_date"
+                        <div class="mb-5 p-2 w-[50%]">
+                            <label for="shipped_date"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">商品発送日</label>
-                            <input type="date" :value="purchase_offer.send_date" id="send_date" disabled
+                            <input type="date" :value="purchase_offer.shipped_date" id="shipped_date" disabled
                                    class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-1000 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
@@ -98,7 +98,7 @@
                     </div>
 
                     <BlueButton text="更新する" @click="updatePurchaseOfferStatus"/>
-                    <DeleteButton text="削除する" :onclick="deleteUser"/>
+                    <DeleteButton text="削除する" :onclick="deletePurchaseOffer"/>
                     <GrayButton text="戻る" @click="goBack"/>
                 </div>
             </div>
@@ -134,7 +134,7 @@ type PurchaseOfferType = {
     user_name: string;
     status: number;
     offer_date: string;
-    send_date: string;
+    shipped_date: string;
     total_price: string;
     purchase_targets: PurchaseTargetType[]
 }
@@ -153,6 +153,7 @@ const {handleSubmit, errors, values, setFieldValue} = useForm({
     validationSchema: schema,
     initialValues: {
         status: props.purchase_offer.status,
+        shipped_date: props.purchase_offer.shipped_date,
     }
 });
 
@@ -179,29 +180,18 @@ const resetServerErrors = () => {
     serverErrors.value = {};
 };
 
-const updateUser = async () => {
-    console.log(values);
-    // try {
-    //     await router.put(route('user.update', user.value.id), {
-    //         is_active: user.value.is_active,
-    //     });
-    //     toast.success('データが更新されました');
-    // } catch (error) {
-    //     toast.error(error.response.data.message);
-    // }
-};
-
-const deleteUser = async (): Promise<void> => {
-    console.log(props.purchase_offer.id)
-    // try {
-    //     await router.delete(route('user.delete', user.value.id));
-    //     sessionStorage.setItem('toastMessage', 'データが削除されました');
-    //     // Inertia.visit(route('user.list'));
-    // } catch (error) {
-    //     const toast = useToast();
-    //     toast.error(error.response.data.message);
-    // }
-};
+const deletePurchaseOffer = () => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void; };
+    router.delete(route('admin.purchase_offer.delete', {id: props.purchase_offer.id}), {
+        onSuccess: () => {
+            toast.success('買取オファーを削除しました', {duration: 5000})
+            serverErrors.value = {};
+        },
+        onError: (errors) => {
+            serverErrors.value = errors;
+        }
+    });
+}
 
 </script>
 

@@ -37,9 +37,9 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3 w-[10%]">
-                            商品画像
-                        </th>
+<!--                        <th scope="col" class="px-6 py-3 w-[10%]">-->
+<!--                            商品画像-->
+<!--                        </th>-->
                         <th scope="col" class="px-6 py-3 w-[30%]">
                             商品名
                         </th>
@@ -54,11 +54,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="(purchase_target, index) in purchase_targets" :key="index"
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 cursor-pointer">
-                        <td class="px-6 py-4">
-                            <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:text-blue-700">
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100">
+<!--                        <td class="px-6 py-4">-->
+<!--                            <img v-if="purchase_target.image_url" :src="purchase_target.image_url" alt="商品画像">-->
+<!--                        </td>-->
+                        <td class="px-6 py-4 font-medium whitespace-nowrap dark:text-white">
                             {{ purchase_target.name }}
                             <!-- ユーザーの名前などを表示する -->
                         </td>
@@ -178,6 +178,14 @@
                                @input="(e) => setStoreFieldValue('quantity', e.target.value)"
                         />
                         <InputError v-if="storeErrors.quantity" :message="storeErrors.quantity" class="text-red-500"/>
+                        <label for="evidence_url"
+                               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">参考価格URL</label>
+                        <input type="text" name="evidence_url" id="evidence_url" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               :class="{ 'bg-red-100': storeErrors.quantity, 'border-red-300': storeErrors.evidence_url }"
+                               :value="storeValues.evidence_url"
+                               @input="(e) => setStoreFieldValue('evidence_url', e.target.value)"
+                        />
+                        <InputError v-if="storeErrors.evidence_url" :message="storeErrors.evidence_url" class="text-red-500"/>
                         <BlueButton text="カートに追加する" @click="addCart"/>
                     </div>
                     <!-- Modal footer -->
@@ -220,6 +228,7 @@ type PurchaseOfferType = {
     user_name: string;
     price: number;
     quantity: number;
+    evidence_url: string;
 }
 
 type PurchaseTargetType = {
@@ -243,6 +252,7 @@ const props = defineProps<{
 const storeSchema = object({
     price: number().min(1, '希望買取価格は1円以上を指定してください。').required('希望買取価格は必須です。'),
     quantity: number().min(1, '希望買取個数は1個以上を指定してください。').required('希望買取個数は必須です。'),
+    evidence_url: string().url('正しいURLを入力してください。'),
 });
 
 const {handleSubmit: handleStoreSubmit, errors: storeErrors, values: storeValues, setFieldValue: setStoreFieldValue} = useForm({
@@ -250,6 +260,7 @@ const {handleSubmit: handleStoreSubmit, errors: storeErrors, values: storeValues
     initialValues: {
         price: 1000,
         quantity: 1,
+        evidence_url: '',
     }
 });
 
@@ -328,16 +339,13 @@ const openAddCartDialog = (purchase_target: PurchaseTargetType) => {
 
 
 const addCart = async () => {
-    console.log(modalPurchaseTargetId.value)
-    console.log(modalPurchaseTargetName.value)
-    console.log(storeValues.price)
-    console.log(storeValues.quantity)
     const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
     await router.post(route('client.cart.store'), {
         purchase_target_id: modalPurchaseTargetId.value,
         name: modalPurchaseTargetName.value,
         price: storeValues.price,
         quantity: storeValues.quantity,
+        evidence_url: storeValues.evidence_url,
     }, {
         headers: {
             'Content-Type': 'multipart/form-data'

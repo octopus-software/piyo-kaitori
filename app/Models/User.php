@@ -13,8 +13,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     const USER_ROLE = [
-        "admin" => 1,
-        "client" => 2,
+        'admin' => 1,
+        'client' => 2,
+    ];
+
+    const USER_GENDER = [
+        'male' => 1,
+        'female' => 2,
+        'others' => 3
     ];
 
     /**

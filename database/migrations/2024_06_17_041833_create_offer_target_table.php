@@ -14,12 +14,16 @@ return new class extends Migration
     {
         Schema::create('offer_target', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('purchase_offer_id')->references('id')->on('purchase_offers');
-            $table->unsignedInteger('purchase_target_id')->references('id')->on('purchase_targets');
+            $table->unsignedBigInteger('purchase_offer_id');
+            $table->unsignedBigInteger('purchase_target_id');
             $table->unsignedInteger('price');
             $table->unsignedInteger('quantity');
             $table->string('evidence_url',255);
             $table->timestamps();
+
+            // 外部キーを作成する
+            $table->foreign('purchase_offer_id')->references('id')->on('purchase_offers');
+            $table->foreign('purchase_target_id')->references('id')->on('purchase_targets');
         });
     }
 

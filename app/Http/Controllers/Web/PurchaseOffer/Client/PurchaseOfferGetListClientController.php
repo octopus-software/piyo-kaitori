@@ -16,8 +16,8 @@ class PurchaseOfferGetListClientController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $user_id = session()->id();//sessionからuser_idを取得
-        $paginator = PurchaseOffer::with(['user', 'purchase_targets'])
+        $user_id = auth()->id();//sessionからuser_idを取得
+        $paginator = PurchaseOffer::query()->with(['user', 'purchase_targets'])
             ->when(isset($request['user_name']), function ($query) use ($request) {
                 $query->whereHas('user', function ($relation_query) use ($request) {
                     $relation_query->where('name', 'LIKE', '%' . $request["user_name"] . '%');
@@ -41,6 +41,7 @@ class PurchaseOfferGetListClientController extends Controller
                     'user_id' => $offer['user_id'],
                     'user_name' => $offer['user']['name'],
                     'status' => $offer['status'],
+                    'shipped_date' => $offer['shipped_date'] ? (new Carbon($offer['shipped_date']))->format('Y年m月d日') : null,
                     'summary' => implode(', ', $offer['purchase_targets']->map(function ($target) {
                         return substr($target['name'], 0, 20) . '×' . $target['pivot']['quantity'];
                     })->toArray()),
@@ -68,6 +69,6 @@ class PurchaseOfferGetListClientController extends Controller
                 'jan_code' => $request['jan_code'] ?? '',
                 'status' => $request['status'] ?? '',
             ]
-        ]);        
+        ]);
     }
 }
