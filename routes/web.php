@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetEditAdminContro
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferGetListAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Admin\PurchaseOfferUpdateStatusAdminController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferDeleteClientController;
+use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferFormGenerateController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetEditClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferGetListClientController;
 use App\Http\Controllers\Web\PurchaseOffer\Client\PurchaseOfferStoreClientController;
@@ -88,6 +89,7 @@ Route::prefix('client')
 
         // 買取オファー
         Route::get('/purchase_offers',PurchaseOfferGetListClientController::class)->name('client.purchase_offer.list');
+        Route::get('/purchase_offer/export_pdf', PurchaseOfferFormGenerateController::class)->name('client.export_pdf');
         Route::get('purchase_offer/{id}/edit', PurchaseOfferGetEditClientController::class)->name('client.purchase_offer.edit');
         Route::post('purchase_offer', PurchaseOfferStoreClientController::class)->name('client.purchase_offer.store');
         Route::put('purchase_offer/{id}/status', PurchaseOfferUpdateStatusClientController::class)->name('client.purchase_offer.update.status');

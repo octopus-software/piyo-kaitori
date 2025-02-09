@@ -19,6 +19,26 @@ class PurchaseOffer extends Model
         "paid" => 4
     ];
 
+    const purchase_method = [
+        "direct" => 1,
+        "ship" => 2
+    ];
+
+    const transaction_method = [
+        "yahuoku" => 1,
+        "rakuma" => 2,
+        "payfuri" => 3
+    ];
+
+    const identification_document_type = [
+        "residence_record" => 1,
+        "family_register" => 2,
+        "seal_registration_certificate" => 3,
+        "driver_license" => 4,
+        "health_insurance_card" => 5,
+        "others" => 6
+    ];
+
     // リレーション設定
     public function user(): BelongsTo
     {
