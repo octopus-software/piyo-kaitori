@@ -36,7 +36,7 @@
         }
 
         p#header-item-right {
-            font-size: 14px;
+            font-size: 10px;
             text-align: right;
         }
 
@@ -76,7 +76,10 @@
 
     <div class="header">
         <p id="header-item-left">買取依頼書兼同意書　ひよこの森</p>
-        <p id="header-item-right">お申込日 {{ (new DateTime())->format('Y年m月d日') }}</p>
+        <p id="header-item-right">
+            お申込日: {{ (new DateTime())->format('Y年m月d日') }}<br />
+            買取ID: {{ sprintf('%015d', $purchase_offer['id']) }}
+        </p>
     </div>
 
     <div class="frame personal_info">

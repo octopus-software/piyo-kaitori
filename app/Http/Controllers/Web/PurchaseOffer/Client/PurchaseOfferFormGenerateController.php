@@ -43,7 +43,6 @@ class PurchaseOfferFormGenerateController extends Controller
             'total_price' => $total_price,
             'consumption_tax' => $consumption_tax
         ])->render();
-//        return $html;
 
         // Mpdf 設定
         $mpdf = new Mpdf([
@@ -63,11 +62,13 @@ class PurchaseOfferFormGenerateController extends Controller
         $mpdf->WriteHTML($html);
 
         // PDF を保存
-        $pdfFilePath = storage_path('app/public/purchase_offer.pdf');
+        $now = new Carbon();
+        $file_name = '買取依頼書_' . $purchase_offer->id . 'U' . $user->id . '_' . $now->format('YmdHis') . '.pdf';
+        $pdfFilePath = storage_path('app/public/' . $file_name);
         $mpdf->Output($pdfFilePath, 'F');
 
         // PDF をダウンロード
-        return response()->download($pdfFilePath);
+        return response()->download($pdfFilePath, $file_name)->deleteFileAfterSend(true);
     }
 }
 
