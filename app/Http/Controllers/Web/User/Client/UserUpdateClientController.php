@@ -16,11 +16,12 @@ class UserUpdateClientController extends Controller
     public function __invoke(Request $request,int $id)
     {
         // 画像がアップロードされている場合
-        $identification_file_url = null;
         if ($request['identification_file']) {
             $request->file('identification_file')->store('public/identification_files');
             $path = Storage::disk('local')->putFile('identification_files', $request['identification_file']);
             $identification_file_url = Storage::disk('local')->url($path); // 新しい画像のURL
+        } else {
+            $identification_file_url = $request['identification_file_url']; // 画像がアップロードされていない場合は元の画像のURLをそのまま使う
         }
 
     //     //DB更新処理

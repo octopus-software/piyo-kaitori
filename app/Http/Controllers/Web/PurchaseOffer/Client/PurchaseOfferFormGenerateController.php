@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web\PurchaseOffer\Client;
 
+use App\Http\Controllers\Controller;
 use App\Models\PurchaseOffer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Mpdf\Mpdf;
 use Illuminate\Support\Facades\View;
+use Mpdf\Mpdf;
 
-class GeneratePurchaseOfferFormController extends Controller
+class PurchaseOfferFormGenerateController extends Controller
 {
-    public function exportToPdf(Request $request)
+    public function __invoke(Request $request)
     {
         set_time_limit(120); // 実行時間の制限を解除または延長
 
@@ -66,7 +67,7 @@ class GeneratePurchaseOfferFormController extends Controller
         $mpdf->Output($pdfFilePath, 'F');
 
         // PDF をダウンロード
-        return response()->download($pdfFilePath)->deleteFileAfterSend(true);
+        return response()->download($pdfFilePath);
     }
 }
 
