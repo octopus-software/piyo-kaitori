@@ -18,6 +18,7 @@ export default defineConfig({
         }),
     ],
     build: {
-        manifest: true, // 👈 これが必要！
+        manifest: true,
+        outDir: 'public/build',
     },
 });
