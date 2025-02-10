@@ -17,4 +17,7 @@ export default defineConfig({
             },
         }),
     ],
+    build: {
+        manifest: true, // 👈 これが必要！
+    },
 });
