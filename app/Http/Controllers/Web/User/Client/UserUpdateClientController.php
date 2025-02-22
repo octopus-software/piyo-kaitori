@@ -17,11 +17,12 @@ class UserUpdateClientController extends Controller
     {
         // 画像がアップロードされている場合
         if ($request['identification_file']) {
-            $request->file('identification_file')->store('public/identification_files');
-            $path = Storage::disk('local')->putFile('identification_files', $request['identification_file']);
-            $identification_file_url = Storage::disk('local')->url($path); // 新しい画像のURL
+            // storage/app/public/identification_files に保存
+            $path = $request->file('identification_file')->store('identification_files', 'public');
+            // 公開URLを取得
+            $identification_file_url = Storage::disk('public')->url($path);
         } else {
-            $identification_file_url = $request['identification_file_url']; // 画像がアップロードされていない場合は元の画像のURLをそのまま使う
+            $identification_file_url = $request['identification_file_url'];
         }
 
     //     //DB更新処理
