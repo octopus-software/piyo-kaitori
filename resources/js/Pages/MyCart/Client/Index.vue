@@ -14,6 +14,7 @@
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望個数</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">備考欄</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取合計金額</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取合計金額</th>
                         </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
@@ -28,6 +29,9 @@
                             <td v-if="item.remarks" class="px-4 py-2 text-sm">{{ item.remarks }}</td>
                             <td v-else></td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.total_price }}</td>
+                            <td class="px-4 py-2 text-sm text-gray-900">
+                                <RedButton text="カートから削除" @click="deleteCartItem(item.purchase_target_id)" />
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
@@ -59,6 +63,7 @@ import BlueButton from "@/Components/Button/BlueButton.vue";
 import {useForm} from "vee-validate";
 import {object} from "yup";
 import {router} from "@inertiajs/vue3";
+import RedButton from "@/Components/Button/RedButton.vue";
 
 type CartType = {
     purchase_target_id: number;
@@ -110,31 +115,18 @@ const storePurchaseOffer = () => {
     });
 };
 
-// const buildUrlWithParams = (page: number) => {
-//     let params = {page: page}
-//     if (values.name) params['name'] = values.name;
-//     if (values.jan_code) params['jan_code'] = values.jan_code;
-//     if (values.is_active) params['is_active'] = values.is_active;
-//     return route('purchase_target.list', params);
-// };
-//
-// const clear = () => router.get(route('purchase_target.list'));
-//
-// const search = () => router.get(buildUrlWithParams(1));
-//
-// const goPage = page => router.get(buildUrlWithParams(page));
-//
-// const previousPage = () => {
-//     if (props.current_page > 1) goPage(props.current_page - 1);
-// }
-//
-// const nextPage = () => {
-//     if (props.current_page < props.last_page) goPage(props.current_page + 1);
-// }
-//
-// const goCreate = () => {
-//     router.get(route('purchase_target.create'));
-// }
+const deleteCartItem = (id: number) => {
+    const toast = useToast() as { success: (message: string, options?: Record<string, any>) => void;};
+    router.delete(route('client.cart.item.delete', {id: id}), {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        onSuccess: () => toast.success('カートアイテムを削除しました', {duration: 5000}),
+        onError: (errors) => {
+            // serverErrors.value = errors;
+        },
+    });
+};
 
 </script>
 

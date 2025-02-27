@@ -3,6 +3,7 @@
 use App\Http\Controllers\CsvDownloadController;
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
+use App\Http\Controllers\Web\MyCart\Client\MyCartDeleteItemClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartStoreClientController;
 use App\Http\Controllers\Web\ProfileController;
@@ -98,6 +99,7 @@ Route::prefix('client')
         // 買取依頼カート
         Route::get('/my_cart', MyCartGetClientController::class)->name('client.my_cart.list');
         Route::post('/my_cart', MyCartStoreClientController::class)->name('client.cart.store');
+        Route::delete('/my_cart/{id}', MyCartDeleteItemClientController::class)->name('client.cart.item.delete');
 
         // 買取依頼者プロフィール
         Route::get('/user/{id}/edit', UserGetEditClientController::class)->name('client.user.edit');
