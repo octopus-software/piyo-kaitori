@@ -166,7 +166,7 @@ type PurchaseTargetType = {
     target_name: string;
     price: number;
     max_quantity: number;
-    evidence_url: string;
+    remarks: string;
 }
 
 type PurchaseOfferType = {

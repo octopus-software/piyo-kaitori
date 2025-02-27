@@ -70,6 +70,7 @@
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">JANコード</th>
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望金額</th>
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望個数</th>
+                                    <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">備考欄</th>
                                     <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取合計金額</th>
                                 </tr>
                                 </thead>
@@ -83,9 +84,11 @@
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.jan_code }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.price }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.quantity }}</td>
+                                    <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.remarks }}</td>
                                     <td class="px-4 py-2 text-sm text-gray-900">{{ purchase_target.total_price }}</td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -125,7 +128,7 @@ type PurchaseTargetType = {
     price: string;
     quantity: string;
     total_price: string;
-    evidence_url: string;
+    remarks: string;
 }
 
 type PurchaseOfferType = {

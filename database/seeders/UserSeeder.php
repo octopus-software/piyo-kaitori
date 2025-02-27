@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
                         ->attach($purchase_target['id'],[
                             'price' => fake()->randomElement([5000,10000,15000,20000,25000,30000,35000,40000,45000,50000]),
                             'quantity' => rand(1,10),
-                            'evidence_url' => fake()->url()
+                            'remarks' => fake()->text(100)
                         ]);
                 }
             }

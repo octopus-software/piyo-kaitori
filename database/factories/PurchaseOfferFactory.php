@@ -23,7 +23,7 @@ class PurchaseOfferFactory extends Factory
             //'purchase_target_id' => PurchaseTarget::factory(),
             // 'price' => fake()->randomElement($array = array (10000,15000,20000,25000,30000,35000,40000,45000,5000)),
             // 'quantity' => fake()->randomDigit(),
-            // 'evidence_url' => fake()->url(),
+            // 'remarks' => '',
             'status' => fake()->numberBetween($min = 1, $max = 4)
         ];
     }

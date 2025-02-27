@@ -53,7 +53,7 @@ class PurchaseOfferGetListAdminController extends Controller
                             'target_name' => $target['name'],
                             'price' => $target['pivot']['price'],
                             'quantity' => $target['pivot']['quantity'],
-                            'evidence_url' => $target['pivot']['evidence_url']
+                            'remarks' => $target['pivot']['remarks']
                         ];
                     })
                 ];

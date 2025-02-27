@@ -42,7 +42,7 @@ class PurchaseOfferGetEditAdminController extends Controller
                     'price'        => FormatHelper::formatYen($target['pivot']['price']),
                     'quantity'     => $target['pivot']['quantity'] . '点',
                     'total_price'  => FormatHelper::formatYen($target['pivot']['price'] * $target['pivot']['quantity']),
-                    'evidence_url' => $target['pivot']['evidence_url']
+                    'remarks' => $target['pivot']['remarks']
                 ];
             })->toArray()
         ];

@@ -26,7 +26,7 @@ class PurchaseOfferStoreClientRequest extends FormRequest
             '*.purchase_target_id' => 'required|exists:purchase_targets,id',
             '*.price' => 'required|integer|min:0',
             '*.quantity' => 'required|integer|min:1',
-            '*.evidence_url' => 'required|url'
+            '*.remarks' => ''
         ];
     }
 }

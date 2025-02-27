@@ -12,7 +12,7 @@
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">商品名</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望金額</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取希望個数</th>
-                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">参考価格URL</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">備考欄</th>
                             <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">買取合計金額</th>
                         </tr>
                         </thead>
@@ -25,9 +25,7 @@
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.name }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.price }}</td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.quantity }}個</td>
-                            <td v-if="item.evidence_url" class="px-4 py-2 text-sm text-blue-800 hover:text-blue-400">
-                                <a :href="item.evidence_url"><p>参考価格URLを確認</p></a>
-                            </td>
+                            <td v-if="item.remarks" class="px-4 py-2 text-sm">{{ item.remarks }}</td>
                             <td v-else></td>
                             <td class="px-4 py-2 text-sm text-gray-900">{{ item.total_price }}</td>
                         </tr>
@@ -67,7 +65,7 @@ type CartType = {
     name: string;
     price: number;
     quantity: number;
-    evidence_url: string;
+    remarks: string;
     total_price: number;
 }
 

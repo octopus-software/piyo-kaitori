@@ -31,7 +31,7 @@ class PurchaseOfferStoreClientController extends Controller
                     'purchase_target_id' => $item['purchase_target_id'],
                     'price' => $item['price'],
                     'quantity' => $item['quantity'],
-                    'evidence_url' => $item['evidence_url']
+                    'remarks' => $item['remarks']
                 ]);
             }
 
@@ -51,7 +51,7 @@ class PurchaseOfferStoreClientController extends Controller
             Mail::to(config('mail')['from']['address'])->send(new PurchaseOfferUnapprovedMail($purchase_offer_id,$purchase_targets));
 
             // // セッションからcartを削除する
-            // session()->forget('cart');
+            session()->forget('cart');
             // return Redirect::route('client.purchase_offer.list');
         });
     }
