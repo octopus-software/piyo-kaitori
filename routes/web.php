@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\CsvDownloadController;
+use App\Http\Controllers\Web\Company\Admin\CompanyGetEditAdminController;
+use App\Http\Controllers\Web\Company\Admin\CompanyStoreAdminController;
+use App\Http\Controllers\Web\Company\Admin\CompanyUpdateAdminController;
 use App\Http\Controllers\Web\Dashboard\Admin\DashboardGetAdminController;
 use App\Http\Controllers\Web\Dashboard\Client\DashboardGetClientController;
 use App\Http\Controllers\Web\MyCart\Client\MyCartDeleteItemClientController;
@@ -76,6 +79,11 @@ Route::prefix('admin')
         Route::get('/user/{id}/edit', UserGetEditAdminController::class)->name('admin.user.edit');
         Route::put('/user/{id}', UserUpdateAdminController::class)->name('admin.user.update');
         Route::delete('/user/{id}/delete', UserDeleteAdminController::class)->name('admin.user.delete');
+
+        // 企業
+        Route::get('/company/{id}/edit', CompanyGetEditAdminController::class)->name('admin.company.edit');
+        Route::post('/company', CompanyStoreAdminController::class)->name('admin.company.store');
+        Route::put('/company/{id}', CompanyUpdateAdminController::class)->name('admin.company.update');
     });
 
 Route::prefix('client')
