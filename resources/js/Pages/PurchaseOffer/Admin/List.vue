@@ -13,7 +13,7 @@
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">依頼者名</label>
                             <input type="text" :value="values.user_name" id="name"
-                                   @input="(e) => setFieldValue('user_name', e.target.value)"
+                                   @input="(e) => handleInput(e, 'user_name', setFieldValue)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    required/>
                         </div>
@@ -21,7 +21,7 @@
                             <label for="jan_code"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
                             <input type="text" :value="values.jan_code" id="jan_code"
-                                   @input="(e) => setFieldValue('jan_code', e.target.value)"
+                                   @input="(e) => handleInput(e, 'jan_code', setFieldValue)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="" required/>
                         </div>
@@ -29,7 +29,7 @@
                             <label for="is_active"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
                             <select :value="values.status" id="is_active"
-                                    @input="(e) => setFieldValue('status', e.target.value)"
+                                    @input="(e) => handleInput(e, 'status', setFieldValue)"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required>
                                 <option value=""></option>
@@ -129,7 +129,7 @@
                             </li>
                             <li v-for="page in $page.props.last_page" :key="page">
                                 <div @click="goPage(page)"
-                                     :aria-current="page === $page.props.current_page ? 'page' : null"
+                                     :aria-current="page === $page.props.current_page ? 'page' : undefined"
                                      class="flex cursor-pointer items-center justify-center px-3 h-8 leading-tight"
                                      :class="{
                             'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white': page === current_page,
@@ -169,8 +169,10 @@ import BlueButton from "@/Components/Button/BlueButton.vue";
 import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {object, string} from "yup";
 import {useForm} from "vee-validate";
+import {handleInput} from "@/helpers/HandleInput";
 
 type ParamType = {
+    page: number;
     user_name: string;
     jan_code: string;
     status: number;
@@ -193,6 +195,7 @@ type PurchaseOfferType = {
     total_price: string;
     offer_date: string;
     detail: PurchaseTargetType[]
+    shipped_date: string
 }
 
 const props = defineProps<{
@@ -226,10 +229,10 @@ onMounted(() => {
 });
 
 const buildUrlWithParams = (page: number) => {
-    let params = {page: page}
-    if (values.user_name) params['user_name'] = values.user_name;
-    if (values.jan_code) params['jan_code'] = values.jan_code;
-    if (values.status) params['status'] = values.status;
+    let params: ParamType = {page: page, user_name: '', jan_code: 'null', status: 0}
+    values.user_name ? params.user_name = values.user_name : delete(params.user_name);
+    values.jan_code ? params.jan_code = values.jan_code : delete(params.jan_code);
+    values.status ? params.status = values.status : delete(params.status);
     return route('admin.purchase_offer.list', params);
 };
 

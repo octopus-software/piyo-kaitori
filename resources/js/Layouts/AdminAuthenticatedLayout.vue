@@ -1,7 +1,56 @@
 <script setup lang="ts">
 import {initFlowbite} from 'flowbite'
 import {onMounted} from "vue";
-import {router} from '@inertiajs/vue3';
+import {router, usePage} from '@inertiajs/vue3';
+
+type Auth = {
+    user: {
+        id: number
+        name: string
+        email: string
+        email_verified_at: string
+        password: string
+        remember_token: string
+        role: number
+        is_active: number
+        created_at: string
+        updated_at: string
+        name_kana: string
+        birthday: string
+        gender: number
+        post_code: string
+        address: string
+        tel: string
+        job: string
+        bank_name: string
+        bank_branch_name: string
+        bank_branch_code: string
+        bank_account_type: string
+        bank_account_number: string
+        bank_account_name_kana: string
+        is_qualified_supplier: number
+        invoice_number: string
+        identification_file_url: string
+        company: {
+            id: number
+            user_id: number
+            name: string
+            email: string
+            address: string
+            representative_name: string
+            tel: string
+            line_id: string
+            secondhand_dealer_license_number: string
+            send_address: string
+            created_at: string
+            updated_at: string
+        }
+    }
+}
+
+const page = usePage()
+console.log(page.props.auth)
+const auth = page.props.auth as Auth
 
 onMounted(() => {
     initFlowbite();
@@ -64,7 +113,7 @@ onMounted(() => {
 
                                 <span class="flex-1 ms-3 whitespace-nowrap">買取オファー</span>
                             </li>
-                            <li @click="router.get(route('admin.company.edit', {id: $page.props.auth.user.company.id}))"
+                            <li @click="router.get(route('admin.company.edit', {id: auth.user.company.id}))"
                                 class="flex cursor-pointer items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                     <path fill-rule="evenodd" d="M4 4a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2v14a1 1 0 1 1 0 2H5a1 1 0 1 1 0-2V5a1 1 0 0 1-1-1Zm5 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H9Zm5 0a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-1Zm-5 4a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H9Zm5 0a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1h-1Zm-3 4a2 2 0 0 0-2 2v3h2v-3h2v3h2v-3a2 2 0 0 0-2-2h-2Z" clip-rule="evenodd"/>
@@ -74,7 +123,7 @@ onMounted(() => {
 
                             <!-- アカウント情報 -->
                             <li class="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $page.props.auth.user.name }}<span class="text-base">　様</span></h5>
+                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ auth.user.name }}<span class="text-base">　様</span></h5>
                                 <p class="text-blue-600 hover:text-blue-300 cursor-pointer" @click="router.get(route('debug.logout'))">ログアウト</p>
                             </li>
                         </ul>
