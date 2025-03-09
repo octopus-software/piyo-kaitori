@@ -20,5 +20,6 @@ export default defineConfig({
     build: {
         manifest: true,
         outDir: 'public/build',
+        emptyOutDir: true,       // 既存のビルドを削除して新しく生成
     },
 });
