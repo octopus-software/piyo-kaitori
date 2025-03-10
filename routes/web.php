@@ -108,7 +108,7 @@ Route::prefix('client')
 
 Route::post('/test', UserStoreAdminController::class);
 
-Route::get('/csv_download', CsvDownloadController::class);
+Route::get('/csv_download', CsvDownloadController::class)->name('admin.purchase_offer.csv_download');
 
 Route::middleware('auth')->group(function () {
 

@@ -1,49 +1,76 @@
 <template>
     <AdminAuthenticatedLayout>
         <div class="relative overflow-x-auto">
+            <div class="flex justify-between gap-4">
+                <!-- 検索フィルター -->
+                <div
+                    class="block w-[60%] mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">検索フォーム</h5>
+                    <!--                <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
+                    <div class="mx-auto">
+                        <div class="flex">
+                            <div class="mb-5 p-2 w-[30%]">
+                                <label for="name"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">依頼者名</label>
+                                <input type="text" :value="searchValues.user_name" id="name"
+                                       @input="(e) => handleInput(e, 'user_name', setSearchFieldValue)"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       required/>
+                            </div>
+                            <div class="mb-5 p-2 w-[40%]">
+                                <label for="jan_code"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
+                                <input type="text" :value="searchValues.jan_code" id="jan_code"
+                                       @input="(e) => handleInput(e, 'jan_code', setSearchFieldValue)"
+                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="" required/>
+                            </div>
+                            <div class="mb-5 p-2 w-[30%]">
+                                <label for="is_active"
+                                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
+                                <select :value="searchValues.status" id="is_active"
+                                        @input="(e) => handleInput(e, 'status', setSearchFieldValue)"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        required>
+                                    <option value=""></option>
+                                    <option value="1">未承認</option>
+                                    <option value="2">承認済み</option>
+                                    <option value="3">発送済み</option>
+                                    <option value="4">取引完了</option>
+                                </select>
+                            </div>
+                        </div>
+                        <BlueButton text="検索する" @click="search"/>
+                        <OrangeButton text="条件をクリア" @click="clear"/>
+                    </div>
+                </div>
 
-            <!-- 検索フィルター -->
-            <div
-                class="block w-full mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">検索フォーム</h5>
-                <!--                <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
-                <div class="mx-auto">
+                <!-- CSV出力 -->
+                <div
+                    class="block w-[40%] mb-4 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">取引完了買取オファーCSV出力</h5>
                     <div class="flex">
                         <div class="mb-5 p-2 w-[50%]">
-                            <label for="name"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">依頼者名</label>
-                            <input type="text" :value="values.user_name" id="name"
-                                   @input="(e) => handleInput(e, 'user_name', setFieldValue)"
+                            <label for="from_date"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">取得開始日</label>
+                            <input type="date" :value="generateCsvValues.from_date" id="from_date"
+                                   @input="(e) => handleInput(e, 'from_date', setGenerateCsvFieldValue)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   required/>
+                            />
                         </div>
                         <div class="mb-5 p-2 w-[50%]">
-                            <label for="jan_code"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">JANコード</label>
-                            <input type="text" :value="values.jan_code" id="jan_code"
-                                   @input="(e) => handleInput(e, 'jan_code', setFieldValue)"
+                            <label for="to_date"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">取得終了日</label>
+                            <input type="date" :value="generateCsvValues.to_date" id="to_date"
+                                   @input="(e) => handleInput(e, 'to_date', setGenerateCsvFieldValue)"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="" required/>
-                        </div>
-                        <div class="mb-5 p-2 w-[50%]">
-                            <label for="is_active"
-                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">買取ステータス</label>
-                            <select :value="values.status" id="is_active"
-                                    @input="(e) => handleInput(e, 'status', setFieldValue)"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required>
-                                <option value=""></option>
-                                <option value="1">未承認</option>
-                                <option value="2">承認済み</option>
-                                <option value="3">発送済み</option>
-                                <option value="4">取引完了</option>
-                            </select>
+                            />
                         </div>
                     </div>
-                    <BlueButton text="検索する" @click="search"/>
-                    <OrangeButton text="条件をクリア" @click="clear"/>
+                    <OrangeButton text="CSV出力" @click="generateCsv"/>
                 </div>
             </div>
+
 
             <!-- オファーリスト -->
             <div v-if="purchase_offers.length !== 0">
@@ -170,6 +197,7 @@ import OrangeButton from "@/Components/Button/OrangeButton.vue";
 import {object, string} from "yup";
 import {useForm} from "vee-validate";
 import {handleInput} from "@/helpers/HandleInput";
+import axios from "axios";
 
 type ParamType = {
     page: number;
@@ -211,12 +239,20 @@ const schema = object({
     status: string(),
 });
 
-const {handleSubmit, errors, values, setFieldValue} = useForm({
+const {handleSubmit: handleSearchSubmit, errors: searchErrors, values: searchValues, setFieldValue: setSearchFieldValue} = useForm({
     validationSchema: schema,
     initialValues: {
         user_name: props.params.user_name,
         jan_code: props.params.jan_code,
         status: props.params.status,
+    }
+});
+
+const {handleSubmit: handleGenerateCsvSubmit, errors: generateCsvErrors, values: generateCsvValues, setFieldValue: setGenerateCsvFieldValue} = useForm({
+    validationSchema: schema,
+    initialValues: {
+        from_date: '',
+        to_date: '',
     }
 });
 
@@ -230,15 +266,24 @@ onMounted(() => {
 
 const buildUrlWithParams = (page: number) => {
     let params: ParamType = {page: page, user_name: '', jan_code: 'null', status: 0}
-    values.user_name ? params.user_name = values.user_name : delete(params.user_name);
-    values.jan_code ? params.jan_code = values.jan_code : delete(params.jan_code);
-    values.status ? params.status = values.status : delete(params.status);
+    searchValues.user_name ? params.user_name = searchValues.user_name : delete(params.user_name);
+    searchValues.jan_code ? params.jan_code = searchValues.jan_code : delete(params.jan_code);
+    searchValues.status ? params.status = searchValues.status : delete(params.status);
     return route('admin.purchase_offer.list', params);
 };
 
 const clear = () => router.get(route('admin.purchase_offer.list'));
 
 const search = () => router.get(buildUrlWithParams(1));
+
+const generateCsv = () => {
+    const url = route('admin.purchase_offer.csv_download', {
+        from_date: generateCsvValues.from_date ?? null,
+        to_date: generateCsvValues.to_date ?? null
+    });
+    window.open(url, '_blank'); // 新しいタブで開く（ダウンロード処理を開始）
+}
+
 
 const goPage = page => router.get(buildUrlWithParams(page));
 
