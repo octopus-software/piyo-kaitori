@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseOffer;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CsvDownloadController extends Controller
 {
