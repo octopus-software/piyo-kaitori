@@ -35,20 +35,12 @@ use App\Http\Controllers\Web\User\Admin\UserStoreAdminController;
 use App\Http\Controllers\Web\User\Admin\UserUpdateAdminController;
 use App\Http\Controllers\Web\User\Client\UserGetEditClientController;
 use App\Http\Controllers\Web\User\Client\UserUpdateClientController;
+use App\Http\Controllers\Web\WelcomeController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', WelcomeController::class)->name('welcome');
 Route::get('/token', function () {
     return csrf_token();
 });
