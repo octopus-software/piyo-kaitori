@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\PurchaseOffer\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\PurchaseOffer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class PurchaseOfferFormGenerateController extends Controller
         $purchase_offer_id = $request->input('purchase_offer_id');
         $purchase_offer = PurchaseOffer::with(['purchase_targets'])->findOrFail($purchase_offer_id);
         $user = auth()->user();
-
+        $company = Company::query()->first();
         // 誕生日の分割
         $carbonDate = Carbon::parse($user->birthday);
         $bd_year = $carbonDate->year;
@@ -41,7 +42,9 @@ class PurchaseOfferFormGenerateController extends Controller
             'birthday_month' => $bd_month,
             'birthday_day' => $bd_day,
             'total_price' => $total_price,
-            'consumption_tax' => $consumption_tax
+            'consumption_tax' => $consumption_tax,
+            'send_address' => $company['send_address'],
+            'secondhand_dealer_license_number' => $company['secondhand_dealer_license_number'],
         ])->render();
 
         // Mpdf 設定

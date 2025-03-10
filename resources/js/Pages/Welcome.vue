@@ -97,7 +97,7 @@ function handleImageError() {
                             </tr>
                             <tr class="bg-gray-50 border-b">
                                 <th class="px-4 py-3 text-gray-700 w-1/3">古物商許可番号</th>
-                                <td class="px-4 py-3 text-gray-900">{{ companies[0].secondhand_dealer_license_number }}</td>
+                                <td class="px-4 py-3 text-gray-900">第{{ companies[0].secondhand_dealer_license_number }}号</td>
                             </tr>
                             </tbody>
                         </table>

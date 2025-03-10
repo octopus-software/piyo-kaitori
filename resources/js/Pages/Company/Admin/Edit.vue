@@ -19,7 +19,7 @@
                         </ul>
                     </div>
                     <div class="flex">
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">企業名</label>
                             <input type="text" :value="values.name" id="name"
@@ -28,7 +28,7 @@
                                    placeholder="" required/>
                             <InputError v-if="errors.name" :message="errors.name" class="text-red-500"/>
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="email"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Eメール</label>
                             <input type="text" :value="values.email" id="email"
@@ -37,9 +37,7 @@
                                    placeholder="" required/>
                             <InputError v-if="errors.email" :message="errors.email" class="text-red-500"/>
                         </div>
-                    </div>
-                    <div class="flex">
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[40%]">
                             <label for="address"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">住所</label>
                             <input type="text" :value="values.address" id="address"
@@ -48,7 +46,9 @@
                                    placeholder="" required/>
                             <InputError v-if="errors.address" :message="errors.address" class="text-red-500"/>
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
+                    </div>
+                    <div class="flex">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="representative_name"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">代表者名</label>
                             <input type="text" :value="values.representative_name" id="representative_name"
@@ -58,9 +58,7 @@
                             <InputError v-if="errors.representative_name" :message="errors.representative_name"
                                         class="text-red-500"/>
                         </div>
-                    </div>
-                    <div class="flex">
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="tel"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">電話番号</label>
                             <input type="text" :value="values.tel" id="tel"
@@ -69,7 +67,7 @@
                                    placeholder="" required/>
                             <InputError v-if="errors.tel" :message="errors.tel" class="text-red-500"/>
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[40%]">
                             <label for="line_id"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LINE ID</label>
                             <input type="text" :value="values.line_id" id="line_id"
@@ -80,19 +78,24 @@
                         </div>
                     </div>
                     <div class="flex">
-                        <div class="mb-5 p-2 w-[50%]">
+
+                    </div>
+                    <div class="flex">
+                        <div class="mb-5 p-2 w-[20%]">
                             <label for="secondhand_dealer_license_number"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">古物商許可証番号</label>
-                            <input type="text" :value="values.secondhand_dealer_license_number"
-                                   id="secondhand_dealer_license_number"
-                                   @input="(e) => handleInput(e, 'secondhand_dealer_license_number', setFieldValue)"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="" required/>
+                            <div class="flex items-center">
+                                第<input type="text" :value="values.secondhand_dealer_license_number"
+                                       id="secondhand_dealer_license_number"
+                                       @input="(e) => handleInput(e, 'secondhand_dealer_license_number', setFieldValue)"
+                                       class="mx-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="" required/>号
+                            </div>
                             <InputError v-if="errors.secondhand_dealer_license_number"
                                         :message="errors.secondhand_dealer_license_number"
                                         class="text-red-500"/>
                         </div>
-                        <div class="mb-5 p-2 w-[50%]">
+                        <div class="mb-5 p-2 w-[30%]">
                             <label for="send_address"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">送付先住所</label>
                             <input type="text" :value="values.send_address" id="send_address"

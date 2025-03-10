@@ -232,13 +232,13 @@
             </div>
             <div>
                 <p><u>▼ヤマト運輸から発送</u></p>
-                <p>〒125-0035 東京都葛飾区南水元2-7-29</p>
+                <p>{{ $send_address }}</p>
             </div>
             <div>
                 <p class="bg-gray" style="text-align: center;">※誤った送付先へ発送すると、減額もしくは買取不可・着払返品になる可能性がございます。</p>
             </div>
             <div>
-                <p style="text-align: center;">古物商　許可番号　東京都公安委員会　第401300000065号</p>
+                <p style="text-align: center;">古物商　許可番号　東京都公安委員会　第 {{ $secondhand_dealer_license_number }}号</p>
             </div>
         </div>
     </div>
