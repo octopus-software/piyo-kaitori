@@ -43,7 +43,7 @@ class PurchaseOfferGetListClientController extends Controller
                     'status' => $offer['status'],
                     'shipped_date' => $offer['shipped_date'] ? (new Carbon($offer['shipped_date']))->format('Y年m月d日') : null,
                     'summary' => implode(', ', $offer['purchase_targets']->map(function ($target) {
-                        return substr($target['name'], 0, 20) . '×' . $target['pivot']['quantity'];
+                        return mb_substr($target['name'], 0, 20, 'UTF-8') . '×' . $target['pivot']['quantity'];
                     })->toArray()),
                     'total_price' => FormatHelper::formatYen($offer['purchase_targets']->sum(function ($target) {
                         return $target['pivot']['price'] * $target['pivot']['quantity'];
