@@ -20,10 +20,10 @@ class PurchaseOfferFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'purchase_target_id' => PurchaseTarget::factory(),
-            'price' => fake()->randomElement($array = array (10000,15000,20000,25000,30000,35000,40000,45000,5000)),
-            'amount' => fake()->randomDigit(),
-            'evidence_url' => fake()->url(),
+            //'purchase_target_id' => PurchaseTarget::factory(),
+            // 'price' => fake()->randomElement($array = array (10000,15000,20000,25000,30000,35000,40000,45000,5000)),
+            // 'quantity' => fake()->randomDigit(),
+            // 'remarks' => '',
             'status' => fake()->numberBetween($min = 1, $max = 4)
         ];
     }

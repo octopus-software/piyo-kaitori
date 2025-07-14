@@ -6,10 +6,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "dompdf/dompdf": "^3.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "mpdf/mpdf": "^8.2",
+        "phenx/php-font-lib": "^1.0",
+        "phenx/php-svg-lib": "^1.0",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

@@ -19,7 +19,7 @@ entity "PurchaseTarget <買取商品>" as purchase_target {
   name（買取商品名）: varchar(255)
   jan_code（JANコード）: varchar(255) <<UQ>>
   image_url（画像URL）: varchar(255)
-  amount（買取可能数）: unsigned int
+  max_quantity（買取可能数）: unsigned int
   is_active（買取中フラグ）: unsigned tinyint
   --
   created_at（作成日）: timestamp
@@ -31,8 +31,8 @@ entity "PurchaseOffer <買取希望>" as purchase_offer {
   user_id（買取希望ユーザーID）: unsigned bigint <<FK>>
   purchase_target_id（買取対象ID）: unsigned bigint
   price（買取希望価格）: unsigned int
-  amount（買取希望数）: unsigned int
-  evidence_url（証左URL）: varchar(255)
+  max_quantity（買取希望数）: unsigned int
+  remarks（証左URL）: varchar(255)
   status（買取ステータス）: unsigned int #1承認待ち 2承認済み 3発送済み 4買取済み
   --
   created_at（作成日）: timestamp

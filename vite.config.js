@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
     plugins: [
         laravel({
-            input: 'resources/js/app.ts',
+            input: ['resources/js/app.ts', 'resources/css/app.css'],
             refresh: true,
         }),
         vue({
@@ -17,4 +17,9 @@ export default defineConfig({
             },
         }),
     ],
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        emptyOutDir: true,       // 既存のビルドを削除して新しく生成
+    },
 });
