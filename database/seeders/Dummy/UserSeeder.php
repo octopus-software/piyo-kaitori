@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
 
         User::query()->create([
             'name' => 'テスト用ユーザー',
-            'email' => 'test@example.com',
+            'email' => 'taigabox224@gmail.com',
             'password' => bcrypt('password'),
             'role' => User::USER_ROLE['client'],
         ]);
